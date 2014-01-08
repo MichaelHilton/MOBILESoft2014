@@ -28,9 +28,10 @@
 % 10pt          To set in 10-point type instead of 9-point.
 % authoryear    To obtain author/year citation style instead of numeric.
 
-\usepackage{amsmath}
-\usepackage{listings}
-\usepackage{graphicx}
+\input{macrosSafe}
+
+%\usepackage{hyperref}
+%\pagenumbering{arabic}
 
 \begin{document}
 
@@ -99,7 +100,19 @@ Cloud computing has become a great tool for many developers to use, with many be
 
 % Contributions
 This paper makes the following contributions:
+\begin{itemize}
+\item{\textbf{Idea:}} To the best of our knowledge, we are the first to enable hobbyists and beginner programmers to tap into the power of the mobile cloud
+computing through the use of refactoring techniques.
 
+\item{\textbf{Formative Study:}} We have conducted a formative study on \numFormative real-world apps to learn what transformations are needed to convert single to multi-user mobile apps. 
+
+\item{\textbf{Tool:}} We have designed and implemented the analysis and transformation algorithms to refactor \emph{local} data structures into \emph{cloud} data structures on the TouchDevelop platform. 
+
+\item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely \emph{applicable}: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took 9 seconds for each performed refactoring. Third, \tool is  
+\emph{accurate}: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  
+\end{itemize}
+
+%\Comment{eat this line}
 
 Cloud computing has been a long held dream of treating computing as a utility~\cite{Armbrust:2010:VCC:1721654.1721672}.  It can enable developers with innovative ideas for new Internet services to no longer require the large capital outlays in hardware to deploy their service, or human expense to operate it.  By using a pay-as-you-go pricing model, resources are only paid for if they are needed, which lowers the up-front investment, and allows developers to avoid paying for unneeded resources~\cite{zhang2010cloud}.  Some examples of cloud computing servers include Amazon EC2, Windows Azure, and Google App Engine.  While there are many benefits of cloud computing, there are also some disadvantages. As cloud services are often remote, they can suffer from latency and bandwidth related issues~\cite{4804045}.  This provides a challenge to developers if they wish to provide a similar experience to users while still taking advantage of the benefits that cloud computing can offer.  In addition, if a developer wishes to transform an existing application that previously had only dealt with data locally, there new must be a new communication layer that the developer must deal with 
 in order to transform the application to use cloud services.  
@@ -487,7 +500,7 @@ Very few scripts in TouchDevelop have any tests at all.  We were not able to use
 
 Strauch et al.~\cite{strauchmigrating} provide a methodology for refactoring applications to move from application data to cloud data based on finding a migration scenario depending upon requirements and then mapping the scenario with one of the existing cloud data patterns. Though this paper provided a methodology at a high level, the actual application refactoring is completely manual and left up to programmers. Also, Moving application data to cloud was also manual (actual move of data to cloud) and programmer will have to get involved at multiple level to make this refactoring possible.  
 
-Ling et al. ~\cite{ling2010refactoring} provided a systematic refactoring approach using theoretic computing to formally define a mechanism to convert object oriented systems into service oriented architecture. The services then can be moved to cloud to benefit from elasticity of cloud. Again, this approach leads to use of manual refactoring and manual moving of services to cloud. 
+Ling et al.~\cite{ling2010refactoring} provided a systematic refactoring approach using theoretic computing to formally define a mechanism to convert object oriented systems into service oriented architecture. The services then can be moved to cloud to benefit from elasticity of cloud. Again, this approach leads to use of manual refactoring and manual moving of services to cloud. 
 
 Different from these two approaches, our tool achieves refactoring completely automatic and programmers are saved from the effort of moving data structures manually to cloud. Once a data structure is selected to refactor, the outcome of our tools is cloud data structures and updated code that references the cloud data structures.
 
