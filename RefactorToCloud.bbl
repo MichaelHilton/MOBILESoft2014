@@ -1,0 +1,96 @@
+\begin{thebibliography}{12}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Armbrust et~al.(2010)Armbrust, Fox, Griffith, Joseph, Katz, Konwinski,
+  Lee, Patterson, Rabkin, Stoica, and
+  Zaharia]{Armbrust:2010:VCC:1721654.1721672}
+M.~Armbrust, A.~Fox, R.~Griffith, A.~D. Joseph, R.~Katz, A.~Konwinski, G.~Lee,
+  D.~Patterson, A.~Rabkin, I.~Stoica, and M.~Zaharia.
+\newblock A view of cloud computing.
+\newblock \emph{Commun. ACM}, 53\penalty0 (4):\penalty0 50--58, Apr. 2010.
+\newblock ISSN 0001-0782.
+\newblock \doi{10.1145/1721654.1721672}.
+\newblock URL \url{http://doi.acm.org/10.1145/1721654.1721672}.
+
+\bibitem[Burckhardt et~al.(2012)Burckhardt, F{\"a}hndrich, Leijen, and
+  Wood]{burckhardt2012cloud}
+S.~Burckhardt, M.~F{\"a}hndrich, D.~Leijen, and B.~P. Wood.
+\newblock Cloud types for eventual consistency.
+\newblock In \emph{ECOOP 2012--Object-Oriented Programming}, pages 283--307.
+  Springer, 2012.
+
+\bibitem[Chun et~al.(2011)Chun, Ihm, Maniatis, Naik, and
+  Patti]{chun2011clonecloud}
+B.-G. Chun, S.~Ihm, P.~Maniatis, M.~Naik, and A.~Patti.
+\newblock Clonecloud: elastic execution between mobile device and cloud.
+\newblock In \emph{Proceedings of the sixth conference on Computer systems},
+  pages 301--314. ACM, 2011.
+
+\bibitem[Dinh et~al.(2013)Dinh, Lee, Niyato, and Wang]{WCM}
+H.~T. Dinh, C.~Lee, D.~Niyato, and P.~Wang.
+\newblock A survey of mobile cloud computing: architecture, applications, and
+  approaches.
+\newblock \emph{Wireless Communications and Mobile Computing}, 13\penalty0
+  (18):\penalty0 1587--1611, 2013.
+\newblock ISSN 1530-8677.
+\newblock \doi{10.1002/wcm.1203}.
+\newblock URL \url{http://dx.doi.org/10.1002/wcm.1203}.
+
+\bibitem[Gartner()]{Gartner}
+Gartner.
+\newblock August'13, \url{http://www.gartner.com/newsroom/id/2153215}.
+
+\bibitem[Grossman(2009)]{4804045}
+R.~Grossman.
+\newblock The case for cloud computing.
+\newblock \emph{IT Professional}, 11\penalty0 (2):\penalty0 23--27, 2009.
+\newblock ISSN 1520-9202.
+\newblock \doi{10.1109/MITP.2009.40}.
+
+\bibitem[Khan et~al.(2013)Khan, Othman, Madani, and Khan]{khan2013survey}
+A.~Khan, M.~Othman, S.~Madani, and S.~Khan.
+\newblock A survey of mobile cloud computing application models.
+\newblock 2013.
+
+\bibitem[Kwon and Tilevich(2013)]{kwon2013cloud}
+Y.-W. Kwon and E.~Tilevich.
+\newblock Cloud refactoring: automated transitioning to cloud-based services.
+\newblock \emph{Automated Software Engineering}, pages 1--28, 2013.
+
+\bibitem[Ling et~al.(2010)Ling, Zhou, and Zheng]{ling2010refactoring}
+H.~Ling, X.~Zhou, and Y.~Zheng.
+\newblock Refactoring from object-oriented systems to service-oriented systems:
+  A categorical approach.
+\newblock In \emph{Service Sciences (ICSS), 2010 International Conference on},
+  pages 214--218. IEEE, 2010.
+
+\bibitem[Strauch et~al.()Strauch, Andrikopoulos, and
+  Bachmann]{strauchmigrating}
+S.~Strauch, V.~Andrikopoulos, and T.~Bachmann.
+\newblock Migrating application data to the cloud using cloud data.
+\newblock In \emph{Proceedings of the 3rd International Conference on Cloud},
+  pages 36--46.
+
+\bibitem[Tillmann et~al.(2011)Tillmann, Moskal, de~Halleux, and
+  Fahndrich]{Tillmann2011TPC20482372048245}
+N.~Tillmann, M.~Moskal, J.~de~Halleux, and M.~Fahndrich.
+\newblock Touchdevelop: Programming cloud-connected mobile devices via
+  touchscreen.
+\newblock In \emph{Proceedings of the 10th SIGPLAN Symposium on New Ideas, New
+  Paradigms, and Reflections on Programming and Software}, ONWARD '11, pages
+  49--60, New York, NY, USA, 2011. ACM.
+\newblock ISBN 978-1-4503-0941-7.
+\newblock \doi{10.1145/2048237.2048245}.
+\newblock URL \url{http://doi.acm.org/10.1145/2048237.2048245}.
+
+\bibitem[Zhang et~al.(2010)Zhang, Cheng, and Boutaba]{zhang2010cloud}
+Q.~Zhang, L.~Cheng, and R.~Boutaba.
+\newblock Cloud computing: state-of-the-art and research challenges.
+\newblock \emph{Journal of Internet Services and Applications}, 1\penalty0
+  (1):\penalty0 7--18, 2010.
+
+\end{thebibliography}

@@ -86,17 +86,27 @@ Cloud computing has become a great tool for many developers to use, with many be
 
 
 \section{Introduction}
-% mobile is everywhere. mobile cloud computing can make it better. Examples
+
+% mobile is everywhere. mobile cloud computing can make it better. Examples of multiuser apps
+Mobile apps have gained significant popularity in the recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved battery life~\cite{TODO}, security~\cite{TODO}, bandwidth utilization, location awareness~\cite{OOPSLA13:fromMicrosoft}. In this paper we are focusing on another killer feature enabled by the cloud: the ability to develop rich, multiuser apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, collaborative data collection (e.g., Citizen Science~\cite{TODO:natureMagazine}). 
 
 % What's broken: advanced expertise, infrastructure, multiple languages
+To take advantage of the benefits of the cloud, app developers face a high entry barrier. They need expertise on many topics: communication protocols (e.g., web services, REST, SOAP, etc.), data storage (e.g., Amazon S3, Microsoft SkyDrive, etc.), databases, cloud infrastructure (e.g., Amazon EC2, Windows Azure, etc.),  programming or scripting languages. Similarly, converting a single into a multiuser app has a high entry barrier: they need to determine the candidate data structures and methods that operate on data structures and move them to the cloud. Currently, this process is manual, time consuming, and error prone~\cite{khan2013survey}.
 
 % In this paper we want to lower the entry barrier for developers, so that even hobbyists and beginner mobile app devs. Thus, TouchDevelop + Refactoring
+In this paper we are lowering the entry barrier to allow even hobbyists and beginner app developers to use the cloud. Thus, we are targetting TouchDevelop~\cite{Tillmann2011TPC20482372048245}, a programming environment and language developed by Microsoft Research to write apps \emph{on} mobile devices for mobile devices. We are employing automated refactoring techniques to convert local data structures into cloud data structures.
 
 % Intro to TouchDevelop and its cloud datatype
+TouchDevelop introduced specialized cloud data types~\cite{burckhardt2012cloud} that provide an abstraction layer over web service implementation, communication protocols, and storage.  In order to make the app responsive, even when the connection to the server is unavailable, cloud data types provide both local copies of the data as well as eventually consistent sharable cloud storage. This paradigm allows programmers to use cloud types in a similar manner to local data structures, but to also enjoy the benefits of the cloud.
 
-% our formative study to learn about refactorings from single to multi-user apps. refactorings for data structures
+% Our formative study to learn about refactorings from single to multi-user apps. refactorings for data structures
+In this paper we present the results of our formative study to convert single to multi-user apps. We used \numFormative publicly available, single-user TouchDevelop apps (two productivity tools and one game) and manually converted them into multi-user apps. Thus we discovered four conversion steps: (i) identify local data structures that need to be shared between multiple users, (ii) for each identified local data structure add a new cloud data structure, (iii) replace local data structure API calls with cloud API calls, (iv) initialize the cloud data structures. Not all these steps can be automated; some (e.g., identifying data structures that need to be shared) require domain knowledge which is best provided by the app developer. 
 
 % Automated refactoring based on these lessons, why do we need refactoring support.
+Using the lessons that we learned from the formative study, we designed and implemented a refactoring tool, \tool, to automate the conversion of local \code{Number Collection} into \code{Cloud Data Table}, and to transform the API calls. We selected this refactoring because its manual application is 
+challenging: the developer needs to map a 1-dimensional, horizontal data layout (as in \code{Collection} into a 2-dimensional data layout (as in \code{Table}).
+The difference is not only in the names of the APIs, but also in the cardinality of the mapping.
+Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same in both data structure), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}. In addition, sometimes there is no mapping, in which case it requires creating custom functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a custom function that iterates atomically over the elements of the \code{Table}. Such transformations can not be performed by a find-and-replace tool.
 
 % Contributions
 This paper makes the following contributions:
