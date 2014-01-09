@@ -81,7 +81,7 @@
 
 
 \begin{abstract}
-Cloud computing has become a great tool for many developers to use, with many benefits, especially in mobile development.  However, adding cloud functionality to an existing app can be difficult and time-consuming. We present \textsc{cloudifyer}, a tool that can automatically refractor \emph{local} data structures into \emph{cloud} data structures on the TouchDevelop platform.  As this platform targets students and hobbyist programmers, lowering the barrier of entry to using the cloud is imperative.
+Cloud computing has become a great tool for many developers to use, with many benefits, especially in mobile development.  However, adding cloud functionality to an existing app can be difficult and time-consuming. We present \tool, a tool that can automatically refractor \emph{local} data structures into \emph{cloud} data structures on the TouchDevelop platform.  As this platform targets students and hobbyist programmers, lowering the barrier of entry to using the cloud is imperative.
 \end{abstract}
 
 
@@ -252,10 +252,10 @@ The "everyone" session creates a session that everyone running the script can co
   
 \section{DataStructure to Cloud REFACTORING}
 \label{sec:Refactoring}
-This section presents the data structure to cloud refactoring.  We explain \textsc{cloudifyer}'s workflow, as well as the three types of transformations that we have identified that are necessary for the refactoring. 
+This section presents the data structure to cloud refactoring.  We explain \tool's workflow, as well as the three types of transformations that we have identified that are necessary for the refactoring. 
 
 \subsection{Workflow}
-\textsc{cloudifyer} is written in TouchDevelop, and can be run using the TouchDevelop platform.  Once it is run, the user is presented with a picker to choose which script to refactor.  This must be a script that is saved for that user, but any public script can be saved as your own script. When the user selects which script they wish to refactor, they are presented with all \textsc{number collection}s that are a part of this script.  The user can then choose which \textsc{number collection} they wish to refactor by typing in the name into a standard TouchDevelop wall prompt box. Once the user has typed in the name and clicked the ``ok'' button, the tool will automatically refactor all the calls to the selected \textsc{number collection}, and then present some output to the user, which includes how many of each type of transformation were performed, as well as the total time required to complete the refactoring. 
+\tool is written in TouchDevelop, and can be run using the TouchDevelop platform.  Once it is run, the user is presented with a picker to choose which script to refactor.  This must be a script that is saved for that user, but any public script can be saved as your own script. When the user selects which script they wish to refactor, they are presented with all \textsc{number collection}s that are a part of this script.  The user can then choose which \textsc{number collection} they wish to refactor by typing in the name into a standard TouchDevelop wall prompt box. Once the user has typed in the name and clicked the ``ok'' button, the tool will automatically refactor all the calls to the selected \textsc{number collection}, and then present some output to the user, which includes how many of each type of transformation were performed, as well as the total time required to complete the refactoring. 
 
 
 \subsection{Algorithm}
@@ -267,7 +267,7 @@ Step 2: Traverse through the script and find candidate statements for refactorin
 
 Step 3: Refactor local data structure statements into corresponding cloud data structure statements.
 
-To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop script, BlockY World.  BlockY World is a game where our hero must find his way through a maze of blocks, while also being able to move blocks to change the environment around him.  BlockY World uses multiple \textsc{number collection}s named \texttt{stats}, \texttt{spestats} and \texttt{zones}. For our further discussion of algorithm, we assume that user has selected \texttt{spestats} as the \textsc{number collection} to refactor. In step 1, a cloud data type is created and injected by \textsc{cloudifyer} into the BlockY World script.  A new cloud data table is added for every refactoring to avoid conflicts if there are more then one refactoring per script. Then a column will be added to the table with the same name as the \textsc{number collection} that is being refactored.  For \texttt{spestats}, the tool will produce a cloud data table with a single column whose data type is number and who's column name is \texttt{spestats}.  In step 2, TouchDevelop's JSON AST tree representation is used to traverse script's AST. If any references to selected collection to refactor is found, the tool marks it as a candidate statement to refactor.  In step 3, each of the candidate statement is then transformed into individual new statement that replace the call to the \textsc{number collection} with a the corresponding cloud data action. 
+To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop script, BlockY World.  BlockY World is a game where our hero must find his way through a maze of blocks, while also being able to move blocks to change the environment around him.  BlockY World uses multiple \textsc{number collection}s named \texttt{stats}, \texttt{spestats} and \texttt{zones}. For our further discussion of algorithm, we assume that user has selected \texttt{spestats} as the \textsc{number collection} to refactor. In step 1, a cloud data type is created and injected by \tool into the BlockY World script.  A new cloud data table is added for every refactoring to avoid conflicts if there are more then one refactoring per script. Then a column will be added to the table with the same name as the \textsc{number collection} that is being refactored.  For \texttt{spestats}, the tool will produce a cloud data table with a single column whose data type is number and who's column name is \texttt{spestats}.  In step 2, TouchDevelop's JSON AST tree representation is used to traverse script's AST. If any references to selected collection to refactor is found, the tool marks it as a candidate statement to refactor.  In step 3, each of the candidate statement is then transformed into individual new statement that replace the call to the \textsc{number collection} with a the corresponding cloud data action. 
 
 \subsection{Transformations}
 There are several categories of transformations that are needed to transform local data structures to cloud data structures.  
@@ -321,7 +321,7 @@ The indirect transformations are slightly more complex then the direct transform
 \end{center}
 \end{figure}
 
-Figure~\ref{fig:CloudTable_Add} shows the same line of code after it has been transformed by  \textsc{cloudifyer}.  Now the actions are operating on a cloud data table.  Since each element in the \textsc{number collection} is being mapped to a row in the cloud data table, before the number can be added a new row must be added to the table.  TouchDevelop offers the ability to chain functions together, so we can chain the add and assignment operators.  In the same line of code we can add a new row to the table, as well as set the value as the current Mileage that we wish to store.
+Figure~\ref{fig:CloudTable_Add} shows the same line of code after it has been transformed by  \tool.  Now the actions are operating on a cloud data table.  Since each element in the \textsc{number collection} is being mapped to a row in the cloud data table, before the number can be added a new row must be added to the table.  TouchDevelop offers the ability to chain functions together, so we can chain the add and assignment operators.  In the same line of code we can add a new row to the table, as well as set the value as the current Mileage that we wish to store.
 
 
 \subsubsection{Custom Function Transformations}
@@ -337,7 +337,7 @@ The third type of transformation we have implemented is custom function transfor
 \end{center}
 \end{figure}
 
-Figure~\ref{fig:CloudTable_avg_fun} shows the same line of code after \textsc{cloudifyer} has performed the transformation.  The action \texttt{Cloud Data avg} is a custom function that is generated by our refactoring engine that is needed to calculate the average of all the values in the cloud data table.  This function also returns a value, so we are saving it in the same local variable.  Figure~\ref{fig:CloudTable_avg_fun} shows the helper function that is added to the script.
+Figure~\ref{fig:CloudTable_avg_fun} shows the same line of code after \tool has performed the transformation.  The action \texttt{Cloud Data avg} is a custom function that is generated by our refactoring engine that is needed to calculate the average of all the values in the cloud data table.  This function also returns a value, so we are saving it in the same local variable.  Figure~\ref{fig:CloudTable_avg_fun} shows the helper function that is added to the script.
 
 \begin{figure}[htbp!]
 \begin{center}
@@ -367,49 +367,56 @@ avg := sum / Cloud Data table $\rightarrow$ count}
 
 \subsubsection{Unsupported Language Features}
 \label{sec:unsupportedLanguageFeatures}
-There were some transformations that we were unable to perform due to limitations of the TouchDevelop language.  Local data structures, in our case the \textsc{number collection} data structure, can be passed as an input parameter (argument) or output parameter (return value) of a TouchDevelop action.  Due to language constraints, cloud data tables must be declared as global variables and cannot be used as input or output parameters.  \textsc{cloudifyer} does not attempt to perform transformation in these situations.  In the future, a transformation could potentially be developed that would transform the local structure from a parameter to a global variable, and then the local to cloud data transformation could be performed.
+There were some transformations that we were unable to perform due to limitations of the TouchDevelop language.  Local data structures, in our case the \textsc{number collection} data structure, can be passed as an input parameter (argument) or output parameter (return value) of a TouchDevelop action.  Due to language constraints, cloud data tables must be declared as global variables and cannot be used as input or output parameters.  \tool does not attempt to perform transformation in these situations.  In the future, a transformation could potentially be developed that would transform the local structure from a parameter to a global variable, and then the local to cloud data transformation could be performed.
 
  \texttt{number collection}s can be assigned to a variable using the assignment operator.  However, cloud data tables are able to be assigned due to their global nature.  We are therefore unable to transform any occurrences of a data collection that use the assignment operator. 
 
-\textsc{cloudifyer} also does not support the custom function transformation of \texttt{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \textsc{cloudifyer} is unable to support transformations that involve the \texttt{add many} action.
+\tool also does not support the custom function transformation of \texttt{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \texttt{add many} action.
 
 
 
 \section{Evaluation}
 \label{sec:evaluation}
-To determine if \textsc{cloudifyer} is useful we ask the following research questions.\\
-Q1:  \textbf{APPLICABILITY}:  How applicable are the refactorings?\\
-Q2:  \textbf{EFFORT}: How much effort is saved by \textsc{cloudifyer} when refactoring?\\
-Q3:  \textbf{ACCURACY}: How accurate is \textsc{cloudifyer} when performing a refactoring ?\\
+To determine if \tool is useful we ask the following research questions.\\
+Q1:  \textbf{APPLICABILITY}:  How applicable is the refactoring?\\
+Q2:  \textbf{EFFORT}: How much effort is saved by \tool when refactoring?\\
+Q3:  \textbf{ACCURACY}: How accurate is \tool when performing a refactoring ?\\
  
 \subsection{Methodology}
 
+To create a corpus, we wrote queries against a database of all publicly available scripts in the \TD script bazaar. We wanted to collect popular and mature scripts. 
+Thus, our query returned top scripts (based on the number of times that each script was executed\TODO{verify that this is what ``number of runs'' means}) 
+that contained a \code{Number Collection}. We retained the top 109 scripts.
+
+%We also required the \code{Number Collection} be a global variable since 
+%Our refactoring works on non-global variables, but using global variables simplifies the automated identification of refactoring targets. 
+
+We ran the refactoring in batch mode. From each script in our corpus, our tool randomly selects one \code{Number Collection} as the target for refactoring. 
+
+In order to determine the applicability of \tool, we report the number of scripts that our tool was able to refactor successfully, as well as the number of each kind of transformations performed inside a refactoring.
+
+% TODO: move to the results
+%We did find some programs that our tool was unable to refactor.  Currently the way Cloud Data tables are implemented in TouchDevelop, they cannot be passed as arguments to a method, they may only be used as a global variable.  Since \textsc{number collection}s do have the ability to be passed as collections, the tool is unable to refactor programs where the \textsc{number collection} is passed as an argument.  We only found 5 scripts that were unable to be refactored for this reason, as noted in Table~\ref{table:totalScripts}.  We also were unable to implement the \texttt{add many} functionality, so any script that called the add many action on a \textsc{number collection} was unable to be transformed by our tool. 
+
+In order to determine the effort saved by using this refactoring tool we record the number of seconds each refactoring took. 
+%TODO: move to results
+%Table~\ref{table:avgTrans} shows  the refactoring times.  The longest refactoring took 18 seconds, but the median time was only 9 seconds.  The majority of the time spent doing the refactoring was spent locating transformations, so the time that the refactoring took was correlated with the program size, not with the number of transformations performed for each script.
 
 
-\subsubsection{Verification Corpus}
-We developed our refactoring tool as a TouchDevelop script.  In order to empirically evaluate the application, we ran it on 109 scripts.  In order for a script to be a candidate for refactoring it should have at least one \textsc{number collection}.  In order to make our evaluation easier, we also required the \textsc{number collection} be a global variable.  Our refactoring works on non-global variables, but using global variables simplifies the automated identification of refactoring targets.  We chose to target the top ranked scripts based on number of runs.
-
-For each script we ran a program that would identify all the \textsc{number collection} data structures in the target script.  Once the \textsc{number collection}s had been identified, one would then be chosen to be the target of the refactoring.  For each successful refactoring we returned several metrics.
-
-In order to determine the applicability of our tool we tracked the number of scripts that our tool was able to refactor, as well as the number of each specific class of refactoring.
-
-In order to determine the effort saved by using this refactoring tool we record the number of seconds each refactoring took. Table~\ref{table:avgTrans} shows  the refactoring times.  The longest refactoring took 18 seconds, but the median time was only 9 seconds.  The majority of the time spent doing the refactoring was spent locating transformations, so the time that the refactoring took was correlated with the program size, not with the number of transformations performed for each script.
-
-We did find some programs that our tool was unable to refactor.  Currently the way Cloud Data tables are implemented in TouchDevelop, they cannot be passed as arguments to a method, they may only be used as a global variable.  Since \textsc{number collection}s do have the ability to be passed as collections, the tool is unable to refactor programs where the \textsc{number collection} is passed as an argument.  We only found 5 scripts that were unable to be refactored for this reason, as noted in Table~\ref{table:totalScripts}.  We also were unable to implement the \texttt{add many} functionality, so any script that called the add many action on a \textsc{number collection} was unable to be transformed by our tool. 
 
 In order to determine if the tool was accurate or not we chose 10 applications to manually evaluate from the list of scripts we had run our automated refactoring tool on.  In order to evaluate the accuracy we first checked to ensure that our automated tool had not introduced any new syntax errors into the script.  After that, we looked at each reference to the original \textsc{number collection} and ensured that it had been correctly transformed into the correct call to the Cloud Table.
 
 
 \subsubsection{Further Validation}
 In order to further validate our results we randomly chose 10 scripts to further evaluate.  We then ran the scripts for up to three minutes and explored their functionality.  During this exploration we took notes of the behavior and any output of the script.  We then performed our refactoring on each script and then ran each script for three minutes again to verify that our script had not introduced any runtime behavioral changes. We did not observe any runtime changes based on the changes to these scripts.
-In addition to running these scripts we also performed code inspections of these randomly selected scripts.  We counted any potential transformations that were missed by \textsc{cloudifyer} as well as we inspected all the transformations that had been performed to see if they had been performed precisely or imprecisely.  Using these values we were able to calculate precision and recall for \textsc{cloudifyer}.  We define precision as
+In addition to running these scripts we also performed code inspections of these randomly selected scripts.  We counted any potential transformations that were missed by \tool as well as we inspected all the transformations that had been performed to see if they had been performed precisely or imprecisely.  Using these values we were able to calculate precision and recall for \tool.  We define precision as
 \[precision = \frac{|True Positive|}{|True Positive|+|False Positive|}\]
 and recall as
 \[recall = \frac{|True Positive|}{|True Positive|+|False Negative|}\]
-A {\it TruePositive} is a potential transformation that is correctly identified as a transformation, and the transformation is correctly performed.  A {\it FalsePositive} is when \textsc{cloudifyer} applies a refactoring to a line of code that is not a potential target.  In other words, it transforms code that should not have been transformed.   {\it FalseNegative} is when a transformation that should be applied is not.  This is when \textsc{cloudifyer} does not correctly transform some code, leaving it as it was before, when in fact, it should have been transformed. 
+A {\it TruePositive} is a potential transformation that is correctly identified as a transformation, and the transformation is correctly performed.  A {\it FalsePositive} is when \tool applies a refactoring to a line of code that is not a potential target.  In other words, it transforms code that should not have been transformed.   {\it FalseNegative} is when a transformation that should be applied is not.  This is when \tool does not correctly transform some code, leaving it as it was before, when in fact, it should have been transformed. 
 \subsection{Results}
 
-\textbf{APPLICABILITY}:  Table~\ref{table:totalScripts} shows the results for running our refactoring tool on 109 scripts.  Out of the 109 scripts that were attempted to be refactored by our tool, only 7 were unable to be refactored due to unsupported language features as described in Section~\ref{sec:unsupportedLanguageFeatures}.  \textsc{cloudifyer} was able to refactor 91\% of the scripts that we attempted.  This shows that \textsc{cloudifyer} is clearly applicable to a wide range of scripts that contain the \textsc{number collection} data structure.
+\textbf{APPLICABILITY}:  Table~\ref{table:totalScripts} shows the results for running our refactoring tool on 109 scripts.  Out of the 109 scripts that were attempted to be refactored by our tool, only 7 were unable to be refactored due to unsupported language features as described in Section~\ref{sec:unsupportedLanguageFeatures}.  \tool was able to refactor 91\% of the scripts that we attempted.  This shows that \tool is clearly applicable to a wide range of scripts that contain the \textsc{number collection} data structure.
 
 \begin{table}[htdp]
 \begin{center}
@@ -456,7 +463,7 @@ MAX & 112 & 13 & 112 & 19 & 18 \\
 \end{center}
 \end{figure}
 
-\textbf{ACCURACY}: By manually checking 20 scripts, we analyzed the precision and recall for our tool.  We found a precision of 100\%.  We also calculated the recall, and our recall value was 94\%. There were over 145 transformations that we inspected in these 20 scripts, and we only found 8 potential transformations that \textsc{cloudifyer} missed.
+\textbf{ACCURACY}: By manually checking 20 scripts, we analyzed the precision and recall for our tool.  We found a precision of 100\%.  We also calculated the recall, and our recall value was 94\%. There were over 145 transformations that we inspected in these 20 scripts, and we only found 8 potential transformations that \tool missed.
 
 \begin{table}[htdp]
 \begin{center}
@@ -474,7 +481,7 @@ Recall & 95\% \\
 \subsection{Case Studies}
 
 \subsubsection{Motivating Example}
-We forked the Mileage Tracker script and created our own Mileage Tracker script. Without making any logical change to the script, we used \textsc{number collection} instead of number map to store data. We then manually replaced a slice api call with corresponding logic as the slice api call is not available with \textsc{number collection}. We ran both the original script and our manual changes to ensure that both scripts exhibited the exact same functionality. The new Mileage Tracker script is available in TouchDevelop with script id \texttt{mfbb}.  We then refactored the Mileage Tracker script using \textsc{cloudifyer}. All the transformations were successfully applied and script did not have any compilation errors. Though to ensure that script behavior was exactly same as before we needed to make two lines of code change in InitializeApplicationSettings method of the script. As Microsoft TouchDevelop recent version removed is invalid with cloud data table, we have to replace it with corresponding logical step. The other one line of change in code is to enable everyone session on the cloud data table. This will allow multiple users with their own separate sessions to share same cloud data table. We ran the refactored Mileage Tracker application with three different devices, two laptops and one mobile phone to verify Mileage Tracker is indeed refactored into multi device, multi user application. Thus, with our automated refactorings and two lines of code changes we were successfully able to convert a single user, single device application into multi user, multi device application. The refactored Mileage Tracker Appliation is available in TouchDevelop with id \texttt{eyhca} and name Mileage Tracker Refactored. 
+We forked the Mileage Tracker script and created our own Mileage Tracker script. Without making any logical change to the script, we used \textsc{number collection} instead of number map to store data. We then manually replaced a slice api call with corresponding logic as the slice api call is not available with \textsc{number collection}. We ran both the original script and our manual changes to ensure that both scripts exhibited the exact same functionality. The new Mileage Tracker script is available in TouchDevelop with script id \texttt{mfbb}.  We then refactored the Mileage Tracker script using \tool. All the transformations were successfully applied and script did not have any compilation errors. Though to ensure that script behavior was exactly same as before we needed to make two lines of code change in InitializeApplicationSettings method of the script. As Microsoft TouchDevelop recent version removed is invalid with cloud data table, we have to replace it with corresponding logical step. The other one line of change in code is to enable everyone session on the cloud data table. This will allow multiple users with their own separate sessions to share same cloud data table. We ran the refactored Mileage Tracker application with three different devices, two laptops and one mobile phone to verify Mileage Tracker is indeed refactored into multi device, multi user application. Thus, with our automated refactorings and two lines of code changes we were successfully able to convert a single user, single device application into multi user, multi device application. The refactored Mileage Tracker Appliation is available in TouchDevelop with id \texttt{eyhca} and name Mileage Tracker Refactored. 
 
 \subsubsection{BlockY World}
 To further demonstrate the usefulness of cloud refactoring, we applied it on BlockY World, a game script written for TouchDevelop. The BlockY World script id is skdk. 65 users are following this game and the game has been installed 350.  To convert this game from single device to multi device/multi user game via refactoring, we used our tool to refactor all the collections to cloud data types. BlockY World has 8 \textsc{number collection}s and one \texttt{picture collection}. As TouchDevelop cloud data tables do not support picture type, we are unable to convert the picture collection to cloud data type.  All 8 \textsc{number collection}s were automatically refactored into corresponding cloud data type using the tool. We also added some manual code to initialize and share the data. 
@@ -495,7 +502,7 @@ We also determined that for this application, eventually consistency was not res
 
 \textbf{External Validity:}  Do our results generalize? We chose over 100 of the most commonly run scripts to use as our corpus, but we put no restrictions on the tags, or types of the scripts.  Our selection include scripts tagged with entertainment,sports, games, education, productivity and platform bugs.  Since tags are not required in TouchDevelop we observed many scripts without tags.  However, in a addition to a wide variety of scripts tags, we also observed a variety of script types while performing the evaluations.  We do not foresee any reasons why these results would not generalize to all TouchDevelop scripts.
 
-\textbf{Reliability:} Is our evaluation reliable? The scripts that we used to evaluate our tool are all available on the TouchDevelop website, and \textsc{cloudifyer} is published on the TouchDevelop website with a script Id of //TODO FINAL VERSION OF SCRIPT ID.
+\textbf{Reliability:} Is our evaluation reliable? The scripts that we used to evaluate our tool are all available on the TouchDevelop website, and \tool is published on the TouchDevelop website with a script Id of //TODO FINAL VERSION OF SCRIPT ID.
 
 Very few scripts in TouchDevelop have any tests at all.  We were not able to use these to verify that we did not break the runtime behavior of the scripts.  In order to mitigate this we manually validated a random selection of scripts to ensure constant runtime behavior before and after our refactoring.
 
@@ -517,7 +524,7 @@ The approach of partially moving computations of mobile device to a clone virtua
 
 \section{Conclusions and Future Work}
 \label{sec:conclusions}
-In this paper we present \textsc{cloudifyer}, a tool to refactor local data structures into cloud data structures.  We have shown that it is able to automatically transform most usages of \textsc{number collection} into cloud data references.  We are able to perform these transformations while still preserving the behavior of the application.  Should the user choose to take further advantage of the cloud data features, in some cases only a few lines of code are needed to take advantage of the cloud data features to provide more functionality. 
+In this paper we present \tool, a tool to refactor local data structures into cloud data structures.  We have shown that it is able to automatically transform most usages of \textsc{number collection} into cloud data references.  We are able to perform these transformations while still preserving the behavior of the application.  Should the user choose to take further advantage of the cloud data features, in some cases only a few lines of code are needed to take advantage of the cloud data features to provide more functionality. 
 
 In the future, it would be nice to automate those changes, so in addition to being able to refactor their data to the cloud, we would like to provide an automated transformation tool that would enable multiuser features to be automatically added to scripts.
 
