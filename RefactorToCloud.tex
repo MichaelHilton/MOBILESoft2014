@@ -88,7 +88,7 @@ Cloud computing has become a great tool for many developers to use, with many be
 \section{Introduction}
 
 % mobile is everywhere. mobile cloud computing can make it better. Examples of multiuser apps
-Mobile apps have gained significant popularity in the recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved battery life~\cite{TODO}, security~\cite{TODO}, bandwidth utilization, location awareness~\cite{OOPSLA13:fromMicrosoft}. In this paper we are focusing on another killer feature enabled by the cloud: the ability to develop rich, multiuser apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, collaborative data collection (e.g., Citizen Science~\cite{TODO:natureMagazine}). 
+Mobile apps have gained significant popularity in the recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved battery life~\cite{Chen:2012:CCO:2310096.2310228}, security~\cite{Oberheide:2008:VIS:1622103.1629656}, bandwidth utilization~\cite{Vemulapalli:2013:PSD:2492348.2492353}, location awareness~\cite{kansal2013latency}. In this paper we are focusing on another killer feature enabled by the cloud: the ability to develop rich, multiuser apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, collaborative data collection (e.g., Citizen Science~\cite{cohn2008citizen}). 
 
 % What's broken: advanced expertise, infrastructure, multiple languages
 To take advantage of the benefits of the cloud, app developers face a high entry barrier. They need expertise on many topics: communication protocols (e.g., web services, REST, SOAP, etc.), data storage (e.g., Amazon S3, Microsoft SkyDrive, etc.), databases, cloud infrastructure (e.g., Amazon EC2, Windows Azure, etc.),  programming or scripting languages. Similarly, converting a single into a multiuser app has a high entry barrier: they need to determine the candidate data structures and methods that operate on data structures and move them to the cloud. Currently, this process is manual, time consuming, and error prone~\cite{khan2013survey}.
@@ -163,43 +163,43 @@ If the application had been developed using the TouchDevelop table data structur
 Number Collection Operations & Cloud Table Operations & Transformation Type\\
  \hline
   \hline
-add & add row & Indirect \\ 
+\code{add} & \code{add row} & Indirect \\ 
 \hline
-at & row at & Indirect \\
+\code{at} & \code{row at} & Indirect \\
 \hline
-add many() & NONE & Function \\
+\code{add many} & NONE & Function \\
 \hline
-avg & NONE & Function \\
+\code{avg} & NONE & Function \\
 \hline
-clear & clear & Direct \\
+\code{clear} & \code{clear} & Direct \\
 \hline
-contains & NONE & Function \\
+\code{contains} & NONE & Function \\
 \hline
-count & count & Direct \\
+\code{count} & \code{count} & Direct \\
 \hline
-index of &NONE  & Function \\
+\code{index of} &NONE  & Function \\
 \hline
-insert at & row at$\rightarrow$value & Indirect \\
+\code{insert at} & \code{row at$\rightarrow$value} & Indirect \\
 \hline
-max &NONE  & Function \\
+\code{max} &NONE  & Function \\
 \hline
-min & NONE & Function \\
+\code{min} & NONE & Function \\
 \hline
-post to wall & post to wall & direct \\
+\code{post to wall} & \code{post to wall} & direct \\
 \hline
-random &NONE  & Function \\
+\code{random} &NONE  & Function \\
 \hline
-remove  & NONE & Function \\
+\code{remove}  & NONE & Function \\
 \hline
-remove at & row at()$\rightarrow$deleteRow & Indirect \\
+\code{remove at} & \code{row at$\rightarrow$deleteRow} & Indirect \\
 \hline
-reverse &NONE  & Function \\
+\code{reverse} &NONE  & Function \\
 \hline
-set at & row at()$\rightarrow$valueName & Indirect \\
+\code{set at} & \code{row at$\rightarrow$valueName} & Indirect \\
 \hline
-sort & NONE & Function \\
+\code{sort} & NONE & Function \\
 \hline
-sum & NONE & Function \\
+\code{sum} & NONE & Function \\
 \hline
 
 \end{tabular}
@@ -415,9 +415,8 @@ A {\it TruePositive} is a potential transformation that is correctly identified 
 \begin{center}
 \begin{tabular}{ll}
 Total Scripts & 109 \\
-Number Successfully Refactored & 98 \\
+Number Successfully Refactored & 102 \\
 Unsupported Language Features & 7 \\
-Tool Crashed on Refactoring Attempt & 4\\
 \end{tabular}
 \nocaptionrule
 \caption{Total Scripts Refactored}
