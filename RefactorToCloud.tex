@@ -132,13 +132,13 @@ computing through the use of refactoring techniques.
 %describe the applications
 We selected \numFormative apps from the \TD script bazaar for our formative study. We converted them from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
 
-The first app we selected was \MT \TODO{replace all other usages of MileageTracker and other apps with macros}, which is publicly available with the script id of \TODO{change to citation} \code{zenx}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. We converted Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
+The first app we selected was \MT, which is publicly available with the script id of~\cite{MileageTracker}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. We converted Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
 
 Business Manager+~\cite{BusinessManager} is an app to track of business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with others.
 
-CliffHangers \TODO{change to citation}\code{jrqt} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they loose the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
+CliffHangers~\cite{CliffHangers} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they loose the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
 
-MyAssignment \TODO{cite xkhza} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  We converted into a multi-user app so that multiple students can collaborate on class assignments.
+MyAssignment~\cite{MyAssignments} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  We converted into a multi-user app so that multiple students can collaborate on class assignments.
 
 After converting these apps, we ran them with multiple users to verify that in fact the apps work correctly. 
 
@@ -192,6 +192,7 @@ Table~\ref{tab:refactoringsFormative} lists the total number of refactorings tha
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
+\hline
 App  & Primitive to  & Local Table to   & Collection to  \\
  Name &  Cloud  &  Cloud Table  & Cloud \\
 \hline
@@ -202,6 +203,10 @@ Buisness Manager+ & 0 & 0 & 5\\
 CliffHangers & 8 & 0 & 2\\
 \hline
 My Assignments & 0 & 1 & 0\\
+\hline
+\hline
+Total & 10 & 1  & 8 \\
+\hline
 \end{tabular}
 \end{center}
 \nocaptionrule
@@ -231,7 +236,7 @@ My Assignments & 0 & 1 & 0\\
       \label{fig:lambdaOverload}
       }
     }
-    \caption{CAPTION}
+    \caption{Selected code from Mileage Tracker app}
     \label{fig:anonCornerCase2}
 \end{figure*}
 
@@ -501,31 +506,39 @@ We ran the refactoring in batch mode. From each script in our corpus, our tool r
 
 In order to determine the applicability of \tool, we report the number of scripts that our tool was able to refactor successfully, as well as the number of each kind of transformations performed inside a refactoring.
 
-% TODO: move to the results
-%We did find some programs that our tool was unable to refactor.  Currently the way Cloud Data tables are implemented in TouchDevelop, they cannot be passed as arguments to a method, they may only be used as a global variable.  Since \NC{}s do have the ability to be passed as collections, the tool is unable to refactor programs where the \NC{} is passed as an argument.  We only found 5 scripts that were unable to be refactored for this reason, as noted in Table~\ref{table:totalScripts}.  We also were unable to implement the \texttt{add many} functionality, so any script that called the add many action on a \NC{} was unable to be transformed by our tool. 
+
 
 In order to determine the effort saved by using this refactoring tool we record the number of seconds each refactoring took. 
-%TODO: move to results
-%Table~\ref{table:avgTrans} shows  the refactoring times.  The longest refactoring took 18 seconds, but the median time was only 9 seconds.  The majority of the time spent doing the refactoring was spent locating transformations, so the time that the refactoring took was correlated with the program size, not with the number of transformations performed for each script.
 
 
-%We also chose \numManual scripts to manually evaluate 
-%In order to determine if the tool was accurate or not we chose 10 applications to manually evaluate from the list of scripts we had run our automated refactoring tool on.  In order to evaluate the accuracy we first checked to ensure that our automated tool had not introduced any new syntax errors into the script.  After that, we looked at each reference to the original \NC{} and ensured that it had been correctly transformed into the correct call to the Cloud Table.
 
-After running the batch refactoring, we chose \numManual script to manually evaluate to verify our results.  In order to verify that our scripts did not introduce any runtime errors, we first ran the original script for three minutes and manually explored their functionality.  We then ran the refactored version of the script.
-In order to determine the precision of our refactorings, we performed manual code inspections on these randomly selected scripts.  We looked for all the potential transformations for each refactoring, and determined if \tool had correctly identified them.  If they were correctly identified, we determined if the transformation had been applied correctly.
+In order to validate the accuracy of \tool, we randomly chose \numManual scripts from the corpus of \numScripts refactored scripts. We ran the scripts and exercised the features for three minutes before and after each refactoring to ensure that the refactorings did not change the scripts' runtime behavior. Indeed, we did not observe any runtime differences before and after the refactoring. 
 
-\subsubsection{Further Validation}
-In order to further validate our results we randomly chose \numManual scripts to further evaluate.  We then ran the scripts for up to three minutes and explored their functionality.  During this exploration we took notes of the behavior and any output of the script.  We then performed our refactoring on each script and then ran each script for three minutes again to verify that our script had not introduced any runtime behavioral changes. We did not observe any runtime changes based on the changes to these scripts.
-In addition to running these scripts we also performed code inspections of these randomly selected scripts.  We counted any potential transformations that were missed by \tool as well as we inspected all the transformations that had been performed to see if they had been performed precisely or imprecisely.  Using these values we were able to calculate precision and recall for \tool.  We define precision as
+In addition to running these \numManual scripts we also carefully inspected the refactored code. We counted transformations that \tool
+(i) applied correctly, (ii) applied incorrectly, and (iii) missed. We first manually created a set of transformations required for each refactoring, which we define as the \emph{golden standard}. We define a {\it TruePositive} as a transformation that \tool identified and applied correctly, and it was a part of the golden standard. 
+We define {\it FalsePositive} as a transformation that \tool applies to the code, but it is not part of the golden standard. In other words, \tool transformed code that should not have been transformed.
+We define a {\it FalseNegative} as a transformation that \tool did not apply, but it is in the golden standard. In other words, \tool missed applying a needed transformation.
+ 
+ Using these metrics we calculate precision and recall for \tool, using the standard definitions:
 \[precision = \frac{|True Positive|}{|True Positive|+|False Positive|}\]
-and recall as
+
 \[recall = \frac{|True Positive|}{|True Positive|+|False Negative|}\]
-A {\it TruePositive} is a potential transformation that is correctly identified as a transformation, and the transformation is correctly performed.  A {\it FalsePositive} is when \tool applies a refactoring to a line of code that is not a potential target.  In other words, it transforms code that should not have been transformed.   {\it FalseNegative} is when a transformation that should be applied is not.  This is when \tool does not correctly transform some code, leaving it as it was before, when in fact, it should have been transformed. 
+
+
+
 \subsection{Results}
 
-\textbf{APPLICABILITY}:  We determined that our refactorings are widely applicable to \TD scripts that contain the \NC{} data structure.  Table~\ref{table:totalScripts} shows the results for running our refactoring tool on \numScripts scripts.  Out of the \numScripts scripts that were attempted to be refactored by our tool, only 7 were unable to be refactored due to unsupported language features as described in Section~\ref{sec:unsupportedLanguageFeatures}.  \tool was able to refactor 94\% of the scripts that we attempted.  
+Next we present the results for each of the three research questions.
 
+
+\textbf{Applicability: } 
+Table~\ref{table:totalScripts} shows the results for running \tool on \numScripts scripts. 
+Out of the \numScripts scripts that \tool attempted to refactor, 102 (94\%) met the preconditions for the refactoring.
+
+Only 7 scripts were unable to be refactored. Out of these, 4 scripts did not meet precondition \POne (the \NC{} was passed as an argument to a function), and 1 did not meet precondition \PTwo (\NC{} was assigned to a local variable). The remaining 2 scripts exposed a limitation of the current implementation of \tool (they were using a currently unsupported function, \code{add many}). 
+Thus, we think that our refactoring is widely applicable to \TD scripts that contain the \NC{} data structure.  
+
+\TODO{breakout into preconditions}
 \begin{table}[htdp]
 \begin{center}
 \begin{tabular}{ll}
@@ -540,15 +553,23 @@ Unsupported Language Features & 7 \\
 \end{table}%
 
 \textbf{EFFORT}:  
-Figure~\ref{table:avgTrans} shows the number of transformations performed per script as well as the average times.
+Table~\ref{table:avgTrans} shows the number of transformations performed per each refactoring. The first column tabulates the total number of 
+transformations per refactoring. The next three columns show the type of these transformations (i.e., direct, indirect, and custom function). The last column shows the running time for each refactoring.
+
 Each refactoring consisted on an average of almost 12 transformations.  The most common transformation was indirect transformations with 10  transformations on average for each script.
 
 The last column shows the time in seconds.  On average each refactoring took a total of 9 seconds to complete.  The maximum length of time any single refactoring took was 18 seconds.  As the number of transformations on average was 12, this shows that our refactoring tool saves significant effort, as the time to make these transformations by hand would clearly exceed a few seconds.  
+
+%TODO: move to results
+%Table~\ref{table:avgTrans} shows  the refactoring times.  The longest refactoring took 18 seconds, but the median time was only 9 seconds.  The majority of the time spent doing the refactoring was spent locating transformations, so the time that the refactoring took was correlated with the program size, not with the number of transformations performed for each script.
+
+
+
 \begin{table}[htdp]
 \begin{center}
 \begin{tabular}{lclclclclcl}
  & Total & Direct & Indirect & Custom & Time \\
-  & Trans & Trans & Trans & Function & in secs \\
+  & Trans & Trans & Trans & Function & [secs] \\
   \hline
   \hline
 AVG & 11.6 & 1.20 & 9.07 & 1.34 & 9.30 \\

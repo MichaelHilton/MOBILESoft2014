@@ -4,3 +4,11 @@ RefactorToCloud.aux
 RefactorToCloud.log
 
 RefactorToCloud.synctex.gz
+
+RefactorToCloud.bbl
+
+*.blg
+
+RefactorToCloud.synctex.gz(busy)
+
+RefactorToCloud.bbl

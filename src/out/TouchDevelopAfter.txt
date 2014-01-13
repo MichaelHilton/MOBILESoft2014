@@ -10,8 +10,7 @@ private action ClearMileageRecord ()
 This action clears the mileage record.
 wall->clear      
 if wall->ask boolean("Warning", "Are you sure…")
-    ->equals(true) then                      
-  MileageRecord := collections->create number collection      
+    ->equals(true) then                        
   MileageRecordTable table->clear      
 else
 
