@@ -138,6 +138,8 @@ Business Manager+~\cite{BusinessManager} is an app to track of business contacts
 
 CliffHangers \TODO{change to citation}\code{jrqt} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they loose the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
 
+MyAssignment \TODO{cite xkhza} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  We converted into a multi-user app so that multiple students can collaborate on class assignments.
+
 After converting these apps, we ran them with multiple users to verify that in fact the apps work correctly. 
 
 %describe the process with the four steps
@@ -187,12 +189,23 @@ For these reasons, we automated the refactoring.
 Table~\ref{tab:refactoringsFormative} lists the total number of refactorings that we applied as part of our formative study.
 
 \begin{table}[htdp]
-\caption{Total number of refactorings}
-\begin{center}
-\begin{tabular}{|c|c|}
 
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+App  & Primitive to  & Local Table to   & Collection to  \\
+ Name &  Cloud  &  Cloud Table  & Cloud \\
+\hline
+MileageTracker & 2 & 0 & 1\\
+\hline
+Buisness Manager+ & 0 & 0 & 5\\
+\hline
+CliffHangers & 8 & 0 & 2\\
+\hline
+My Assignments & 0 & 1 & 0\\
 \end{tabular}
 \end{center}
+\nocaptionrule
+\caption{Total number of refactorings}
 \label{tab:refactoringsFormative}
 \end{table}%
 
