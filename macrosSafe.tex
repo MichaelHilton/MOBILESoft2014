@@ -130,12 +130,142 @@
 
 
 
+
+
+
 %Are they \textbf{safer} than manual approach?\xspace}
 %Do they improve \textbf{code quality}?\xspace}
 
 %\newcommand{\subParagraph}[1]{\textbf{\emph{#1}}}
 %\newcommand{\MyParagraph}[1]{\noindent \textbf{#1}}
 
+
+
+
+
+
+
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xspace}
+\usepackage{alltt}
+
+ \usepackage{multirow} 
+ \usepackage{rotating}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% THIS BELOW COPIED FROM vkuncak/doc/vmcai09/defs.tex
+\definecolor{gray}{RGB}{211,211,211}
+\newcommand{\jbasicstyle}{\scriptsize\sffamily}%\footnotesize}
+\newcommand{\textcode}[1]{{#1}} % with current font \sf and \tt look ugly
+\newcommand{\jnumberstyle}{\tiny}
+\newcommand{\Hilight}{\makebox[0pt][l]{\color{gray}\rule[-3pt]{0.80\linewidth}{9pt}}}
+\newcommand{\CodeIn}[1]{{\small\texttt{#1}}}
+
+\newcommand{\codex}[1]{{\smaller\texttt{#1}}\xspace}
+
+\newcommand{\tilted}[1]{\begin{turn}{75}#1\end{turn}}
+
+\lstdefinelanguage{pseudo}
+ {
+%alsoletter={<>:=},
+  morekeywords={int,boolean,new,continue,enum,
+                void,if,else,while,return,for,foreach,in,assert,assume,false,true,class,static,import,
+                ignoreIf,getInt,getAny,getNew,getExisting,getBoolean,force,concrete,Susp,
+                getInt,getAny,getNew,getBoolean,force,concrete,Susp,max,min,ObjectPool,
+                implements,interface,public,double,synchronized,final,
+                proc,@Event,@Schedule,extends,case,sleep,waitForTick,assertTick,instanceof},
+  keywordstyle=\bfseries,
+  lineskip=-0.1em,
+%  numbers=left,
+  numbers=none,
+  numberstyle=\jnumberstyle,
+  numbersep=4pt,
+%  basicstyle=\scriptsize,
+  basicstyle=\jbasicstyle,
+  breaklines=true,
+  breakautoindent=true,
+  tabsize=2,
+%  columns=fixed,
+%  columns=flexible,
+  columns=fullflexible,
+%  morecomment=*[s][\textsl]{/*:}{*/},
+  morecomment=*[l][\textsl]{//},
+%  morecomment=*[s][\jahobform]{"}{"},
+  mathescape=true,
+%  escapeinside=<>,
+%  escapebegin={\begin{isakeyword}},
+%  escapeend={\end{isakeyword}}
+%  caption={},
+%  label={},
+}
+\newcommand{\MyParagraph}[1]{\noindent \textbf{#1}}
+\newenvironment{CodeOut}{\begin{scriptsize}}{\end{scriptsize}}
+
+
+\newcommand{\ConvertAnonymousH}{AnonymousToLambda\xspace}
+\newcommand{\ConvertForLoopH}{ForLoopToFunctional\xspace}
+
+\newcommand{\ConvertAnonymous}{\textsc{\small AnonymousToLambda}\xspace}
+\newcommand{\ConvertForLoop}{\textsc{\small ForLoopToFunctional}\xspace}
+\newcommand{\Tool}{\textsc{\small LambdaFicator}\xspace}
+\newcommand{\ToolH}{LambdaFicator\xspace}
+
+\newcommand{\NumConvertAnonymous}{1263\xspace}
+\newcommand{\NumConvertForLoop}{1709\xspace}
+
+\newcommand{\PercentConvertAnonymous}{55\%\xspace}
+\newcommand{\PercentConvertForLoop}{46\%\xspace}
+
+
+\newcommand{\aic}{\textsc{AIC}\xspace}
+\newcommand{\AST}{\textsc{AST}\xspace}
+
+\newcommand{\onearm}{\emph{Prospective Filter}\xspace}
+\newcommand{\linear}{\emph{Prospective Map}\xspace}
+\newcommand{\eager}{\emph{Prospective Eager}\xspace}
+\newcommand{\fb}{\emph{Prospective Operation}\xspace}
+\newcommand{\fbs}{\emph{Prospective Operations}\xspace}
+\newcommand{\foreach}{\code{forEach}\xspace}
+\newcommand{\anymatch}{\code{anyMatch}\xspace}
+\newcommand{\nonematch}{\code{noneMatch}\xspace}
+\newcommand{\reduce}{\code{reduce}\xspace}
+\newcommand{\filter}{\code{filter}\xspace}
+\newcommand{\map}{\code{map}\xspace}
+\newcommand{\operations}{operations\xspace}
+\newcommand{\nef}{n.e.f.\xspace}
+
+\newcommand{\ASK}[1]{\textbf{ASK Reviewers:} {#1}\xspace}
+\newcommand{\TECH}[1]{}
+%\newcommand{\TODO}[1]{}
+
+
+\newcommand{\vertbar}{vertBar\xspace}
+
+
+
+
+\newcommand{\NumProjects}{9\xspace}
+\newcommand{\NumSLOCReduced}{2213\xspace}
+\newcommand{\NumOperationsInferred}{2681\xspace}
+\newcommand{\NumChainsInferred}{1709\xspace}
+\newcommand{\NumSLOCChangedAnon}{3707\xspace}
+\newcommand{\NumSLOCChangedFor}{12313\xspace}
+\newcommand{\NumSLOCChanged}{16020\xspace}
+
+
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{url}
+\usepackage{footnote}
+%\usepackage{biblatex}
+%\usepackage{natbib}
+\usepackage{balance}
+
+\usepackage{float}
+\restylefloat{table}
 
 
 
