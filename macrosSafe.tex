@@ -1,19 +1,25 @@
 % !TEX root =  RefactorToCloud.tex
 
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{color}
+
+
 %\usepackage[english]{babel}
 %\usepackage{threeparttable}
 %\usepackage{amssymb}
 %\setcounter{tocdepth}{3}
-\usepackage{graphicx}
+%
 %\usepackage{multirow}
 %\usepackage{url}
 %\usepackage{array}
-\usepackage{xspace}
+%
 %\usepackage{moreverb}
-\usepackage{listings}
-\usepackage{color}
-%\usepackage{cite}
-\usepackage{relsize}
+%\usepackage{listings}
+
+%%\usepackage{cite}
+%\usepackage{relsize}
 %\usepackage{wasysym}
 %\usepackage{fancybox}
 %\usepackage{balance}
@@ -21,7 +27,7 @@
 %\usepackage{lmodern}
 %\usepackage{caption}
 %\usepackage{epstopdf}
-\usepackage{amsmath}
+%
 %\usepackage[font={bf}, labelfont=bf]{caption}
 %\usepackage[font={bf,small},labelfont=bf]{caption}
 %\usepackage{datetime}
@@ -51,7 +57,7 @@
 %}
 %
 %
-%\lstdefinelanguage{TD}
+%\lstdefinelanguage{TouchDevelop}
 %{
 %sensitive=true,
 %morekeywords=[1]{
@@ -62,18 +68,18 @@
 %morestring=[b]",
 %morestring=[b]',
 %}
-%
-%\DeclareCaptionFormat{listing}{\rule{\dimexpr\textwidth+17pt\relax}{0.4pt}\par\vskip1pt#1#2#3}
-%\captionsetup[lstlisting]{singlelinecheck=false, margin=0pt, font={sf},labelsep=space,labelfont=bf}
-%\renewcommand\lstlistingname{Code}
-%
+%%
+%%\DeclareCaptionFormat{listing}{\rule{\dimexpr\textwidth+17pt\relax}{0.4pt}\par\vskip1pt#1#2#3}
+%%\captionsetup[lstlisting]{singlelinecheck=false, margin=0pt, font={sf},labelsep=space,labelfont=bf}
+%%\renewcommand\lstlistingname{Code}
+%%
 %\definecolor{mygreen}{rgb}{0,0.6,0}
 %\definecolor{mygray}{rgb}{0.5,0.5,0.5}
 %\definecolor{mymauve}{rgb}{0.58,0,0.82}
-%
+%%
 %\lstset{ %
 %%frame=bottom,
-%  language=TD,                % the language of the code
+%  language=TouchDevelop,                % the language of the code
 %  basicstyle=\ttfamily\scriptsize,           % the size of the fonts that are used for the code
 %  keywordstyle=\color{blue},
 %  commentstyle=\color{mygreen},
@@ -95,8 +101,8 @@
 %}
 %
 %
-%\newcommand{\codesnippet}[1]{
-%\begin{lstlisting}#1\end{lstlisting}}
+\newcommand{\codesnippet}[1]{
+\begin{lstlisting}#1\end{lstlisting}}
 %
 %\newcommand{\readme}[1]{\texbf{ReadMe: }#1}
 %
@@ -107,7 +113,9 @@
 
 
 \newcommand{\numScripts}{109\xspace}
-\newcommand{\numFormative}{3\xspace}
+\newcommand{\numManual}{20\xspace}
+\newcommand{\numFormative}{three\xspace}
+\newcommand{\MT}{\begin{small}\textsc{Mileage Tracker}\end{small}\xspace}
 \newcommand{\numTransformations}{1139\xspace}
 \newcommand{\percentRefactored}{94\%\xspace}
 \newcommand{\TD}{\begin{small}\textsc{TouchDevelop}\end{small}\xspace}

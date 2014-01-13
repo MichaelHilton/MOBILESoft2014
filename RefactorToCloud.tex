@@ -104,10 +104,10 @@ TouchDevelop introduced specialized cloud data types~\cite{burckhardt2012cloud} 
 In this paper we present the results of our formative study to convert single to multi-user apps. We used \numFormative publicly available, single-user TouchDevelop apps (two productivity tools and one game) and manually converted them into multi-user apps. Thus we discovered four conversion steps: (i) identify local data structures that need to be shared between multiple users, (ii) for each identified local data structure add a new cloud data structure, (iii) replace local data structure API calls with cloud API calls, (iv) initialize the cloud data structures. Not all these steps can be automated; some (e.g., identifying data structures that need to be shared) require domain knowledge which is best provided by the app developer. 
 
 % Automated refactoring based on these lessons, why do we need refactoring support.
-Using the lessons that we learned from the formative study, we designed and implemented a refactoring tool, \tool, to automate the conversion of local \code{Number Collection} into \code{Cloud Data Table}, and to transform the API calls. We selected this refactoring because its manual application is 
-challenging: the developer needs to map a 1-dimensional, horizontal data layout (as in \code{Collection} into a 2-dimensional data layout (as in \code{Table}).
+Using the lessons that we learned from the formative study, we designed and implemented a refactoring tool, \tool, to automate the conversion of local \NC{} into \code{Cloud Data Table}, and to transform the API calls. We selected this refactoring because its manual application is 
+challenging: the developer needs to map a 1-dimensional, horizontal data layout (as in \code{Collection}) into a 2-dimensional data layout (as in \code{Table}).
 The difference is not only in the names of the APIs, but also in the cardinality of the mapping.
-Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same in both data structure), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}. In addition, sometimes there is no mapping, in which case it requires creating custom functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a custom function that iterates atomically over the elements of the \code{Table}. Such transformations can not be performed by a find-and-replace tool.
+Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same in both data structure), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). In addition, sometimes there is no mapping, in which case it requires creating custom functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a custom function that iterates atomically over the elements of the \code{Table}. Such transformations can not be performed by a find-and-replace tool.
 
 % Contributions
 This paper makes the following contributions:
@@ -128,6 +128,77 @@ computing through the use of refactoring techniques.
 
 
 \section{Formative Study}
+
+%describe the applications
+We selected \numFormative apps from the \TD script bazaar for our formative study. We converted them from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
+
+The first app we selected was \MT \TODO{replace all other usages of MileageTracker and other apps with macros}, which is publicly available with the script id of \TODO{change to citation} \code{zenx}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. We converted Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
+
+Business Manager+~\cite{BusinessManager} is an app to track of business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with others.
+
+CliffHangers \TODO{change to citation}\code{jrqt} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they loose the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
+
+After converting these apps, we ran them with multiple users to verify that in fact the apps work correctly. 
+
+%describe the process with the four steps
+Based on the lessons we learned from converting these \numFormative apps, we designed a process to convert  a single to a multi-user app.  Our process consists of four steps:   
+\begin{enumerate}
+\item Identify data that needs to be shared between users
+
+\item Create new Cloud Data Structures to hold the shared data
+
+\item Replace the local usage with cloud usage for the shared data
+
+\item Initialize Cloud Data
+\end{enumerate}
+
+Next we will illustrate these steps using the \MT app.  In step 1 we identified the data that needed to be shared: 
+(i) the \code{MilageRecord} is a collection of numbers that holds the Miles Per Gallon for the past usage consumption, 
+(ii) \code{MaximumRecordEntries} is a number that determines how many records should be stored, 
+(iii) \code{UseUSUnits} is a boolean that stores the preference between metric or imperial units.
+   
+To illustrate step 2, let us consider one of the shared data structures, the \code{MilageRecord} collection. 
+We created a new \code{Cloud Data Table} named \code{MileageRecordTable} to hold the data. Notice that the
+original data is stored in a one-dimensional data structure, whereas the \code{Cloud Data Table} is a two-dimensional data 
+structure.
+
+In step 3 we replaced all the uses of the local \code{MilageRecord} with uses of \code{MileageRecordTable}. 
+
+In step 4 we initialized  \code{MileageRecordTable}. 
+Since the data is now persistent on the cloud, we need to change the initialization code from 
+eager to lazy in order to avoid erasing all the data every time the app is launched.  
+In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') versus (ii) to enable collaboration between multiple users across multiple devices (``everyone session'').
+
+%STEP ONE AND 4 REQUIRE DOMAIN KNOWLEDGE
+Notice that steps 1 and 4 require domain knowledge in order to choose and refine the proper end-user experience.  
+ 
+% NEXT WE DESCRIBE THREE REFACTORINGS
+Based on the type of the input, local data that we needed to migrate to cloud, we have identified three kinds of refactorings. Each refactoring can be performed using the general steps that we identified above. First, we refactored primitive data 
+types into the corresponding cloud-enabled primitive type (e.g., from \code{Number} to \code{Cloud Number}).
+Second, we refactored local \code{Data Table} into \code{Cloud Data Table}. Third, we refactored local \code{Collection}
+into \code{Cloud Data Table}.
+
+When carrying out the refactorings, we noticed that steps 1 and 4 are hard to automate as they require understanding the original program and the desired end-user experience. Steps 2 and 3 have different degrees of complexity. 
+The first two kinds of refactorings  are trivial because there is a perfect match between the local data and the cloud data type, so the change is as simple as prepending the keyword \code{Cloud} to the variable declaration. 
+
+The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table}. The APIs are different enough, so that sometimes we needed to map one function call from \code{Collection} into a sequence of calls from \code{Table}, whereas other times we had to augment the API by writing new functions. 
+For these reasons, we automated the refactoring. 
+
+Table~\ref{tab:refactoringsFormative} lists the total number of refactorings that we applied as part of our formative study.
+
+\begin{table}[htdp]
+\caption{Total number of refactorings}
+\begin{center}
+\begin{tabular}{|c|c|}
+
+\end{tabular}
+\end{center}
+\label{tab:refactoringsFormative}
+\end{table}%
+
+
+
+%describe the refactoring targets with tables to show frequency
 
 \section{Automated Refactoring}
 
@@ -387,12 +458,12 @@ Q3:  \textbf{ACCURACY}: How accurate is \tool when performing a refactoring ?\\
 
 To create a corpus, we wrote queries against a database of all publicly available scripts in the \TD script bazaar. We wanted to collect popular and mature scripts. 
 Thus, our query returned top scripts (based on the number of times that each script was executed\TODO{verify that this is what ``number of runs'' means}) 
-that contained a \code{Number Collection}. We retained the top 109 scripts.
+that contained a \NC{}. We retained the top \numScripts scripts.
 
-%We also required the \code{Number Collection} be a global variable since 
+%We also required the \NC{} be a global variable since 
 %Our refactoring works on non-global variables, but using global variables simplifies the automated identification of refactoring targets. 
 
-We ran the refactoring in batch mode. From each script in our corpus, our tool randomly selects one \code{Number Collection} as the target for refactoring. 
+We ran the refactoring in batch mode. From each script in our corpus, our tool randomly selects one \NC{} as the target for refactoring. 
 
 In order to determine the applicability of \tool, we report the number of scripts that our tool was able to refactor successfully, as well as the number of each kind of transformations performed inside a refactoring.
 
@@ -404,12 +475,14 @@ In order to determine the effort saved by using this refactoring tool we record 
 %Table~\ref{table:avgTrans} shows  the refactoring times.  The longest refactoring took 18 seconds, but the median time was only 9 seconds.  The majority of the time spent doing the refactoring was spent locating transformations, so the time that the refactoring took was correlated with the program size, not with the number of transformations performed for each script.
 
 
+%We also chose \numManual scripts to manually evaluate 
+%In order to determine if the tool was accurate or not we chose 10 applications to manually evaluate from the list of scripts we had run our automated refactoring tool on.  In order to evaluate the accuracy we first checked to ensure that our automated tool had not introduced any new syntax errors into the script.  After that, we looked at each reference to the original \NC{} and ensured that it had been correctly transformed into the correct call to the Cloud Table.
 
-In order to determine if the tool was accurate or not we chose 10 applications to manually evaluate from the list of scripts we had run our automated refactoring tool on.  In order to evaluate the accuracy we first checked to ensure that our automated tool had not introduced any new syntax errors into the script.  After that, we looked at each reference to the original \NC{} and ensured that it had been correctly transformed into the correct call to the Cloud Table.
-
+After running the batch refactoring, we chose \numManual script to manually evaluate to verify our results.  In order to verify that our scripts did not introduce any runtime errors, we first ran the original script for three minutes and manually explored their functionality.  We then ran the refactored version of the script.
+In order to determine the precision of our refactorings, we performed manual code inspections on these randomly selected scripts.  We looked for all the potential transformations for each refactoring, and determined if \tool had correctly identified them.  If they were correctly identified, we determined if the transformation had been applied correctly.
 
 \subsubsection{Further Validation}
-In order to further validate our results we randomly chose 10 scripts to further evaluate.  We then ran the scripts for up to three minutes and explored their functionality.  During this exploration we took notes of the behavior and any output of the script.  We then performed our refactoring on each script and then ran each script for three minutes again to verify that our script had not introduced any runtime behavioral changes. We did not observe any runtime changes based on the changes to these scripts.
+In order to further validate our results we randomly chose \numManual scripts to further evaluate.  We then ran the scripts for up to three minutes and explored their functionality.  During this exploration we took notes of the behavior and any output of the script.  We then performed our refactoring on each script and then ran each script for three minutes again to verify that our script had not introduced any runtime behavioral changes. We did not observe any runtime changes based on the changes to these scripts.
 In addition to running these scripts we also performed code inspections of these randomly selected scripts.  We counted any potential transformations that were missed by \tool as well as we inspected all the transformations that had been performed to see if they had been performed precisely or imprecisely.  Using these values we were able to calculate precision and recall for \tool.  We define precision as
 \[precision = \frac{|True Positive|}{|True Positive|+|False Positive|}\]
 and recall as
@@ -417,12 +490,12 @@ and recall as
 A {\it TruePositive} is a potential transformation that is correctly identified as a transformation, and the transformation is correctly performed.  A {\it FalsePositive} is when \tool applies a refactoring to a line of code that is not a potential target.  In other words, it transforms code that should not have been transformed.   {\it FalseNegative} is when a transformation that should be applied is not.  This is when \tool does not correctly transform some code, leaving it as it was before, when in fact, it should have been transformed. 
 \subsection{Results}
 
-\textbf{APPLICABILITY}:  Table~\ref{table:totalScripts} shows the results for running our refactoring tool on 109 scripts.  Out of the 109 scripts that were attempted to be refactored by our tool, only 7 were unable to be refactored due to unsupported language features as described in Section~\ref{sec:unsupportedLanguageFeatures}.  \tool was able to refactor 91\% of the scripts that we attempted.  This shows that \tool is clearly applicable to a wide range of scripts that contain the \NC{} data structure.
+\textbf{APPLICABILITY}:  We determined that our refactorings are widely applicable to \TD scripts that contain the \NC{} data structure.  Table~\ref{table:totalScripts} shows the results for running our refactoring tool on \numScripts scripts.  Out of the \numScripts scripts that were attempted to be refactored by our tool, only 7 were unable to be refactored due to unsupported language features as described in Section~\ref{sec:unsupportedLanguageFeatures}.  \tool was able to refactor 94\% of the scripts that we attempted.  
 
 \begin{table}[htdp]
 \begin{center}
 \begin{tabular}{ll}
-Total Scripts & 109 \\
+Total Scripts & \numScripts \\
 Number Successfully Refactored & 102 \\
 Unsupported Language Features & 7 \\
 \end{tabular}
@@ -512,23 +585,21 @@ Very few scripts in TouchDevelop have any tests at all.  We were not able to use
 \section{Related Work}
 \label{sec:relatedWork}
 
-Strauch et al.~\cite{strauchmigrating} provide a methodology for refactoring applications to move from application data to cloud data based on finding a migration scenario depending upon requirements and then mapping the scenario with one of the existing cloud data patterns. Though this paper provided a methodology at a high level, the actual application refactoring is completely manual and left up to programmers. Also, Moving application data to cloud was also manual (actual move of data to cloud) and programmer will have to get involved at multiple level to make this refactoring possible.  
+Strauch et al.~\cite{strauchmigrating} provide a methodology for refactoring applications to move from application data to cloud data.  Their approach is based on finding a migration scenario that depends upon requirements and then mapping the scenario to one of their existing cloud data patterns. Though this paper provided a methodology at a high level, the actual application refactoring is completely manual and left up to programmers. Also, moving application data to the cloud was also manual  and programmer will have to be involved at multiple level to make this refactoring possible.  
 
-Ling et al.~\cite{ling2010refactoring} provided a systematic refactoring approach using theoretic computing to formally define a mechanism to convert object oriented systems into service oriented architecture. The services then can be moved to cloud to benefit from elasticity of cloud. Again, this approach leads to use of manual refactoring and manual moving of services to cloud. 
+Ling et al.~\cite{ling2010refactoring} provided a systematic refactoring approach using theoretic computing to formally define a mechanism to convert object oriented systems into service oriented architecture systems. The services then can be moved to the cloud to benefit from the elasticity of the cloud. Again, this approach leads to the use of manual refactoring and manual moving of services to cloud. 
 
-Different from these two approaches, our tool achieves refactoring completely automatic and programmers are saved from the effort of moving data structures manually to cloud. Once a data structure is selected to refactor, the outcome of our tools is cloud data structures and updated code that references the cloud data structures.
+\tool is different from both these approaches in that it performs the refactoring in an automated manner, thus saving programmers from the effort of moving data structures manually to the cloud.  
 
-Kwon and Tilevich~\cite{kwon2013cloud} proposed Cloud Refactoring, a tool to automatically refactor methods of an enterprise application systems into services that can be then ported to cloud. Their tool is even capable of determining if a method is a good candidate for refactoring depending upon static analysis of code and dynamic traces generated using application execution. Still, once methods are automatically refactored into service, manual movement of services to cloud is needed, something that our tool achieves automatically. We still believe that Kwon and Tilevich's approach is a big leap forward in right direction.  
+Kwon and Tilevich~\cite{kwon2013cloud} proposed \emph{Cloud Refactoring}, a tool to automatically refactor methods of an enterprise application system into services that can be then ported to the cloud. Their tool also determines if a method is a good candidate for refactoring via static analysis of code and dynamic traces generated using application execution. However, even though the methods are automatically refactored into services, they still must be moved to the cloud manually.  \tool performs the refactoring automatically, but also handles the transfer to the cloud.  We do believe that Kwon and Tilevich's approach is a big leap forward in right direction.  
 
-The approach of partially moving computations of mobile device to a clone virtual device is a very recent addition. One such approach CloudCone is discussed by Chun et al.~\cite{chun2011clonecloud}, but it significantly differ from our approach as it ports part of execution to a cloned device in cloud at run time. 
-
+CloudCone~\cite{chun2011clonecloud}, also attempts to harness the power of mobile cloud computing, but their approach is significantly different then ours in that they create clones on the cloud, and then move the execution of the application as well as it's state between the cloud and the device.
 
 \section{Conclusions and Future Work}
 \label{sec:conclusions}
 In this paper we present \tool, a tool to refactor local data structures into cloud data structures.  We have shown that it is able to automatically transform most usages of \NC{} into cloud data references.  We are able to perform these transformations while still preserving the behavior of the application.  Should the user choose to take further advantage of the cloud data features, in some cases only a few lines of code are needed to take advantage of the cloud data features to provide more functionality. 
 
 In the future, it would be nice to automate those changes, so in addition to being able to refactor their data to the cloud, we would like to provide an automated transformation tool that would enable multiuser features to be automatically added to scripts.
-
 
 
 
