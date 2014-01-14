@@ -128,6 +128,7 @@ computing through the use of refactoring techniques.
 
 
 \section{Formative Study}
+\label{sec:Formative}
 
 %describe the applications
 We selected \numFormative apps from the \TD script bazaar for our formative study. We converted them from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
@@ -140,7 +141,7 @@ CliffHangers~\cite{CliffHangers} is a clone of the popular game ``hangman."  The
 
 MyAssignment~\cite{MyAssignments} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  We converted into a multi-user app so that multiple students can collaborate on class assignments.
 
-After converting these apps, we ran them with multiple users to verify that in fact the apps work correctly. 
+After converting these apps, we ran them with multiple users on three devices to verify that in fact the apps work correctly. \TODO{Put here the IDs of the changed apps}
 
 %describe the process with the four steps
 Based on the lessons we learned from converting these \numFormative apps, we designed a process to convert  a single to a multi-user app.  Our process consists of four steps:   
@@ -218,7 +219,7 @@ Total & 10 & 1  & 8 \\
 
 %describe the refactoring targets with tables to show frequency
 
-\section{Automated Refactoring}
+\secti mated Refactoring}
 
 \begin{figure*}
    \centering
@@ -368,9 +369,19 @@ This section presents the data structure to cloud refactoring.  We explain \tool
 \subsection{Workflow}
 \tool is written in TouchDevelop, and can be run using the TouchDevelop platform.  Once it is run, the user is presented with a picker to choose which script to refactor.  This must be a script that is saved for that user, but any public script can be saved as your own script. When the user selects which script they wish to refactor, they are presented with all \NC{}s that are a part of this script.  The user can then choose which \NC{} they wish to refactor by typing in the name into a standard TouchDevelop wall prompt box. Once the user has typed in the name and clicked the ``ok'' button, the tool will automatically refactor all the calls to the selected \NC{}, and then present some output to the user, which includes how many of each type of transformation were performed, as well as the total time required to complete the refactoring. 
 
+\subsection{Preconditions}
+
+The \NC{} data structure can be passed as an argument or returned from a TouchDevelop function.  Due to language constraints, cloud data tables must be declared as global variables and cannot be passed as parameters.  Similarly, \NC{}s can be assigned to a local variable, where as Cloud Data Tables cannot.  Based on this, we developed two preconditions that must be met before \tool can perform a refactoring.  These preconditions are inherent to how the \TD language works, not limitations of our tool.  
+
+\POne  The \NC{} data structure must not be passed as an argument or returned from a \TD function. 
+
+\PTwo The \NC{} may not be assigned to a local variable.
+
+%Should we identify potential solutions? In the future, a transformation could potentially be developed that would transform the local structure from a parameter to a global variable, and then the local to cloud data transformation could be performed.
+
 
 \subsection{Algorithm}
-We describe the algorithm that is used by the refactoring engine to refactor TouchDevelop scripts.   
+We describe the algorithm that is used to refactor TouchDevelop scripts.   
 
 Step 1: Create a new Cloud Data structure that transformations will use and add it to the script.
 
@@ -379,6 +390,8 @@ Step 2: Traverse through the script and find candidate statements for refactorin
 Step 3: Refactor local data structure statements into corresponding cloud data structure statements.
 
 To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop script, BlockY World.  BlockY World is a game where our hero must find his way through a maze of blocks, while also being able to move blocks to change the environment around him.  BlockY World uses multiple \NC{}s named \texttt{stats}, \texttt{spestats} and \texttt{zones}. For our further discussion of algorithm, we assume that user has selected \texttt{spestats} as the \NC{} to refactor. In step 1, a cloud data type is created and injected by \tool into the BlockY World script.  A new cloud data table is added for every refactoring to avoid conflicts if there are more then one refactoring per script. Then a column will be added to the table with the same name as the \NC{} that is being refactored.  For \texttt{spestats}, the tool will produce a cloud data table with a single column whose data type is number and who's column name is \texttt{spestats}.  In step 2, TouchDevelop's JSON AST tree representation is used to traverse script's AST. If any references to selected collection to refactor is found, the tool marks it as a candidate statement to refactor.  In step 3, each of the candidate statement is then transformed into individual new statement that replace the call to the \NC{} with a the corresponding cloud data action. 
+
+
 
 \subsection{Transformations}
 There are several categories of transformations that are needed to transform local data structures to cloud data structures.  
@@ -476,14 +489,17 @@ avg := sum / Cloud Data table $\rightarrow$ count}
 \label{fig:CloudTable_avg_fun}
 \end{figure}
 
-\subsubsection{Unsupported Language Features}
-\label{sec:unsupportedLanguageFeatures}
-There were some transformations that we were unable to perform due to limitations of the TouchDevelop language.  Local data structures, in our case the \NC{} data structure, can be passed as an input parameter (argument) or output parameter (return value) of a TouchDevelop action.  Due to language constraints, cloud data tables must be declared as global variables and cannot be used as input or output parameters.  \tool does not attempt to perform transformation in these situations.  In the future, a transformation could potentially be developed that would transform the local structure from a parameter to a global variable, and then the local to cloud data transformation could be performed.
+\TODO{Tool Limitations}
+The current version of \tool does not support the custom function transformation needed for \texttt{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \texttt{add many} action.
 
- \NC{}s can be assigned to a variable using the assignment operator.  However, cloud data tables are able to be assigned due to their global nature.  We are therefore unable to transform any occurrences of a data collection that use the assignment operator. 
-
-\tool also does not support the custom function transformation of \texttt{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \texttt{add many} action.
-
+%\subsubsection{Unsupported Language Features}
+%\label{sec:unsupportedLanguageFeatures}
+%There were some transformations that we were unable to perform due to limitations of the TouchDevelop language.  Local data structures, in our case the \NC{} data structure, can be passed as an input parameter (argument) or output parameter (return value) of a TouchDevelop action.  Due to language constraints, cloud data tables must be declared as global variables and cannot be used as input or output parameters.  \tool does not attempt to perform transformation in these situations.  In the future, a transformation could potentially be developed that would transform the local structure from a parameter to a global variable, and then the local to cloud data transformation could be performed.
+%
+% \NC{}s can be assigned to a variable using the assignment operator.  However, cloud data tables are able to be assigned due to their global nature.  We are therefore unable to transform any occurrences of a data collection that use the assignment operator. 
+%
+%\tool also does not support the custom function transformation of \texttt{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \texttt{add many} action.
+%
 
 
 \section{Evaluation}
@@ -553,18 +569,19 @@ Unsupported Language Features & 7 \\
 \end{table}%
 
 \textbf{EFFORT}:  
-Table~\ref{table:avgTrans} shows the number of transformations performed per each refactoring. The first column tabulates the total number of 
+Table~\ref{table:avgTrans} shows the number of transformations performed per each refactoring. \TODO{rorate the table and update this text}The first column tabulates the total number of 
 transformations per refactoring. The next three columns show the type of these transformations (i.e., direct, indirect, and custom function). The last column shows the running time for each refactoring.
 
-Each refactoring consisted on an average of almost 12 transformations.  The most common transformation was indirect transformations with 10  transformations on average for each script.
-
-The last column shows the time in seconds.  On average each refactoring took a total of 9 seconds to complete.  The maximum length of time any single refactoring took was 18 seconds.  As the number of transformations on average was 12, this shows that our refactoring tool saves significant effort, as the time to make these transformations by hand would clearly exceed a few seconds.  
+On average each refactoring took a total of 9 seconds to complete.  On average, the number of transformations per refactoring was 11.6. Given that 
+the \TD editing experience is optimized for small screens on touch devices, our refactoring tool saves significant effort.
 
 %TODO: move to results
 %Table~\ref{table:avgTrans} shows  the refactoring times.  The longest refactoring took 18 seconds, but the median time was only 9 seconds.  The majority of the time spent doing the refactoring was spent locating transformations, so the time that the refactoring took was correlated with the program size, not with the number of transformations performed for each script.
 
+Moreover, most of these transformations are non-trivial. Figure~\ref{fig:transformations_pieChart} shows the percentage of each kind of transformation applied. By far the most common transformation kind is Indirect Transformation, which involve mapping one API method call to a sequence of one or more API method calls that do not share a common name with the original method. Thus, we believe that automation saves significant effort.
 
 
+\TODO{rotate the table}
 \begin{table}[htdp]
 \begin{center}
 \begin{tabular}{lclclclclcl}
@@ -576,11 +593,12 @@ AVG & 11.6 & 1.20 & 9.07 & 1.34 & 9.30 \\
 \hline
 MAX & 112 & 13 & 112 & 19 & 18 \\
 \hline
+STDDEV & 15.5 & 1.8 & 15.6 & 2.9 & 3.3 \\
 \end{tabular}
 \nocaptionrule
 \caption{Average Transformations}
-\end{center}
 \label{table:avgTrans}
+\end{center}
 \end{table}%
 
 \begin{figure}[htbp!]
@@ -592,53 +610,60 @@ MAX & 112 & 13 & 112 & 19 & 18 \\
 \end{center}
 \end{figure}
 
-\textbf{ACCURACY}: By manually checking 20 scripts, we analyzed the precision and recall for our tool.  We found a precision of 100\%.  We also calculated the recall, and our recall value was 94\%. There were over 145 transformations that we inspected in these 20 scripts, and we only found 8 potential transformations that \tool missed.
+\textbf{ACCURACY}: 
 
-\begin{table}[htdp]
-\begin{center}
-\begin{tabular}{ll}
+By manually checking refactorings applied in \numManual scripts, we found \tool's precision to be 100\% and its recall 94\%. This means that all the transformations that \tool applied are correct. However, \tool missed 8 potential transformations out 145 transformations that it should have applied. We identified the root cause in our current implementation, and we expect a future version will fix this.
 
-Precision & 100\% \\
-Recall & 95\% \\
-\end{tabular}
-\nocaptionrule
-\caption{Precision and Recall values}
-\end{center}
-\label{table:precAndRecall}
-\end{table}%
+%\begin{table}[htdp]
+%\begin{center}
+%\begin{tabular}{ll}
+%
+%Precision & 100\% \\
+%Recall & 95\% \\
+%\end{tabular}
+%\nocaptionrule
+%\caption{Precision and Recall values}
+%\end{center}
+%\label{table:precAndRecall}
+%\end{table}%
 
-\subsection{Case Studies}
-
-\subsubsection{Motivating Example}
-We forked the Mileage Tracker script and created our own Mileage Tracker script. Without making any logical change to the script, we used \NC{} instead of number map to store data. We then manually replaced a slice api call with corresponding logic as the slice api call is not available with \NC{}. We ran both the original script and our manual changes to ensure that both scripts exhibited the exact same functionality. The new Mileage Tracker script is available in TouchDevelop with script id \texttt{mfbb}.  We then refactored the Mileage Tracker script using \tool. All the transformations were successfully applied and script did not have any compilation errors. Though to ensure that script behavior was exactly same as before we needed to make two lines of code change in InitializeApplicationSettings method of the script. As Microsoft TouchDevelop recent version removed is invalid with cloud data table, we have to replace it with corresponding logical step. The other one line of change in code is to enable everyone session on the cloud data table. This will allow multiple users with their own separate sessions to share same cloud data table. We ran the refactored Mileage Tracker application with three different devices, two laptops and one mobile phone to verify Mileage Tracker is indeed refactored into multi device, multi user application. Thus, with our automated refactorings and two lines of code changes we were successfully able to convert a single user, single device application into multi user, multi device application. The refactored Mileage Tracker Appliation is available in TouchDevelop with id \texttt{eyhca} and name Mileage Tracker Refactored. 
-
-\subsubsection{BlockY World}
-To further demonstrate the usefulness of cloud refactoring, we applied it on BlockY World, a game script written for TouchDevelop. The BlockY World script id is skdk. 65 users are following this game and the game has been installed 350.  To convert this game from single device to multi device/multi user game via refactoring, we used our tool to refactor all the collections to cloud data types. BlockY World has 8 \NC{}s and one \texttt{picture collection}. As TouchDevelop cloud data tables do not support picture type, we are unable to convert the picture collection to cloud data type.  All 8 \NC{}s were automatically refactored into corresponding cloud data type using the tool. We also added some manual code to initialize and share the data. 
-
-However, we were unable to convert BlockY World into a multi device game.  We throughly analyzed the script to see what additional steps would be needed to complete the transition to a multiplayer game.
-
-Our further analysis of BlockyWorld suggests that some global variables also need to be moved to cloud because to make the script multi device some global variables also need to be shared across devices over the cloud. For instance, variables like $old_x$ and $old_y$ and $curr_x$ and $curr_y$ needs to be stored across the devices. These variables are of type number.  
-
-BlockY World consists of some variables whose cloud type representation is not available at this point of time. ercan is game board variable used for the BlockY World game. In order to effectively share the game board across multiple devices, we need to move variable ercan to cloud. Currently no cloud data type implementation supports game board variables. BlockyWorld consists many such variables whose cloud data type conversion is not possible.
-
-We also determined that for this application, eventually consistency was not responsive enough for realtime gaming.  Though the eventual consistency model works fine with many types of applications, it is not particularly  suited for games where real time data needs to be shared quickly across device. TouchDevelop team is planning to support flush implementation for synchronization with stronger consistency model~\cite{burckhardt2012cloud}, where any changes in local data is immediately synchronized with cloud data, though it is not available currently. Though we are not able to refactor BlockY World into a multi device application through refactoring, analysis of BlockY World brought into light certain implementation level issues of both TouchDevelop as well as textsc{cloudifyer} that hinders widespread practical usage of textsc{cloudifyer} in case of realtime gaming application refactoring. 
+%\subsection{Case Studies}
+%
+%We also revisited 3 out of the 4 apps from our Formative Study (see Section~\ref{sec:Formative}) and used \tool to refactor \NC{}s into \code{Cloud Data Table}. We also manually changed two or three lines of code per app to turn each app into a multi-user app. The manual changes are described in Step 4 (the initialization of the Cloud Data).
+%
+%\subsubsection{Motivating Example}
+%We forked the Mileage Tracker script and created our own Mileage Tracker script. Without making any logical change to the script, we used \NC{} instead of number map to store data. We then manually replaced a slice api call with corresponding logic as the slice api call is not available with \NC{}. We ran both the original script and our manual changes to ensure that both scripts exhibited the exact same functionality. The new Mileage Tracker script is available in TouchDevelop with script id \texttt{mfbb}.  We then refactored the Mileage Tracker script using \tool. All the transformations were successfully applied and script did not have any compilation errors. Though to ensure that script behavior was exactly same as before we needed to make two lines of code change in InitializeApplicationSettings method of the script. As Microsoft TouchDevelop recent version removed is invalid with cloud data table, we have to replace it with corresponding logical step. The other one line of change in code is to enable everyone session on the cloud data table. This will allow multiple users with their own separate sessions to share same cloud data table. We ran the refactored Mileage Tracker application with three different devices, two laptops and one mobile phone to verify Mileage Tracker is indeed refactored into multi device, multi user application. Thus, with our automated refactorings and two lines of code changes we were successfully able to convert a single user, single device application into multi user, multi device application. The refactored Mileage Tracker Appliation is available in TouchDevelop with id \texttt{eyhca} and name Mileage Tracker Refactored. 
+%
+%\subsubsection{BlockY World}
+%To further demonstrate the usefulness of cloud refactoring, we applied it on BlockY World, a game script written for TouchDevelop. The BlockY World script id is skdk. 65 users are following this game and the game has been installed 350.  To convert this game from single device to multi device/multi user game via refactoring, we used our tool to refactor all the collections to cloud data types. BlockY World has 8 \NC{}s and one \texttt{picture collection}. As TouchDevelop cloud data tables do not support picture type, we are unable to convert the picture collection to cloud data type.  All 8 \NC{}s were automatically refactored into corresponding cloud data type using the tool. We also added some manual code to initialize and share the data. 
+%
+%However, we were unable to convert BlockY World into a multi device game.  We throughly analyzed the script to see what additional steps would be needed to complete the transition to a multiplayer game.
+%
+%Our further analysis of BlockyWorld suggests that some global variables also need to be moved to cloud because to make the script multi device some global variables also need to be shared across devices over the cloud. For instance, variables like $old_x$ and $old_y$ and $curr_x$ and $curr_y$ needs to be stored across the devices. These variables are of type number.  
+%
+%BlockY World consists of some variables whose cloud type representation is not available at this point of time. ercan is game board variable used for the BlockY World game. In order to effectively share the game board across multiple devices, we need to move variable ercan to cloud. Currently no cloud data type implementation supports game board variables. BlockyWorld consists many such variables whose cloud data type conversion is not possible.
+%
+%We also determined that for this application, eventually consistency was not responsive enough for realtime gaming.  Though the eventual consistency model works fine with many types of applications, it is not particularly  suited for games where real time data needs to be shared quickly across device. TouchDevelop team is planning to support flush implementation for synchronization with stronger consistency model~\cite{burckhardt2012cloud}, where any changes in local data is immediately synchronized with cloud data, though it is not available currently. Though we are not able to refactor BlockY World into a multi device application through refactoring, analysis of BlockY World brought into light certain implementation level issues of both TouchDevelop as well as textsc{cloudifyer} that hinders widespread practical usage of textsc{cloudifyer} in case of realtime gaming application refactoring. 
 
 
 \subsection{Threats to validity}
-\textbf{Construct Validity:}  Does the evaluation of candidate scripts prove the applicability of our tool?  Since the refactoring to the cloud is such a new part of the TouchDevelop language, there is not a lot of data for us to identify when developers will actually choose to refactor to the cloud.  By showing that most of the scripts that use the local data structure are applicable candidates, we can show that there is wide applicability for our solution, should developers choose to use it or not.
+\textbf{Construct Validity:}  Do our metrics indeed measure the advantages of using \tool? Can we measure development effort by simply counting the time and number of transformations per refactoring? Ideally, we would have performed an experiment with real \TD developers and observe them while refactoring. However, given the cutting edge nature of the Cloud Data Types, we could not find such developers. Thus, we chose to use indirect metrics, as it is commonly done in the literature~\cite{Gyori:Lambdaficator,Wloka:Reentrancer}. 
+Second, are we sure that the performed refactorings are accurate? Ideally, we should have run tests before and after each refactoring. However, very few scripts in \TD have any tests at all. In order to mitigate this we manually inspected a random set of \numManual apps and exercised their functionality to determine that the runtime behavior did not change.
 
-\textbf{Internal Validity:}  We minimized the threat of internal validity by performing a case study of apps that were written before the introduction of Cloud Data, and by using publicly available scripts, the developers were unaware of our study.  
+\textbf{Internal Validity:}  How did we mitigate bias during manual inspection? We randomly sampled from the set of our corpus, until we had sampled from a variety of app domains. Also, we carefully constructed the set of transformations in the golden standard \emph{before} we applied \tool. The authors are all experts on the \TD platform.
 
-\textbf{External Validity:}  Do our results generalize? We chose over 100 of the most commonly run scripts to use as our corpus, but we put no restrictions on the tags, or types of the scripts.  Our selection include scripts tagged with entertainment,sports, games, education, productivity and platform bugs.  Since tags are not required in TouchDevelop we observed many scripts without tags.  However, in a addition to a wide variety of scripts tags, we also observed a variety of script types while performing the evaluations.  We do not foresee any reasons why these results would not generalize to all TouchDevelop scripts.
+Also, the corpus that we used in the evaluation predates the introduction of Cloud Data Types, and thus the developers were unaware of our later study and could not bias their code to help \tool. 
 
-\textbf{Reliability:} Is our evaluation reliable? The scripts that we used to evaluate our tool are all available on the TouchDevelop website, and \tool is published on the TouchDevelop website with a script Id of //TODO FINAL VERSION OF SCRIPT ID.
+\textbf{External Validity:}  Do our results generalize? For our corpus, we used \numScripts of the most commonly run scripts, but we put no restrictions on the type of the scripts.  Our corpus includes scripts from various domains: entertainment, sports, games, education, productivity, etc. Moreover, the apps in our corpus are developed by 83 authors from a diverse end-user community. We do not foresee any reasons why our results would not generalize to other \TD apps.  
 
-Very few scripts in TouchDevelop have any tests at all.  We were not able to use these to verify that we did not break the runtime behavior of the scripts.  In order to mitigate this we manually validated a random selection of scripts to ensure constant runtime behavior before and after our refactoring.
+\textbf{Reliability:} Is our evaluation reliable? The apps that we used to evaluate our tool are all available on the \TD bazaar, and \tool is published on the \TD website with the script ID: \TODO{FINAL VERSION OF SCRIPT ID.}
 
 
 
 \section{Related Work}
 \label{sec:relatedWork}
+
+We group the related work in the following categories: (i) cloud-related refactorings, (ii) \TODO{multi-user apps}, and (iii) tools for the end-user development community. \TODO{Danny's paper on SpreadsheetRefactoring}.
 
 Strauch et al.~\cite{strauchmigrating} provide a methodology for refactoring applications to move from application data to cloud data.  Their approach is based on finding a migration scenario that depends upon requirements and then mapping the scenario to one of their existing cloud data patterns. Though this paper provided a methodology at a high level, the actual application refactoring is completely manual and left up to programmers. Also, moving application data to the cloud was also manual  and programmer will have to be involved at multiple level to make this refactoring possible.  
 
