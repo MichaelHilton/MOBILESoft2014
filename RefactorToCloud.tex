@@ -89,30 +89,30 @@ Cloud computing has become a great tool for many developers to use, with many be
 \section{Introduction}
 
 % mobile is everywhere. mobile cloud computing can make it better. Examples of multiuser apps
-Mobile apps have gained significant popularity in the recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved battery life~\cite{Chen:2012:CCO:2310096.2310228}, security~\cite{Oberheide:2008:VIS:1622103.1629656}, bandwidth utilization~\cite{Vemulapalli:2013:PSD:2492348.2492353}, location awareness~\cite{kansal2013latency}. In this paper we are focusing on another killer feature enabled by the cloud: the ability to develop rich, multiuser apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, collaborative data collection (e.g., Citizen Science~\cite{cohn2008citizen}). 
+Mobile apps have gained significant popularity in recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved: battery life~\cite{Chen:2012:CCO:2310096.2310228}, security~\cite{Oberheide:2008:VIS:1622103.1629656}, bandwidth utilization~\cite{Vemulapalli:2013:PSD:2492348.2492353}, and location awareness~\cite{kansal2013latency}. In this paper we are focusing on another killer feature enabled by the cloud: the ability to develop rich, multiuser apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, and collaborative data collection (e.g., Citizen Science~\cite{cohn2008citizen}). 
 
 % What's broken: advanced expertise, infrastructure, multiple languages
-To take advantage of the benefits of the cloud, app developers face a high entry barrier. They need expertise on many topics: communication protocols (e.g., web services, REST, SOAP, etc.), data storage (e.g., Amazon S3, Microsoft SkyDrive, etc.), databases, cloud infrastructure (e.g., Amazon EC2, Windows Azure, etc.),  programming or scripting languages. Similarly, converting a single into a multiuser app has a high entry barrier: they need to determine the candidate data structures and methods that operate on data structures and move them to the cloud. Currently, this process is manual, time consuming, and error prone~\cite{khan2013survey}.
+To take advantage of the benefits of the cloud, app developers face a high entry barrier. They need expertise on many topics: communication protocols (e.g., web services, REST, SOAP, etc.), data storage (e.g., Amazon S3, Microsoft SkyDrive, etc.), databases, cloud infrastructure (e.g., Amazon EC2, Windows Azure, etc.),  programming or scripting languages. Similarly, converting a single into a multiuser app has a high entry barrier: they need to determine the candidate data structures and methods that operate on data structures as well as move them to the cloud. Currently, this process is manual, time consuming, and error prone~\cite{khan2013survey}.
 
 % In this paper we want to lower the entry barrier for developers, so that even hobbyists and beginner mobile app devs. Thus, TouchDevelop + Refactoring
-In this paper we are lowering the entry barrier to allow even hobbyists and beginner app developers to use the cloud. Thus, we are targetting TouchDevelop~\cite{Tillmann2011TPC20482372048245}, a programming environment and language developed by Microsoft Research to write apps \emph{on} mobile devices for mobile devices. We are employing automated refactoring techniques to convert local data structures into cloud data structures.
+In this paper we are lowering the entry barrier to allow even hobbyists and beginner app developers to use the cloud. Thus, we are targetting TouchDevelop~\cite{Tillmann2011TPC20482372048245}, a programming environment and language developed by Microsoft Research to write apps \emph{on} mobile devices \emph{for} mobile devices. We are employing automated refactoring techniques to convert local data structures into cloud data structures.
 
 % Intro to TouchDevelop and its cloud datatype
 TouchDevelop introduced specialized cloud data types~\cite{burckhardt2012cloud} that provide an abstraction layer over web service implementation, communication protocols, and storage.  In order to make the app responsive, even when the connection to the server is unavailable, cloud data types provide both local copies of the data as well as eventually consistent sharable cloud storage. This paradigm allows programmers to use cloud types in a similar manner to local data structures, but to also enjoy the benefits of the cloud.
 
 % Our formative study to learn about refactorings from single to multi-user apps. refactorings for data structures
-In this paper we present the results of our formative study to convert single to multi-user apps. We used \numFormative publicly available, single-user TouchDevelop apps (two productivity tools and one game) and manually converted them into multi-user apps. Thus we discovered four conversion steps: (i) identify local data structures that need to be shared between multiple users, (ii) for each identified local data structure add a new cloud data structure, (iii) replace local data structure API calls with cloud API calls, (iv) initialize the cloud data structures. Not all these steps can be automated; some (e.g., identifying data structures that need to be shared) require domain knowledge which is best provided by the app developer. 
+In this paper we present the results of our formative study to convert single to multi-user apps. We used \numFormative publicly available, single-user TouchDevelop apps (three productivity tools and one game) and manually converted them into multi-user apps. In doing so, we discovered four conversion steps: (i) identify local data structures that need to be shared between multiple users, (ii) for each identified local data structure add a new cloud data structure, (iii) replace local data structure API calls with cloud API calls, (iv) initialize the cloud data structures. Not all these steps can be automated; some (e.g., identifying data structures that need to be shared) require domain knowledge which is best provided by the app developer. 
 
 % Automated refactoring based on these lessons, why do we need refactoring support.
 Using the lessons that we learned from the formative study, we designed and implemented a refactoring tool, \tool, to automate the conversion of local \NC{} into \code{Cloud Data Table}, and to transform the API calls. We selected this refactoring because its manual application is 
-challenging: the developer needs to map a 1-dimensional, horizontal data layout (as in \code{Collection}) into a 2-dimensional data layout (as in \code{Table}).
-The difference is not only in the names of the APIs, but also in the cardinality of the mapping.
-Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same in both data structure), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). In addition, sometimes there is no mapping, in which case it requires creating custom functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a custom function that iterates atomically over the elements of the \code{Table}. Such transformations can not be performed by a find-and-replace tool.
+challenging for several reasons.
+In addition to differences in the names of the APIs, there are also differences in the cardinality of the mapping.
+Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same in both data structure), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). Sometimes there is no mapping at all, in which case we create custom functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a custom function that iterates atomically over the elements of the \code{Table}. Such transformations can not be performed by a find-and-replace tool.
 
 % Contributions
 This paper makes the following contributions:
 \begin{itemize}
-\item{\textbf{Idea:}} To the best of our knowledge, we are the first to enable hobbyists and beginner programmers to tap into the power of the mobile cloud
+\item{\textbf{Idea:}} To the best of our knowledge, we are the first to enable hobbyists and beginner programmers to tap into the power of mobile cloud
 computing through the use of refactoring techniques.
 
 \item{\textbf{Formative Study:}} We have conducted a formative study on \numFormative real-world apps to learn what transformations are needed to convert single to multi-user mobile apps. 
@@ -135,7 +135,7 @@ We selected \numFormative apps from the \TD script bazaar for our formative stud
 
 The first app we selected was \MT, which is publicly available with the script id of~\cite{MileageTracker}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. We converted Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
 
-Business Manager+~\cite{BusinessManager} is an app to track of business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with others.
+Business Manager+~\cite{BusinessManager} is an app to track business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with each other.
 
 CliffHangers~\cite{CliffHangers} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they loose the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
 
@@ -313,13 +313,13 @@ before one can apply the refactoring. Section~\ref{sec:algorithm} presents the a
 
 \subsection{Workflow}
 \label{sec:workflow}
+\tool is implemented as a \TD app.  It can be run using the \TD platform like any other \TD app.  Once it is run, the app first prompts the user to select a script to perform the refactoring on.  Once the user has selected a script, \tool will display all the possible refactoring targets for the chosen script, and allow the user to choose which \NC they wish to convert to a \CDT. \tool will then perform all the needed transformations for that refactoring in an automated fashion.  
 
-\tool is written in TouchDevelop, and can be run using the TouchDevelop platform.  Once it is run, the user is presented with a picker to choose which script to refactor.  This must be a script that is saved for that user, but any public script can be saved as your own script. When the user selects which script they wish to refactor, they are presented with all \NC{}s that are a part of this script.  The user can then choose which \NC{} they wish to refactor by typing in the name into a standard TouchDevelop wall prompt box. Once the user has typed in the name and clicked the ``ok'' button, the tool will automatically refactor all the calls to the selected \NC{}, and then present some output to the user, which includes how many of each type of transformation were performed, as well as the total time required to complete the refactoring. 
 
 \subsection{Preconditions}
 \label{sec:preconditions}
 
-The \NC{} data structure can be passed as an argument or returned from a TouchDevelop function.  Due to language constraints, cloud data tables must be declared as global variables and cannot be passed as parameters.  Similarly, \NC{}s can be assigned to a local variable, where as Cloud Data Tables cannot.  Based on this, we developed two preconditions that must be met before \tool can perform a refactoring.  These preconditions are inherent to how the \TD language works, not limitations of our tool.  
+The \NC{} data structure can be passed as an argument or returned from a TouchDevelop function.  Due to language constraints, \CDT{}s must be declared as global variables and cannot be passed as parameters.  Similarly, \NC{}s can be assigned to a local variable, where as Cloud Data Tables cannot.  Based on this, we developed two preconditions that must be met before \tool can perform a refactoring.  These preconditions are inherent to how the \TD language works, not limitations of our tool.  
 
 \POne  The \NC{} data structure must not be passed as an argument or returned from a \TD function. 
 
@@ -369,26 +369,25 @@ To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop 
 
 There are several categories of transformations that are needed to transform \NC{} to \code{Cloud Data Tables}.  
 
-
 \subsubsection{Direct Transformations}
-Direct Transformations are the kind of transformation where both the \NC{} and \CDT have the same API method names.  For example, both have a method "post to wall" which will, as expected, post to the script's wall.  This is the simplest of the transformations, as all that is needed to do is replace the object that the method is being called on.  Figure~\ref{fig:codeTransformations} line 4 shows code that shows a direct transformation.
-
-
-Figure~\ref{fig:CloudTable_postToWall}  shows the same line of code after it has been transformed by our algorithm.  Now the cloud data table is being posted to the wall.
+Direct Transformations are the kind of transformation where both the \NC{} and \CDT have the same API method names.  This is the simplest of all the transformations.  This transformation consists of simply replacing the object that the API is called on.  One example of this kind of transformation is the API call \code{post to wall}.
+Figure~\ref{fig:codeTransformations} line 4 in column (a) shows the API call before the transformation, while column (b) line 4 shows the code after the transformation.
 
 \subsubsection{Indirect Transformations}
-The indirect transformations are slightly more complex then the direct transformations.  The indirect transformation is when there are two actions that have similar behavior, but different names.  For example, \texttt{add}, which adds to a \NC{}, and \texttt{add row} which adds to a cloud data table.  Consider the case where the user of the previous example would like to add the current mileage to the list that stores all the past mileages.  In order to add it to a \NC{}, the developer would have to use the \texttt{add} operator.  This is shown in Figure~\ref{fig:numCol_Add}.
+Indirect Transformations are more complex then Direct Transformations, and cannot be performed with a simple find-and-replace technique.  We define an Indirect Transformation as a transformation where the same functionality can be accomplished using the \TD APIs, but there are not identical functions across both data types.  Some Indirect Transformations have a one-to-one relationship between the API calls, whereas others have a one-to-two or even one-to-three relationship.  In addition, sometimes a function call is turned into assignment, further complicating the transformation.  
 
-Figure~\ref{fig:CloudTable_Add} shows the same line of code after it has been transformed by  \tool.  Now the actions are operating on a cloud data table.  Since each element in the \NC{} is being mapped to a row in the cloud data table, before the number can be added a new row must be added to the table.  TouchDevelop offers the ability to chain functions together, so we can chain the add and assignment operators.  In the same line of code we can add a new row to the table, as well as set the value as the current Mileage that we wish to store.
+One example of an Indirect Transformation is shown in Figure~\ref{fig:codeTransformations}.  The function \code{AddMielageToRecord} is a very simple function that adds a number to the \code{MileageRecord} \NC{}. Line 22 in column (a) shows \code{Mileage} being added via the API call \code{add}.
+In order to correctly perform the transformation, \code{Mileage} now needs to be added to the \code{Cloud Data Table} \code{MileageRecordTable}.
+This becomes a two step process now. Step 1 is to add a new row to the \CDT, and step two is to assign the value of \code{Mileage} to that row. This is shown in column (b) lines 22-23.
 
 
 \subsubsection{Custom Function Transformations}
-The third type of transformation we have implemented is custom function transformations.  These are needed when there is no action in Cloud Table that will achieve the same functionality as the action that exits in  \NC{}. For example, the developer of the mileage tracker would like to calculate the average across all the sessions of the app.  The \texttt{avg} action will return the average of all the numbers in the \NC{}.  In order to transform a \NC{}s that contain this action, we inject a custom function into the code that provides the same behavior as the \texttt{avg} action.  Then we can transform a call from the TouchDevelop API to a call to our custom function.  Figure~\ref{fig:numCol_avg} shows a line of source code where the \texttt{avg} action is being called, and then the returned value is being stored in a local variable \texttt{avgMielage}.
+Custom Function Transformations also cannot be performed with a  simple find-and-replace technique.  We define Custom Function Transformations as 
+a transformation where there is not the same API functionality for \CDT as there is for \NC{}.  In order to transform these API calls, \tool injects custom functions that provide the same functionality as the missing API methods.   Since \TD does not allow \CDT{}s to be passed to functions, but instead must be used a global variable, \tool cannot create generic functions to replicate the API functionality.  Instead, it must create a custom function for each \CDT that has been created as a result of a refactoring.
+Figure~\ref{fig:codeTransformations} shows an example of this kind of transformation.  The function \code{DisplayAvgMileage} calculates the average value of all the contents of a \NC{}, and then displays it, as seen in column (a) on lines 27-29.  Once the program has been transformed to use a \CDT to store the data instead of a \NC, there is no longer an API call that will calculate the average value of all the contents of a \CDT. Instead, \tool must introduce the custom function \code{MileageRecordTable avg} that will compute the average of all the values in the \code{MileageRecordTable}.  This is shown in column (b) lines 32-41.  One that function exists, then the API call in \code{DisplayAvgMileage} can be transformed to a custom function call instead, as seen in column (b), line 28.
 
-Figure~\ref{fig:CloudTable_avg_fun} shows the same line of code after \tool has performed the transformation.  The action \texttt{Cloud Data avg} is a custom function that is generated by our refactoring engine that is needed to calculate the average of all the values in the cloud data table.  This function also returns a value, so we are saving it in the same local variable.  Figure~\ref{fig:CloudTable_avg_fun} shows the helper function that is added to the script.
-
-\TODO{Tool Limitations}
-The current version of \tool does not support the custom function transformation needed for \texttt{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \texttt{add many} action.
+\subsubsection{Tool Limitations}
+The current version of \tool does not support the custom function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \code{add many} action.
 
 %\subsubsection{Unsupported Language Features}
 %\label{sec:unsupportedLanguageFeatures}
@@ -452,13 +451,14 @@ Out of the \numScripts scripts that \tool attempted to refactor, 102 (94\%) met 
 Only 7 scripts were unable to be refactored. Out of these, 4 scripts did not meet precondition \POne (the \NC{} was passed as an argument to a function), and 1 did not meet precondition \PTwo (\NC{} was assigned to a local variable). The remaining 2 scripts exposed a limitation of the current implementation of \tool (they were using a currently unsupported function, \code{add many}). 
 Thus, we think that our refactoring is widely applicable to \TD scripts that contain the \NC{} data structure.  
 
-\TODO{breakout into preconditions}
 \begin{table}[htdp]
 \begin{center}
 \begin{tabular}{ll}
 Total Scripts & \numScripts \\
 Number Successfully Refactored & 102 \\
-Unsupported Language Features & 7 \\
+Failed Precondition \POne & 4 \\
+Failed Precondition \PTwo & 1\\
+Tool Limitations & 2\\
 \end{tabular}
 \nocaptionrule
 \caption{Total Scripts Refactored}
