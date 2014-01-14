@@ -467,31 +467,35 @@ Unsupported Language Features & 7 \\
 \end{table}%
 
 \textbf{EFFORT}:  
-Table~\ref{table:avgTrans} shows the number of transformations performed per each refactoring. \TODO{rorate the table and update this text}The first column tabulates the total number of 
-transformations per refactoring. The next three columns show the type of these transformations (i.e., direct, indirect, and custom function). The last column shows the running time for each refactoring.
+Table~\ref{table:avgTrans} shows the number of transformations performed per each refactoring. 
+ The first three rows show the type of these transformations (i.e., direct, indirect, and custom function). 
+ The fourth row shows the total for all types of transformations, while the last row shows the running time for each refactoring.
 
-On average each refactoring took a total of 9 seconds to complete.  On average, the number of transformations per refactoring was 11.6. Given that 
-the \TD editing experience is optimized for small screens on touch devices, our refactoring tool saves significant effort.
+The first column tabulates the total number of transformations per refactoring. On average each refactoring took a total of 9 seconds to complete.  On average, the number of transformations per refactoring was 11.6. Given that the \TD editing experience is optimized for small screens on touch devices, our refactoring tool saves significant effort.
 
 %TODO: move to results
 %Table~\ref{table:avgTrans} shows  the refactoring times.  The longest refactoring took 18 seconds, but the median time was only 9 seconds.  The majority of the time spent doing the refactoring was spent locating transformations, so the time that the refactoring took was correlated with the program size, not with the number of transformations performed for each script.
 
 Moreover, most of these transformations are non-trivial. Figure~\ref{fig:transformations_pieChart} shows the percentage of each kind of transformation applied. By far the most common transformation kind is Indirect Transformation, which involve mapping one API method call to a sequence of one or more API method calls that do not share a common name with the original method. Thus, we believe that automation saves significant effort.
 
-
-\TODO{rotate the table}
 \begin{table}[htdp]
 \begin{center}
-\begin{tabular}{lclclclclcl}
- & Total & Direct & Indirect & Custom & Time \\
-  & Trans & Trans & Trans & Function & [secs] \\
-  \hline
-  \hline
-AVG & 11.6 & 1.20 & 9.07 & 1.34 & 9.30 \\
+\begin{tabular}{lclclclcl}
+
+& AVG & MAX & STDDEV \\
 \hline
-MAX & 112 & 13 & 112 & 19 & 18 \\
 \hline
-STDDEV & 15.5 & 1.8 & 15.6 & 2.9 & 3.3 \\
+Direct Trans & 1.20 & 13 & 1.8 \\
+\hline
+Indirect Trans & 9.1  & 112 & 15.6\\
+\hline
+Custom Function & 1.34 & 19 & 2.9 \\
+\hline
+Total Trans & 11.6 & 112 & 15.5 \\
+\hline 
+Time [sec] & 9.3 & 18 & 3.3\\
+
+
 \end{tabular}
 \nocaptionrule
 \caption{Average Transformations}
