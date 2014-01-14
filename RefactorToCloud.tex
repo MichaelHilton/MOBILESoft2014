@@ -184,8 +184,8 @@ into \code{Cloud Data Table}.
 When carrying out the refactorings, we noticed that steps 1 and 4 are hard to automate as they require understanding the original program and the desired end-user experience. Steps 2 and 3 have different degrees of complexity. 
 The first two kinds of refactorings  are trivial because there is a perfect match between the local data and the cloud data type, so the change is as simple as prepending the keyword \code{Cloud} to the variable declaration. 
 
-The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table}. The APIs are different enough, so that sometimes we needed to map one function call from \code{Collection} into a sequence of calls from \code{Table}, whereas other times we had to augment the API by writing new functions. 
-For these reasons, we automated the refactoring. 
+The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table} \TODO{Add a picture}. The APIs are different enough, so that sometimes we needed to map one function call from \code{Collection} into a sequence of calls from \code{Table}, whereas other times we had to augment the API by writing new functions. 
+For these reasons, we automated this refactoring. 
 
 Table~\ref{tab:refactoringsFormative} lists the total number of refactorings that we applied as part of our formative study.
 
@@ -219,54 +219,23 @@ Total & 10 & 1  & 8 \\
 
 %describe the refactoring targets with tables to show frequency
 
-\secti mated Refactoring}
-
-\begin{figure*}
-   \centering
-    \mbox{
-      \lstset{
-	  language=Java, numbers=left, keywordstyle=\color{blue}, commentstyle=\color{red}, stringstyle=\color{black}, basicstyle=\scriptsize, tabsize = 2, moredelim=[is][\underbar]{_}{_}
-      }
-      \subfigure[before]{
-      \lstinputlisting[]{src/in/TouchDevelopBefore.txt}
-      \label{fig:aicOverload}
-      }
-      \hspace{0.2in}
-      \subfigure[after]{
-      \lstinputlisting[]{src/out/TouchDevelopAfter.txt}
-      \label{fig:lambdaOverload}
-      }
-    }
-    \caption{Selected code from Mileage Tracker app}
-    \label{fig:anonCornerCase2}
-\end{figure*}
-
-
-\section{Evaluation}
-
-\section{Related Work}
-
-\section{Conclusion}
-
-
-
-\section{Motivating Example}
-\label{sec:motivatingExample}
-In this section we introduce a motivating example for refactoring data structures to the cloud.   Consider a program called Mileage Tracker that allows the user to store their milage so that they can be aware of their fuel usage.  The user can input how much gas was needed to fill his tank, as well as the miles driven since the last fill up.  This allows the application to be able to calculate what was the miles per gallon since the last fill up.  The script will store this information and allow the user to view their fuel usage over time.  This application was written before the introduction of cloud data to the TouchDevelop platform, and so the way that the application was developed, the data was being stored locally in a local data structure.  The developer did check the option which preserves the values of the data structure across multiple runs, so as long as user uses same device, he will have up to date information regarding its mileage usage.  However, the script cannot work across multiple devices which does not support the ability for multiple family members using the same family car to share their information effectively.
-
-
-\subsection{Goals of Refactoring to Cloud}
-The developer of the MPG tracking application would like to take advantage of cloud functionality.  Specifically, the developer would like to enable the users to be able to access their data on multiple devices and see the same data. The developer would also like to enable social, collaborative features such as allowing users to share their MPG values with other users of the app.
-
-This program was written before the introduction of the cloud API's to the TouchDevelop language.  The program does not use any cloud data types, and all data is stored locally.
-
-Before the introduction of the cloud data types, the developer could select the "save between script runs" option for local data, which would persist the data structures across multiple runs of the script.  This approach has several limitations which significantly reduce the usefulness of the application to the end user.  One of the major limitations of this approach is that the information can not be synced between devices.  The user would only be allowed to track their MPG's on one single device.  This poses a problem if the user would like to upgrade their device,or if there phone was lost or broken.   Also, this approach will not work if there are multiple drivers of the vehicle, and they would like to be able to collaborate on tracking their fuel efficiency.  However, this would not be possible using the local data structure.
-
-
-  
-\subsection{Problem}
-If the application had been developed using the TouchDevelop table data structure, converting to a cloud table is a trivial operation.  It is as simple as selecting the table object and changing the type to cloud table.  The refactoring becomes non-trivial if the user was using another data structure, such as a collection. A TouchDevelop collection is a data structure that consists of a collection of any type of object that TouchDevelop supports.  This could be a primitive type such as Number or String, or it could be something as complex as a Camera object, or a Map object.  The difficulty in refactoring an existing collection into a cloud data structure arises in the need to convert into a cloud table.  The methods that collection provides and the methods that cloud table provides have some overlap, but are not consistent.  In addition, there are methods for \NC{} that have no counterpart for cloud table, i.e. avg.  Table~\ref{tab:mappingTable} shows the operations that are available for \NC{}s, as well as the corresponding operations for cloud table, if they exist.  We have categorized the type of transformation that will be necessary to transform every possible collection operation into a cloud table operations.  We will describe how we perform these transformations Section~\ref{sec:Refactoring}.
-
+%\section{Motivating Example}
+%\label{sec:motivatingExample}
+%In this section we introduce a motivating example for refactoring data structures to the cloud.   Consider a program called Mileage Tracker that allows the user to store their milage so that they can be aware of their fuel usage.  The user can input how much gas was needed to fill his tank, as well as the miles driven since the last fill up.  This allows the application to be able to calculate what was the miles per gallon since the last fill up.  The script will store this information and allow the user to view their fuel usage over time.  This application was written before the introduction of cloud data to the TouchDevelop platform, and so the way that the application was developed, the data was being stored locally in a local data structure.  The developer did check the option which preserves the values of the data structure across multiple runs, so as long as user uses same device, he will have up to date information regarding its mileage usage.  However, the script cannot work across multiple devices which does not support the ability for multiple family members using the same family car to share their information effectively.
+%
+%
+%\subsection{Goals of Refactoring to Cloud}
+%The developer of the MPG tracking application would like to take advantage of cloud functionality.  Specifically, the developer would like to enable the users to be able to access their data on multiple devices and see the same data. The developer would also like to enable social, collaborative features such as allowing users to share their MPG values with other users of the app.
+%
+%This program was written before the introduction of the cloud API's to the TouchDevelop language.  The program does not use any cloud data types, and all data is stored locally.
+%
+%Before the introduction of the cloud data types, the developer could select the "save between script runs" option for local data, which would persist the data structures across multiple runs of the script.  This approach has several limitations which significantly reduce the usefulness of the application to the end user.  One of the major limitations of this approach is that the information can not be synced between devices.  The user would only be allowed to track their MPG's on one single device.  This poses a problem if the user would like to upgrade their device,or if there phone was lost or broken.   Also, this approach will not work if there are multiple drivers of the vehicle, and they would like to be able to collaborate on tracking their fuel efficiency.  However, this would not be possible using the local data structure.
+%
+%
+%  
+%\subsection{Problem}
+%If the application had been developed using the TouchDevelop table data structure, converting to a cloud table is a trivial operation.  It is as simple as selecting the table object and changing the type to cloud table.  The refactoring becomes non-trivial if the user was using another data structure, such as a collection. A TouchDevelop collection is a data structure that consists of a collection of any type of object that TouchDevelop supports.  This could be a primitive type such as Number or String, or it could be something as complex as a Camera object, or a Map object.  The difficulty in refactoring an existing collection into a cloud data structure arises in the need to convert into a cloud table.  The methods that collection provides and the methods that cloud table provides have some overlap, but are not consistent.  In addition, there are methods for \NC{} that have no counterpart for cloud table, i.e. avg.  Table~\ref{tab:mappingTable} shows the operations that are available for \NC{}s, as well as the corresponding operations for cloud table, if they exist.  We have categorized the type of transformation that will be necessary to transform every possible collection operation into a cloud table operations.  We will describe how we perform these transformations Section~\ref{sec:Refactoring}.
+%
 \begin{table*}[htb!]
 \centering
 \begin{center}
@@ -322,54 +291,22 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 \end{table*}%
 
 
-\section{TouchDevelop}
-\label{sec:TouchDevelop}
-In this section we provide a brief overview of the TouchDevelop language, as well as some more discussion on how cloud data types are implemented.
 
-\subsubsection{Cloud Data Types}
-The cloud types implemented in TouchDevelop include both simple types, cloud integers, cloud strings, as well as the structured types of cloud arrays and cloud entities.   The only way that these cloud types are exposed to developers is as cloud tables and cloud indexes.  The cloud table can be used in a similar manner as the local table data structure.  However, when a developer uses the cloud table, they also get an eventually consistent cloud version and the option to share the data across multiple users.
-
-If the developer wished to take advantage of the cloud features for primitive data, they must encapsulate them into a table first.  Table~\ref{table:supportedTypes} lists the types of primitives that are allowed as column types of the cloud table.
-
-\begin{table*}[htb!]
-\begin{center}
-\begin{tabular}{lcl}
-  Supported Cloud \\
-  Table Types  \\
-   \hline
-Boolean  \\
-Number \\
-String  \\
-DateTime  \\
-Location  \\
-User  \\
-\end{tabular}
-\nocaptionrule
-\caption{Supported Types}
-\label{table:supportedTypes}
-\end{center}
-\end{table*}%
-
-
-
-\subsubsection{sessions}
-There are two different types of cloud sessions that are offered by TouchDevelop.  There is the default session, called the "just-me" session as well as the "everyone" session.  \subsubsection{just-me session}
-The "just-me" session is meant to share data between all devices by the same user running the same script.  Other users cannot connect to this session.  When the MPG script is refactored to use the just-me session, the user will now have the opportunity to see all of their data regardless of which device they are on. This allows the user to have the application installed on their phone and tablet and to share the data across each. 
-
-\subsubsection{everyone session}
-The "everyone" session creates a session that everyone running the script can connect to.  All users of the script will see the same data.  For the MPG example, the everyone session would allow users to see the MPG statistics of a community of users.  All users would add their MPG data to the common table, and the statistics that they would see would be for the entire community.  For example, when they see the average MPG, it would be the AVG for all the users of the script.
-
-
-
-  
-\section{DataStructure to Cloud REFACTORING}
+\section{Automated Refactoring}
 \label{sec:Refactoring}
-This section presents the data structure to cloud refactoring.  We explain \tool's workflow, as well as the three types of transformations that we have identified that are necessary for the refactoring. 
+This section presents our automated refactoring which converts from \NC{} to \code{Cloud Data Table}. We implemented the 
+refactoring in a tool, \tool, which itself is a \TD app.
+Section~\ref{sec:workflow} presents the workflow of using the tool. Section~\ref{sec:preconditions} presents the preconditions that must be true
+before one can apply the refactoring. Section~\ref{sec:algorithm} presents the algorithm and section~\ref{sec:transformations} presents the three kinds of transformations needed to perform the refactoring.
+
 
 \subsection{Workflow}
+\label{sec:workflow}
+
 \tool is written in TouchDevelop, and can be run using the TouchDevelop platform.  Once it is run, the user is presented with a picker to choose which script to refactor.  This must be a script that is saved for that user, but any public script can be saved as your own script. When the user selects which script they wish to refactor, they are presented with all \NC{}s that are a part of this script.  The user can then choose which \NC{} they wish to refactor by typing in the name into a standard TouchDevelop wall prompt box. Once the user has typed in the name and clicked the ``ok'' button, the tool will automatically refactor all the calls to the selected \NC{}, and then present some output to the user, which includes how many of each type of transformation were performed, as well as the total time required to complete the refactoring. 
 
 \subsection{Preconditions}
+\label{sec:preconditions}
 
 The \NC{} data structure can be passed as an argument or returned from a TouchDevelop function.  Due to language constraints, cloud data tables must be declared as global variables and cannot be passed as parameters.  Similarly, \NC{}s can be assigned to a local variable, where as Cloud Data Tables cannot.  Based on this, we developed two preconditions that must be met before \tool can perform a refactoring.  These preconditions are inherent to how the \TD language works, not limitations of our tool.  
 
@@ -381,6 +318,29 @@ The \NC{} data structure can be passed as an argument or returned from a TouchDe
 
 
 \subsection{Algorithm}
+\label{sec:algorithm}
+
+\begin{figure*}
+   \centering
+    \mbox{
+      \lstset{
+	  language=Java, numbers=left, keywordstyle=\color{blue}, commentstyle=\color{red}, stringstyle=\color{black}, basicstyle=\scriptsize, tabsize = 2, moredelim=[is][\underbar]{_}{_}
+      }
+      \subfigure[before]{
+      \lstinputlisting[]{src/in/TouchDevelopBefore.txt}
+      \label{fig:aicOverload}
+      }
+      \hspace{0.2in}
+      \subfigure[after]{
+      \lstinputlisting[]{src/out/TouchDevelopAfter.txt}
+      \label{fig:lambdaOverload}
+      }
+    }
+    \caption{Selected code from Mileage Tracker app}
+    \label{fig:anonCornerCase2}
+\end{figure*}
+
+
 We describe the algorithm that is used to refactor TouchDevelop scripts.   
 
 Step 1: Create a new Cloud Data structure that transformations will use and add it to the script.
@@ -394,6 +354,8 @@ To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop 
 
 
 \subsection{Transformations}
+\label{sec:transformations}
+
 There are several categories of transformations that are needed to transform local data structures to cloud data structures.  
 
 
