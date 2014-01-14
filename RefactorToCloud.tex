@@ -348,7 +348,7 @@ The \NC{} data structure can be passed as an argument or returned from a TouchDe
       }
     }
     \caption{Selected code from Mileage Tracker app}
-    \label{fig:anonCornerCase2}
+    \label{fig:codeTransformations}
 \end{figure*}
 
 
@@ -367,11 +367,12 @@ To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop 
 \subsection{Transformations}
 \label{sec:transformations}
 
-There are several categories of transformations that are needed to transform local data structures to cloud data structures.  
+There are several categories of transformations that are needed to transform \NC{} to \code{Cloud Data Tables}.  
 
 
 \subsubsection{Direct Transformations}
-These are the transformations where both the \NC{} and the cloud table have the same action.  For example, both have an action "post to wall" which will, as expected, post to the scripts wall.  This is the simplest of the transformations, as all that is needed to do is replace the object that the action is being called on.  Figure~\ref{fig:numCol_postToWall} shows a line of TouchDevelop code that posts to the wall a \NC{} that is stored in the global variable named \texttt{MileageRecord}.
+Direct Transformations are the kind of transformation where both the \NC{} and \CDT have the same API method names.  For example, both have a method "post to wall" which will, as expected, post to the script's wall.  This is the simplest of the transformations, as all that is needed to do is replace the object that the method is being called on.  Figure~\ref{fig:codeTransformations} line 4 shows code that shows a direct transformation.
+
 
 Figure~\ref{fig:CloudTable_postToWall}  shows the same line of code after it has been transformed by our algorithm.  Now the cloud data table is being posted to the wall.
 
