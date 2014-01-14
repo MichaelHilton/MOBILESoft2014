@@ -148,11 +148,11 @@ Based on the lessons we learned from converting these \numFormative apps, we des
 \begin{enumerate}
 \item Identify data that needs to be shared between users
 
-\item Create new Cloud Data Structures to hold the shared data
+\item Create new cloud data structures to hold the shared data
 
 \item Replace the local usage with cloud usage for the shared data
 
-\item Initialize Cloud Data
+\item Initialize cloud data
 \end{enumerate}
 
 Next we will illustrate these steps using the \MT app.  In step 1 we identified the data that needed to be shared: 
@@ -170,7 +170,7 @@ In step 3 we replaced all the uses of the local \code{MilageRecord} with uses of
 In step 4 we initialized  \code{MileageRecordTable}. 
 Since the data is now persistent on the cloud, we need to change the initialization code from 
 eager to lazy in order to avoid erasing all the data every time the app is launched.  
-In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') versus (ii) to enable collaboration between multiple users across multiple devices (``everyone session'').
+In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session'').
 
 %STEP ONE AND 4 REQUIRE DOMAIN KNOWLEDGE
 Notice that steps 1 and 4 require domain knowledge in order to choose and refine the proper end-user experience.  
@@ -277,7 +277,7 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 \hline
 \code{min} & NONE & Function \\
 \hline
-\code{post to wall} & \code{post to wall} & direct \\
+\code{post to wall} & \code{post to wall} & Direct \\
 \hline
 \code{random} &NONE  & Function \\
 \hline
@@ -296,7 +296,7 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 
 \end{tabular}
 \nocaptionrule
-\caption{Table with the Number Collection API's and corresponding Cloud Table Operations}
+\caption{Table with the Number Collection API's and corresponding Cloud Table Operations. \TODO{sort by: Direct, Indirect,Custom}}
 \label{tab:mappingTable}
 \end{center}
 \end{table*}%
@@ -308,22 +308,22 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 This section presents our automated refactoring which converts from \NC{} to \code{Cloud Data Table}. We implemented the 
 refactoring in a tool, \tool, which itself is a \TD app.
 Section~\ref{sec:workflow} presents the workflow of using the tool. Section~\ref{sec:preconditions} presents the preconditions that must be true
-before one can apply the refactoring. Section~\ref{sec:algorithm} presents the algorithm and section~\ref{sec:transformations} presents the three kinds of transformations needed to perform the refactoring.
+before applying the refactoring. Section~\ref{sec:algorithm} presents the algorithm and section~\ref{sec:transformations} presents the three kinds of transformations needed to perform the refactoring.
 
 
 \subsection{Workflow}
 \label{sec:workflow}
-\tool is implemented as a \TD app.  It can be run using the \TD platform like any other \TD app.  Once it is run, the app first prompts the user to select a script to perform the refactoring on.  Once the user has selected a script, \tool will display all the possible refactoring targets for the chosen script, and allow the user to choose which \NC they wish to convert to a \CDT. \tool will then perform all the needed transformations for that refactoring in an automated fashion.  
+\tool is implemented as a \TD app.  It can be run using the \TD platform like any other \TD app.  Once it is run, the app first prompts the user to select a script on which to perform the refactoring.  Once the user has selected a script, \tool will display all the possible refactoring targets for the chosen script, and allow the user to choose which \NC they wish to convert to a \CDT. \tool will then perform all the needed transformations on the selected \NC in an automated fashion.  
 
 
 \subsection{Preconditions}
 \label{sec:preconditions}
+In the current implementation of \TD, there are some differences in how \NC{}s and \CDT{}s are treated.
+For example, an instance of a \NC{} can be passed as an argument or returned from a \TD function.  However, \CDT{}s cannot be passed as function arguments, or returned from functions. \TODO{Microsoft People: Please explain why this is} Also, \NC{}s can be assigned to a variable, where as \CDT{}s cannot.  Based on these differences, we developed two preconditions that must be met before \tool can perform a refactoring.  These preconditions are inherent to how the \TD language works, not limitations of our tool.   
 
-The \NC{} data structure can be passed as an argument or returned from a TouchDevelop function.  Due to language constraints, \CDT{}s must be declared as global variables and cannot be passed as parameters.  Similarly, \NC{}s can be assigned to a local variable, where as Cloud Data Tables cannot.  Based on this, we developed two preconditions that must be met before \tool can perform a refactoring.  These preconditions are inherent to how the \TD language works, not limitations of our tool.  
+\POne  A \NC{} instance must not be passed as an argument or returned from a function. 
 
-\POne  The \NC{} data structure must not be passed as an argument or returned from a \TD function. 
-
-\PTwo The \NC{} may not be assigned to a local variable.
+\PTwo A \NC{} instance must not be assigned to a variable.
 
 %Should we identify potential solutions? In the future, a transformation could potentially be developed that would transform the local structure from a parameter to a global variable, and then the local to cloud data transformation could be performed.
 
@@ -347,7 +347,7 @@ The \NC{} data structure can be passed as an argument or returned from a TouchDe
       \label{fig:lambdaOverload}
       }
     }
-    \caption{Selected code from Mileage Tracker app}
+    \caption{Selected code from Mileage Tracker app. \TODO{add the definitions of data structure, and update text with the new line numbers}}
     \label{fig:codeTransformations}
 \end{figure*}
 
@@ -367,27 +367,46 @@ To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop 
 \subsection{Transformations}
 \label{sec:transformations}
 
-There are several categories of transformations that are needed to transform \NC{} to \code{Cloud Data Tables}.  
+There are four categories of transformations to refactor \NC{} to \code{Cloud Data Tables}: 
+(i) creating \CDT{} data structure, (ii) direct mapping of APIs, (iii) indirect mapping of APIs, and (iv) custom function to augment missing APIs. Table~\ref{tab:mappingTable} displays the mapping between the APIs of the two data structures.
 
-\subsubsection{Direct Transformations}
-Direct Transformations are the kind of transformation where both the \NC{} and \CDT have the same API method names.  This is the simplest of all the transformations.  This transformation consists of simply replacing the object that the API is called on.  One example of this kind of transformation is the API call \code{post to wall}.
-Figure~\ref{fig:codeTransformations} line 4 in column (a) shows the API call before the transformation, while column (b) line 4 shows the code after the transformation.
+We will illustrate the transformations using simplified code snippets from the MileageTracker app that we introduced in the Formative Study (see Section~\ref{sec:Formative}), an app that enables users to track their fuel usage. Figure~\ref{fig:codeTransformations} shows the code before and after the refactoring. The left column shows the original code. 
+Lines XYZ shows the declaration of the \code{MileageRecord} \NC{}, which is the target of the refactoring. We show four functions to display all mileage record,
+clear existing mileage record, add a new entry to the mileage collection, and compute and display the average mileage. \\
 
-\subsubsection{Indirect Transformations}
-Indirect Transformations are more complex then Direct Transformations, and cannot be performed with a simple find-and-replace technique.  We define an Indirect Transformation as a transformation where the same functionality can be accomplished using the \TD APIs, but there are not identical functions across both data types.  Some Indirect Transformations have a one-to-one relationship between the API calls, whereas others have a one-to-two or even one-to-three relationship.  In addition, sometimes a function call is turned into assignment, further complicating the transformation.  
 
-One example of an Indirect Transformation is shown in Figure~\ref{fig:codeTransformations}.  The function \code{AddMielageToRecord} is a very simple function that adds a number to the \code{MileageRecord} \NC{}. Line 22 in column (a) shows \code{Mileage} being added via the API call \code{add}.
+\myParagraph{Create \texttt{Cloud Data Table} data structure: }
+Lines XYZ of the right-hand side of Figure~\ref{fig:codeTransformations} show the newly created data structure, \code{MileageRecordTable}. We append the \code{Table} to the end of the name for clarity. This \code{Table} contains one column, \code{MileageRecordColumn}. We will use this column to store the values that were originally stored in the \code{MileageRecord} collection.
+\\
+
+
+\myParagraph{Direct Transformations: } The simplest transformations are those when the mapping from the \NC{} to \CDT APIs is one-to-one and both data structures use the same name (e.g., \code{post to wall}). In this case, the transformation consists of simply replacing the receiver object. 
+Figure~\ref{fig:codeTransformations}~(a) line 4 shows the API call before the transformation, while Fig.~\ref{fig:codeTransformations}~(b) line 
+4 shows the code after the transformation.\\
+
+\myParagraph{Indirect Transformations: }
+Indirect Transformations are more complex than Direct Transformations, and cannot be performed with a simple find-and-replace technique. We use Indirect Transformations when the same functionality can be accomplished in both data structures, but the APIs are different: the cardinality and/or the name is different. Sometimes, the transformation maps one API call from the \NC{} into a sequence of API calls from the \CDT{}. In addition, sometimes it turns a function call into an assignment, further increasing complexity.
+
+One example of an Indirect Transformation is shown in Figure~\ref{fig:codeTransformations}. 
+The function \code{AddMileageToRecord} adds a number to the \code{MileageRecord} \NC{}. Line 22 in column (a) shows \code{Mileage} being added via the API call \code{add}.
 In order to correctly perform the transformation, \code{Mileage} now needs to be added to the \code{Cloud Data Table} \code{MileageRecordTable}.
-This becomes a two step process now. Step 1 is to add a new row to the \CDT, and step two is to assign the value of \code{Mileage} to that row. This is shown in column (b) lines 22-23.
+This becomes a two step process. Step 1 is to add a new row to the \CDT, and step two is to assign the value of \code{Mileage} to that row. This is shown in column (b) lines 22-23. \\
 
 
-\subsubsection{Custom Function Transformations}
-Custom Function Transformations also cannot be performed with a  simple find-and-replace technique.  We define Custom Function Transformations as 
-a transformation where there is not the same API functionality for \CDT as there is for \NC{}.  In order to transform these API calls, \tool injects custom functions that provide the same functionality as the missing API methods.   Since \TD does not allow \CDT{}s to be passed to functions, but instead must be used a global variable, \tool cannot create generic functions to replicate the API functionality.  Instead, it must create a custom function for each \CDT that has been created as a result of a refactoring.
-Figure~\ref{fig:codeTransformations} shows an example of this kind of transformation.  The function \code{DisplayAvgMileage} calculates the average value of all the contents of a \NC{}, and then displays it, as seen in column (a) on lines 27-29.  Once the program has been transformed to use a \CDT to store the data instead of a \NC, there is no longer an API call that will calculate the average value of all the contents of a \CDT. Instead, \tool must introduce the custom function \code{MileageRecordTable avg} that will compute the average of all the values in the \code{MileageRecordTable}.  This is shown in column (b) lines 32-41.  One that function exists, then the API call in \code{DisplayAvgMileage} can be transformed to a custom function call instead, as seen in column (b), line 28.
+\MyParagraph{Custom Function Transformations: } 
+We used Custom Function Transformations when some API functionality in \NC{} cannot be replicated using APIs from \CDT{}.
+In order to transform such missing APIs, \tool injects custom functions that provide the same functionality.  
+Since \TD does not allow \CDT{}s to be passed to functions, but instead must be used as a global variable, \tool cannot create generic functions to replicate the API functionality.  
+Instead, it must create a custom function for each \CDT that has been created as a result of a refactoring.
+
+One example of an Custom Function Transformation is shown in Fig~\ref{fig:codeTransformations}~(a) on lines 27-29.
+The function \code{DisplayAvgMileage} calculates the average value of all contents of \code{MileageRecord}, and then displays it. 
+Once \tool refactors the program to use a \CDT to store the data, there is no longer an API call that will calculate the average value 
+of all contents of a \CDT. Instead, \tool must introduce the custom function \code{MileageRecordTable avg} (see Fig.~\ref{fig:codeTransformations}~(b) lines 32-41) that will compute the average of all the values in the \code{MileageRecordTable}.  
+Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{avg} custom function instead, as seen in Fig.~\ref{fig:codeTransformations}~(b), line 28.
 
 \subsubsection{Tool Limitations}
-The current version of \tool does not support the custom function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \code{add many} action.
+The current version of \tool does not support the custom function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve \code{add many}.
 
 %\subsubsection{Unsupported Language Features}
 %\label{sec:unsupportedLanguageFeatures}
@@ -398,6 +417,8 @@ The current version of \tool does not support the custom function transformation
 %\tool also does not support the custom function transformation of \texttt{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \texttt{add many} action.
 %
 
+\subsubsection{Implementation}
+\TODO{write about JSON AST nodes}
 
 \section{Evaluation}
 \label{sec:evaluation}
