@@ -7,7 +7,7 @@ wall->prompt("Click \"Ok\" to continue...")
 ...
 
 private action ClearMileageRecord ()      
-This action clears the mileage record.
+//This action clears the mileage record.
 wall->clear      
 if wall->ask boolean("Warning", "Are you sure…")
     ->equals(true) then                        
@@ -39,5 +39,6 @@ do
   do       
     sum := sum + ct->MileageRecordColumn      
 avg := sum / MileageRecordTable table->count      
-   
+
+...   
 

@@ -6,7 +6,6 @@ wall->prompt("Click \"Ok\" to continue...")
 
 ...
    
-
 private action ClearMileageRecord ()      
 //This action clears the mileage record.
 wall->clear      
@@ -21,6 +20,7 @@ private action AddMileageToRecord (
   Mileage : Number)      
 do       
   MileageRecord->add(Mileage)      
+
 
 ...
 
@@ -38,7 +38,9 @@ avgMileage->post to wall
 
 
 
-.
+
+
+...
 
 
 

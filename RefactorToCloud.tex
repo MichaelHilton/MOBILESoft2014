@@ -184,7 +184,16 @@ into \code{Cloud Data Table}.
 When carrying out the refactorings, we noticed that steps 1 and 4 are hard to automate as they require understanding the original program and the desired end-user experience. Steps 2 and 3 have different degrees of complexity. 
 The first two kinds of refactorings  are trivial because there is a perfect match between the local data and the cloud data type, so the change is as simple as prepending the keyword \code{Cloud} to the variable declaration. 
 
-The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table} \TODO{Add a picture}. The APIs are different enough, so that sometimes we needed to map one function call from \code{Collection} into a sequence of calls from \code{Table}, whereas other times we had to augment the API by writing new functions. 
+The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table} .
+\begin{figure}[htbp!]
+\begin{center}
+\includegraphics[width=250pt]{images/convertCollectionToTable}
+\nocaptionrule
+\caption{Conversion from Number Collection to Cloud Data Table}
+\label{fig:ncToCDT}
+\end{center}
+\end{figure}
+ The APIs are different enough, so that sometimes we needed to map one function call from \code{Collection} into a sequence of calls from \code{Table}, whereas other times we had to augment the API by writing new functions. 
 For these reasons, we automated this refactoring. 
 
 Table~\ref{tab:refactoringsFormative} lists the total number of refactorings that we applied as part of our formative study.
@@ -214,6 +223,8 @@ Total & 10 & 1  & 8 \\
 \caption{Total number of refactorings}
 \label{tab:refactoringsFormative}
 \end{table}%
+
+
 
 
 
@@ -362,50 +373,10 @@ There are several categories of transformations that are needed to transform loc
 \subsubsection{Direct Transformations}
 These are the transformations where both the \NC{} and the cloud table have the same action.  For example, both have an action "post to wall" which will, as expected, post to the scripts wall.  This is the simplest of the transformations, as all that is needed to do is replace the object that the action is being called on.  Figure~\ref{fig:numCol_postToWall} shows a line of TouchDevelop code that posts to the wall a \NC{} that is stored in the global variable named \texttt{MileageRecord}.
 
-
-\begin{figure}[htbp!]
-\begin{center}
-\texttt{MileageRecord $\rightarrow$ post to wall}
-
-\end{center}
-\nocaptionrule
-\caption{post to wall before transformation}
-\label{fig:numCol_postToWall}
-\end{figure}
-
-\begin{figure}[htbp!]
-\begin{center}
-\texttt{Cloud Data table $\rightarrow$ post to wall}
-\nocaptionrule
-\caption{post to wall after transformation}
-\label{fig:CloudTable_postToWall}
-\end{center}
-\end{figure}
-
 Figure~\ref{fig:CloudTable_postToWall}  shows the same line of code after it has been transformed by our algorithm.  Now the cloud data table is being posted to the wall.
-
-
-
 
 \subsubsection{Indirect Transformations}
 The indirect transformations are slightly more complex then the direct transformations.  The indirect transformation is when there are two actions that have similar behavior, but different names.  For example, \texttt{add}, which adds to a \NC{}, and \texttt{add row} which adds to a cloud data table.  Consider the case where the user of the previous example would like to add the current mileage to the list that stores all the past mileages.  In order to add it to a \NC{}, the developer would have to use the \texttt{add} operator.  This is shown in Figure~\ref{fig:numCol_Add}.
-
-\begin{figure}[htbp!]
-\begin{center}
-\texttt{MileageRecord $\rightarrow$ add(Mileage)}
-\nocaptionrule
-\caption{add action before transformation}
-\label{fig:numCol_Add}
-\end{center}
-\end{figure}
-\begin{figure}[htbp!]
-\begin{center}
-\texttt{Cloud Data table $\rightarrow$ add row $\rightarrow$ MileageRecord := Mileage}
-\nocaptionrule
-\caption{add action after transformation}
-\label{fig:CloudTable_Add}
-\end{center}
-\end{figure}
 
 Figure~\ref{fig:CloudTable_Add} shows the same line of code after it has been transformed by  \tool.  Now the actions are operating on a cloud data table.  Since each element in the \NC{} is being mapped to a row in the cloud data table, before the number can be added a new row must be added to the table.  TouchDevelop offers the ability to chain functions together, so we can chain the add and assignment operators.  In the same line of code we can add a new row to the table, as well as set the value as the current Mileage that we wish to store.
 
@@ -413,43 +384,7 @@ Figure~\ref{fig:CloudTable_Add} shows the same line of code after it has been tr
 \subsubsection{Custom Function Transformations}
 The third type of transformation we have implemented is custom function transformations.  These are needed when there is no action in Cloud Table that will achieve the same functionality as the action that exits in  \NC{}. For example, the developer of the mileage tracker would like to calculate the average across all the sessions of the app.  The \texttt{avg} action will return the average of all the numbers in the \NC{}.  In order to transform a \NC{}s that contain this action, we inject a custom function into the code that provides the same behavior as the \texttt{avg} action.  Then we can transform a call from the TouchDevelop API to a call to our custom function.  Figure~\ref{fig:numCol_avg} shows a line of source code where the \texttt{avg} action is being called, and then the returned value is being stored in a local variable \texttt{avgMielage}.
 
-
-\begin{figure}[htbp!]
-\begin{center}
-\texttt{var avgMileage := MileageRecord $\rightarrow$ avg}
-\nocaptionrule
-\caption{avg action before transformation}
-\label{fig:numCol_avg}
-\end{center}
-\end{figure}
-
 Figure~\ref{fig:CloudTable_avg_fun} shows the same line of code after \tool has performed the transformation.  The action \texttt{Cloud Data avg} is a custom function that is generated by our refactoring engine that is needed to calculate the average of all the values in the cloud data table.  This function also returns a value, so we are saving it in the same local variable.  Figure~\ref{fig:CloudTable_avg_fun} shows the helper function that is added to the script.
-
-\begin{figure}[htbp!]
-\begin{center}
-\texttt{var avgMileage := Cloud Data avg}
-\nocaptionrule
-\caption{avg action after transformation}
-\label{fig:CloudTable_avg}
-\end{center}
-
-\end{figure}
-\begin{figure}[htbp!]
-\texttt{ private action Cloud Data avg()\\ 
-returns(\\
-avg: Number)\\
-do\\
-var sum := 0\\
-for each ct in Cloud Data table\\
-where true\\
-do\\
-sum := sum + ct $\rightarrow$ MileageRecord\\
-avg := sum / Cloud Data table $\rightarrow$ count}
-\includegraphics[width=250pt]{images/HelperFunction}
-\nocaptionrule
-\caption{custom function to provide avg functionality}
-\label{fig:CloudTable_avg_fun}
-\end{figure}
 
 \TODO{Tool Limitations}
 The current version of \tool does not support the custom function transformation needed for \texttt{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve the \texttt{add many} action.
