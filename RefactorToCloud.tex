@@ -123,9 +123,9 @@ computing through the use of refactoring techniques.
 \emph{accurate}: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  
 \end{itemize}
 
-%\Comment{eat this line}
-\section{Background on TouchDevelop Cloud Data Types}
 
+\section{Background on TouchDevelop Cloud Data Types}
+\TODO{Microsoft guys, will you please fill out this section.  We were thinking perhaps about a page, talking about the background of TouchDevelop, and specifically focusing on Cloud Data types.}
 
 \section{Formative Study}
 \label{sec:Formative}
@@ -254,40 +254,46 @@ Total & 10 & 1  & 8 \\
  \hline
 Number Collection Operations & Cloud Table Operations & Transformation Type\\
  \hline
+ \hline
+\code{clear} & \code{clear} & Direct \\
   \hline
+  \code{count} & \code{count} & Direct \\
+  \hline
+\code{post to wall} & \code{post to wall} & Direct \\
+\hline
 \code{add} & \code{add row} & Indirect \\ 
 \hline
 \code{at} & \code{row at} & Indirect \\
 \hline
+\code{set at} & \code{row at$\rightarrow$valueName} & Indirect \\
+\hline
+\code{remove at} & \code{row at$\rightarrow$deleteRow} & Indirect \\
+\hline
+\code{insert at} & \code{row at$\rightarrow$value} & Indirect \\
+\hline
 \code{add many} & NONE & Function \\
 \hline
 \code{avg} & NONE & Function \\
-\hline
-\code{clear} & \code{clear} & Direct \\
+
 \hline
 \code{contains} & NONE & Function \\
 \hline
-\code{count} & \code{count} & Direct \\
-\hline
+
 \code{index of} &NONE  & Function \\
-\hline
-\code{insert at} & \code{row at$\rightarrow$value} & Indirect \\
+
 \hline
 \code{max} &NONE  & Function \\
 \hline
 \code{min} & NONE & Function \\
-\hline
-\code{post to wall} & \code{post to wall} & Direct \\
+
 \hline
 \code{random} &NONE  & Function \\
 \hline
 \code{remove}  & NONE & Function \\
-\hline
-\code{remove at} & \code{row at$\rightarrow$deleteRow} & Indirect \\
+
 \hline
 \code{reverse} &NONE  & Function \\
-\hline
-\code{set at} & \code{row at$\rightarrow$valueName} & Indirect \\
+
 \hline
 \code{sort} & NONE & Function \\
 \hline
@@ -296,7 +302,7 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 
 \end{tabular}
 \nocaptionrule
-\caption{Table with the Number Collection API's and corresponding Cloud Table Operations. \TODO{sort by: Direct, Indirect,Custom}}
+\caption{Table with the Number Collection API's and corresponding Cloud Table Operations. }
 \label{tab:mappingTable}
 \end{center}
 \end{table*}%
@@ -328,8 +334,34 @@ For example, an instance of a \NC{} can be passed as an argument or returned fro
 %Should we identify potential solutions? In the future, a transformation could potentially be developed that would transform the local structure from a parameter to a global variable, and then the local to cloud data transformation could be performed.
 
 
-\subsection{Algorithm}
-\label{sec:algorithm}
+
+
+
+%
+%\subsection{Algorithm}
+%\label{sec:algorithm}
+%
+%We describe the algorithm that is used to refactor TouchDevelop scripts.   
+%
+%Step 1: Create a new Cloud Data structure that transformations will use and add it to the script.
+%
+%Step 2: Traverse through the script and find candidate statements for refactoring.
+%
+%Step 3: Refactor local data structure statements into corresponding cloud data structure statements.
+%
+%To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop script, BlockY World.  BlockY World is a game where our hero must find his way through a maze of blocks, while also being able to move blocks to change the environment around him.  BlockY World uses multiple \NC{}s named \texttt{stats}, \texttt{spestats} and \texttt{zones}. For our further discussion of algorithm, we assume that user has selected \texttt{spestats} as the \NC{} to refactor. In step 1, a cloud data type is created and injected by \tool into the BlockY World script.  A new cloud data table is added for every refactoring to avoid conflicts if there are more then one refactoring per script. Then a column will be added to the table with the same name as the \NC{} that is being refactored.  For \texttt{spestats}, the tool will produce a cloud data table with a single column whose data type is number and who's column name is \texttt{spestats}.  In step 2, TouchDevelop's JSON AST tree representation is used to traverse script's AST. If any references to selected collection to refactor is found, the tool marks it as a candidate statement to refactor.  In step 3, each of the candidate statement is then transformed into individual new statement that replace the call to the \NC{} with a the corresponding cloud data action. 
+%
+
+
+\subsection{Transformations}
+\label{sec:transformations}
+
+There are four categories of transformations to refactor \NC{} to \code{Cloud Data Tables}: 
+(i) creating \CDT{} data structure, (ii) direct mapping of APIs, (iii) indirect mapping of APIs, and (iv) custom function to augment missing APIs. Table~\ref{tab:mappingTable} displays the mapping between the APIs of the two data structures.
+
+We will illustrate the transformations using simplified code snippets from the MileageTracker app that we introduced in the Formative Study (see Section~\ref{sec:Formative}), an app that enables users to track their fuel usage. Figure~\ref{fig:codeTransformations} shows the code before and after the refactoring. The left column shows the original code. 
+Lines XYZ shows the declaration of the \code{MileageRecord} \NC{}, which is the target of the refactoring. We show four functions to display all mileage record,
+clear existing mileage record, add a new entry to the mileage collection, and compute and display the average mileage. \\
 
 \begin{figure*}
    \centering
@@ -350,30 +382,6 @@ For example, an instance of a \NC{} can be passed as an argument or returned fro
     \caption{Selected code from Mileage Tracker app. \TODO{add the definitions of data structure, and update text with the new line numbers}}
     \label{fig:codeTransformations}
 \end{figure*}
-
-
-We describe the algorithm that is used to refactor TouchDevelop scripts.   
-
-Step 1: Create a new Cloud Data structure that transformations will use and add it to the script.
-
-Step 2: Traverse through the script and find candidate statements for refactoring.
-
-Step 3: Refactor local data structure statements into corresponding cloud data structure statements.
-
-To explain our algorithm, we will walkthrough the refactoring of a TouchDevelop script, BlockY World.  BlockY World is a game where our hero must find his way through a maze of blocks, while also being able to move blocks to change the environment around him.  BlockY World uses multiple \NC{}s named \texttt{stats}, \texttt{spestats} and \texttt{zones}. For our further discussion of algorithm, we assume that user has selected \texttt{spestats} as the \NC{} to refactor. In step 1, a cloud data type is created and injected by \tool into the BlockY World script.  A new cloud data table is added for every refactoring to avoid conflicts if there are more then one refactoring per script. Then a column will be added to the table with the same name as the \NC{} that is being refactored.  For \texttt{spestats}, the tool will produce a cloud data table with a single column whose data type is number and who's column name is \texttt{spestats}.  In step 2, TouchDevelop's JSON AST tree representation is used to traverse script's AST. If any references to selected collection to refactor is found, the tool marks it as a candidate statement to refactor.  In step 3, each of the candidate statement is then transformed into individual new statement that replace the call to the \NC{} with a the corresponding cloud data action. 
-
-
-
-\subsection{Transformations}
-\label{sec:transformations}
-
-There are four categories of transformations to refactor \NC{} to \code{Cloud Data Tables}: 
-(i) creating \CDT{} data structure, (ii) direct mapping of APIs, (iii) indirect mapping of APIs, and (iv) custom function to augment missing APIs. Table~\ref{tab:mappingTable} displays the mapping between the APIs of the two data structures.
-
-We will illustrate the transformations using simplified code snippets from the MileageTracker app that we introduced in the Formative Study (see Section~\ref{sec:Formative}), an app that enables users to track their fuel usage. Figure~\ref{fig:codeTransformations} shows the code before and after the refactoring. The left column shows the original code. 
-Lines XYZ shows the declaration of the \code{MileageRecord} \NC{}, which is the target of the refactoring. We show four functions to display all mileage record,
-clear existing mileage record, add a new entry to the mileage collection, and compute and display the average mileage. \\
-
 
 \myParagraph{Create \texttt{Cloud Data Table} data structure: }
 Lines XYZ of the right-hand side of Figure~\ref{fig:codeTransformations} show the newly created data structure, \code{MileageRecordTable}. We append the \code{Table} to the end of the name for clarity. This \code{Table} contains one column, \code{MileageRecordColumn}. We will use this column to store the values that were originally stored in the \code{MileageRecord} collection.
@@ -419,6 +427,9 @@ The current version of \tool does not support the custom function transformation
 
 \subsubsection{Implementation}
 \TODO{write about JSON AST nodes}
+\tool performs these transformations on an Abstract Syntax Tree (AST) representation of the target app.   
+In order to perform the refactoring, \tool downloads the source code of the target app as an AST stored in JSON format from the \TD script bazaar.  Once \tool has the AST for the target app, it can than make the necessary changes by changing its local copy of the AST.  Once all the transformations are complete, \tool uploads the AST to the bazaar, thereby applying the changes to the app.  
+
 
 \section{Evaluation}
 \label{sec:evaluation}
@@ -586,17 +597,36 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 \section{Related Work}
 \label{sec:relatedWork}
 
-We group the related work in the following categories: (i) cloud-related refactorings, (ii) \TODO{multi-user apps}, and (iii) tools for the end-user development community. \TODO{Danny's paper on SpreadsheetRefactoring}.
+We group the related work in the following categories: (i) cloud-related refactorings, (ii) multi-user apps, and (iii) tools for the end-user development community.
+
+\MyParagraph{Cloud-related refactorings:}
+Several related works describe refactorings to take advantage of some aspect of cloud computing.  One of the most common of these is to use the cloud to offload computing in order to make apps more energy efficient and thereby preserve battery life.  Some examples of this are Spectra~\cite{flinn2002balancing}, Slingshot~\cite{su2005slingshot}, and MAUI~\cite{cuervo2010maui}. 
+Kwon and Tilervich proposed an approach to offload computation to the cloud to save battery life that is even tolerant to network outages or unavailability~\cite{kwon2012energy}.
+
+Kwon and Tilevich~\cite{kwon2013cloud} proposed \emph{Cloud Refactoring}, a tool to automatically refactor methods of an enterprise application system into services that can be then ported to the cloud. Their tool also determines if a method is a good candidate for refactoring via static analysis of code and dynamic traces generated using application execution. However, even though the methods are automatically refactored into services, they still must be moved to the cloud manually.  \tool performs the refactoring automatically, but also handles the transfer to the cloud.  We do believe that Kwon and Tilevich's approach is a big leap forward in right direction.  
+
+\TODO{ASK DANNY, THIS GUY is a program committee member}
+Reenterencer~\cite{wloka2009refactoring} uses refactoring to replace global state of program with thread-local state so that program becomes thread safe for parallel execution and can benefit from multi core or multi processor architecture.
 
 Strauch et al.~\cite{strauchmigrating} provide a methodology for refactoring applications to move from application data to cloud data.  Their approach is based on finding a migration scenario that depends upon requirements and then mapping the scenario to one of their existing cloud data patterns. Though this paper provided a methodology at a high level, the actual application refactoring is completely manual and left up to programmers. Also, moving application data to the cloud was also manual  and programmer will have to be involved at multiple level to make this refactoring possible.  
 
 Ling et al.~\cite{ling2010refactoring} provided a systematic refactoring approach using theoretic computing to formally define a mechanism to convert object oriented systems into service oriented architecture systems. The services then can be moved to the cloud to benefit from the elasticity of the cloud. Again, this approach leads to the use of manual refactoring and manual moving of services to cloud. 
 
-\tool is different from both these approaches in that it performs the refactoring in an automated manner, thus saving programmers from the effort of moving data structures manually to the cloud.  
-
-Kwon and Tilevich~\cite{kwon2013cloud} proposed \emph{Cloud Refactoring}, a tool to automatically refactor methods of an enterprise application system into services that can be then ported to the cloud. Their tool also determines if a method is a good candidate for refactoring via static analysis of code and dynamic traces generated using application execution. However, even though the methods are automatically refactored into services, they still must be moved to the cloud manually.  \tool performs the refactoring automatically, but also handles the transfer to the cloud.  We do believe that Kwon and Tilevich's approach is a big leap forward in right direction.  
+%\tool is different from both these approaches in that it performs the refactoring in an automated manner, thus saving programmers from the effort of moving data structures manually to the cloud.  
 
 CloudCone~\cite{chun2011clonecloud}, also attempts to harness the power of mobile cloud computing, but their approach is significantly different then ours in that they create clones on the cloud, and then move the execution of the application as well as it's state between the cloud and the device.
+
+\MyParagraph{Multi-user apps}
+Many have studied how to implement Multi-user apps.  There are many different motivations for researching how multi-user systems work, including collaboration~\cite{Yuill:multiuserColab, Lopez-Gulliver:imageprocessing}, gaming~\cite{Leichtenstern:multiuserGames}, Geospatial Applications~\cite{Forlines:geospatial} (i.e. Google earth), information sharing~\cite{Nacenta:2012:LMM:2307798.2307816} and even music~\cite{Sorensen:2012:ISM:2399016.2399094}. 
+
+
+\MyParagraph{End-user Development community}
+Lewis et. al.~cite{lewis2009report} describe the need of End User Programming tools to make End User Programming more acceptable.
+
+\TD is a programming platform developed by Microsoft Research that allows hobbyist,novice programmers and end users  to program \emph{on} their phone for their phone.  There are other programming environments that are targeted to a similar audience, including:  App Inventor~\cite{Wolber}, Scratch~\cite{maloney2010scratch}, Alice~\cite{cooper2010design}, and Greenfoot~\cite{kolling2010greenfoot}.  In addition, end users have been targeted with such tools as excel~\cite{badame2012refactoring}.
+
+
+
 
 \section{Conclusions and Future Work}
 \label{sec:conclusions}
