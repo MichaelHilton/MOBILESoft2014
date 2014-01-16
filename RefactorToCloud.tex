@@ -59,12 +59,12 @@
 
 \title{Refactoring towards Cloud-enabled Multiuser Mobile Apps}
 
-\authorinfo{Arpit Christi }
-           {Oregon State University}
-           {chrsitia@eecs.oregonstate.edu}
 \authorinfo{Michael Hilton}
            {Oregon State University}
            {hiltonm@eecs.oregonstate.edu}
+\authorinfo{Arpit Christi }
+           {Oregon State University}
+           {chrsitia@eecs.oregonstate.edu}
 \authorinfo{Danny Dig}
            {Oregon State University}
            {digd@eecs.oregonstate.edu}
@@ -426,7 +426,8 @@ The current version of \tool does not support the custom function transformation
 
 \subsubsection{Implementation}
 \tool performs these transformations on an Abstract Syntax Tree (AST) representation of the target app.   
-In order to perform the refactoring, \tool downloads the source code of the target app as an AST stored in JSON format from the \TD script bazaar.  Once \tool has the AST for the target app, it can than make the necessary changes by changing its local copy of the AST.  Once all the transformations are complete, \tool uploads the AST to the bazaar, thereby applying the changes to the app.  
+In order to perform the refactoring, \tool downloads the source code of the target app as an AST stored in JSON format from the \TD script bazaar.  Once \tool has the AST for the target app, 
+it changes the local copy of the AST.  Once all the transformations are complete, \tool uploads the AST to the bazaar, thereby applying the changes to the app.  
 
 
 \section{Evaluation}
@@ -596,42 +597,45 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 \label{sec:relatedWork}
 
 \TODO{Microsoft People: are you aware of other related work?}
-We group the related work in the following categories: (i) cloud-related refactorings, (ii) multi-user apps, and (iii) tools for the end-user development community.
+We group the related work in the following categories: (i) cloud-related refactorings, (ii) multi-user apps, and (iii) tools for the end-user development community. \\
 
-\MyParagraph{Cloud-related refactorings:}
+\MyParagraph{Cloud-related refactoring:}
+There is a lot of research on generic topic of refactoring. While the original research was using refactoring to improve the design of existing programs, the more recent work used refactoring techniques to retrofit 
+concurrency~\cite{wloka2009refactoring,dig2009refactoring}, functional features~\cite{Gyori:Lambdaficator}, etc.
+As far as we know, we present the first automated tool to introduce mobile cloud computing via an automated refactoring tool.
 
-Kwon and Tilevich~\cite{kwon2013cloud} proposed \emph{Cloud Refactoring}, a tool to automatically refactor methods of an enterprise application system into services that can be then ported to the cloud. Their tool also determines if a method is a good candidate for refactoring via static analysis of code and dynamic traces generated using application execution. However, even though the methods are automatically refactored into services, they still must be moved to the cloud manually.  \tool also performs the refactoring automatically, but in addition automates the movement to the cloud.  We do believe that Kwon and Tilevich's approach is a big leap forward in right direction.  
+The closest research to our current work is by Kwon and Tilevich~\cite{kwon2013cloud} who proposed \emph{Cloud Refactoring}, a tool to refactor methods of an enterprise application system into services that can be  ported to the cloud. Their tool also determines if a method is a good candidate for refactoring using static and dynamic analysis. However, even though their tool automatically refactors methods into services, the programmer must still move them to the cloud manually.  
+Our tool, \tool, performs the refactoring fully automatically, including moving data to the cloud.  
 
-Strauch et al.~\cite{strauchmigrating} provide a methodology for refactoring applications to move from application data to cloud data.  Their approach is based on finding a migration scenario based on requirements and then mapping the scenario to one of their existing cloud data patterns. Though this work provides a methodology at a high level, the application of the refactoring is completely manual and left up to the programmer. 
 
-Ling et al.~\cite{ling2010refactoring} provided a systematic refactoring approach using theoretic computing to formally define a mechanism to convert object oriented systems into service oriented architecture systems. The services then can be moved to the cloud to benefit from the elasticity of the cloud. Again, this approach leads to the use of manual refactoring and manual moving of services to cloud. 
+Strauch et al.~\cite{strauchmigrating} describe a methodology for refactoring applications to move local data to cloud data. They propose several cloud data patterns, and describe migration scenarios for these patterns. Although this work provides a methodology at a high level, the application of the refactoring is completely manual and left up to the programmer. 
+Ling et al.~\cite{ling2010refactoring} describe a systematic refactoring approach 
+using category theory to formally define an approach to convert Object Oriented systems 
+into Service-Oriented Architecture systems. 
 Our work is different from these in that we provide a tool to perform the refactoring in an automated manner.
 
-There are various approaches researchers have used to harness the power of the cloud.
-One of the more common uses of the cloud is to offload computing in order to make apps more energy efficient and thereby preserve battery life, such as Spectra~\cite{flinn2002balancing}, Slingshot~\cite{su2005slingshot}, and MAUI~\cite{cuervo2010maui}.  Kwon and Tilervich proposed an approach to offload computation to the cloud to save battery life that is even tolerant to network outages or 
-unavailability~\cite{kwon2012energy}.
+Researchers have used many approaches to harness the power of the cloud.
+One of the more common uses of the mobile cloud is to offload computing in order to make apps more energy efficient and thereby preserve battery life, such as Spectra~\cite{flinn2002balancing}, Slingshot~\cite{su2005slingshot}, and MAUI~\cite{cuervo2010maui}.  
+Kwon and Tilevich~\cite{kwon2012energy} proposed an approach to offload computation to the cloud to save battery life that is tolerant to network outages or unavailability.
 
-CloudCone~\cite{chun2011clonecloud}, also attempts to harness the power of mobile cloud computing, but their approach is significantly different then ours in that they create clones on the cloud, and then move the execution of the application as well as it's state between the cloud and the device.  
+CloudCone~\cite{chun2011clonecloud} also attempts to harness the power of mobile cloud computing, but their approach is significantly different then ours in that they create clones on the cloud, and then move the execution of the application as well as it's state between the cloud and the device.  \\
 
-Refactorings have also been applied to several different domains, including introducing concurrency~\cite{wloka2009refactoring,dig2009refactoring} and functional programming constructs~\cite{Gyori:Lambdaficator}.
-As far as we know, we are the first automated tool to introduce mobile cloud computing via an automated refactoring tool.
+\MyParagraph{Multi-user apps:}
+Many have studied multi-user apps in the following domains: collaboration~\cite{Yuill:multiuserColab, Lopez-Gulliver:imageprocessing}, gaming~\cite{Leichtenstern:multiuserGames}, Geospatial Applications~\cite{Forlines:geospatial} (e.g., Google earth), information sharing~\cite{Nacenta:2012:LMM:2307798.2307816}, and music~\cite{Sorensen:2012:ISM:2399016.2399094}. This research focuses on how multi-user technologies impact human interactions. In contrast, we are focused on the technical challenges of refactoring from single to multi-user apps. \\
 
-\MyParagraph{Multi-user apps}
-Many have studied how to implement Multi-user apps in the following domains: collaboration~\cite{Yuill:multiuserColab, Lopez-Gulliver:imageprocessing}, gaming~\cite{Leichtenstern:multiuserGames}, Geospatial Applications~\cite{Forlines:geospatial} (i.e. Google earth), information sharing~\cite{Nacenta:2012:LMM:2307798.2307816} and even music~\cite{Sorensen:2012:ISM:2399016.2399094}. This research focuses on how multi-user technologies impact human interactions. In contrast, we are focused on the technical challenges of refactoring from single to multi-user apps.
+\MyParagraph{End-user Development community:}
+Lewis et al.~\cite{lewis2009report} describe the need of End User Programming tools to make End User Programming more acceptable.  
 
-\MyParagraph{End-user Development community}
-Lewis et. al.~cite{lewis2009report} describes the need of End User Programming tools to make End User Programming more acceptable.  
+\TD is a programming platform developed by Microsoft Research that allows hobbyist, novice programmers and end users  to program \emph{on} their phone for their phone.  There are other programming environments that are targeted to a similar audience, including:  App Inventor~\cite{Wolber}, Scratch~\cite{maloney2010scratch}, Alice~\cite{cooper2010design}, and Greenfoot~\cite{kolling2010greenfoot}. 
+Our recent work~\cite{badame2012refactoring} provides refactoring tools for users of Excel. 
+However, our current paper is the first paper to engage the mobile end-user in a refactoring workflow.
 
-\TD is a programming platform developed by Microsoft Research that allows hobbyist,novice programmers and end users  to program \emph{on} their phone for their phone.  There are other programming environments that are targeted to a similar audience, including:  App Inventor~\cite{Wolber}, Scratch~\cite{maloney2010scratch}, Alice~\cite{cooper2010design}, and Greenfoot~\cite{kolling2010greenfoot}.  
-In addition, end users have been targeted with such tools as excel~\cite{badame2012refactoring}.
-However, none of these tools are engaging the end-user in a refactoring workflow, which is the main goal of our paper.
-
-
-\section{Conclusions and Future Work}
+\section{Conclusion}
 \label{sec:conclusions}
-In this paper we present \tool, a tool to refactor local data structures into cloud data structures.  We have shown that it is able to automatically transform most usages of \NC{} into cloud data references.  We are able to perform these transformations while still preserving the behavior of the application.  Should the user choose to take further advantage of the cloud data features, in some cases only a few lines of code are needed to take advantage of the cloud data features to provide more functionality. 
-
-In the future, it would be nice to automate those changes, so in addition to being able to refactor their data to the cloud, we would like to provide an automated transformation tool that would enable multiuser features to be automatically added to scripts.
+Mobile cloud computing can be harnessed to enable rich multi-user experiences. 
+In this paper we presented a formative study to convert single to multi-user apps using the \TD cloud data types. 
+Based on these lessons, we designed, implemented, and evaluated a tool,  \tool,  to refactor local data structures into cloud data structures.  Our empirical evaluation on \numScripts real apps, shows that the tool is applicable, relevant, and saves human effort.
+Using our refactoring tool in combination with a well designed, powerful end-user programming platform (\TD) can enable even novice programmers to take advantage of the power of the cloud.
 
 
 %suprising. 
