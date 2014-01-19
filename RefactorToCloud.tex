@@ -81,7 +81,11 @@
 
 
 \begin{abstract}
-Cloud computing has become a great tool for many developers to use, with many benefits, especially in mobile development.  However, adding cloud functionality to an existing app can be difficult and time-consuming. We present \tool, a tool that can automatically refractor \emph{local} data structures into \emph{cloud} data structures on the TouchDevelop platform.  As this platform targets students and hobbyist programmers, lowering the barrier of entry to using the cloud is imperative.  
+Mobile cloud computing can greatly enrich the capabilities of today's pervasive mobile devices. One killer feature is the ability to add multi-user support to existing apps. However, 
+ the process of converting a single to multi-user, cloud-enable app requires high expertise, is difficult, and time-consuming. Refactoring techniques can greatly simplify this process.
+ 
+In this paper we present a formative study where we converted \numFormative real-world \TD apps into multi-user apps. Based on these lessons, we designed and implemented, \tool, a tool that automatically refactors \emph{local} data structures into \emph{cloud} data structures on the \TD platform.  Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \numTransformations transformations shows (i) that the refactoring is widely \emph{applicable}, \tool saves human effort, and \tool is \emph{accurate}. 
+
 
 \end{abstract}
 
@@ -89,7 +93,7 @@ Cloud computing has become a great tool for many developers to use, with many be
 \section{Introduction}
 
 % mobile is everywhere. mobile cloud computing can make it better. Examples of multiuser apps
-Mobile apps have gained significant popularity in recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved: battery life~\cite{Chen:2012:CCO:2310096.2310228}, security~\cite{Oberheide:2008:VIS:1622103.1629656}, bandwidth utilization~\cite{Vemulapalli:2013:PSD:2492348.2492353}, and location awareness~\cite{kansal2013latency}. In this paper we are focusing on another killer feature enabled by the cloud: the ability to develop rich, multiuser apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, and collaborative data collection (e.g., Citizen Science~\cite{cohn2008citizen}). 
+Mobile apps have gained significant popularity in recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved: battery life~\cite{Chen:2012:CCO:2310096.2310228}, security~\cite{Oberheide:2008:VIS:1622103.1629656}, bandwidth utilization~\cite{Vemulapalli:2013:PSD:2492348.2492353}, and location awareness~\cite{kansal2013latency}. In this paper we are focusing on another killer feature enabled by the cloud: the ability to develop rich, multi-user apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, and collaborative data collection (e.g., Citizen Science~\cite{cohn2008citizen}). 
 
 % What's broken: advanced expertise, infrastructure, multiple languages
 To take advantage of the benefits of the cloud, app developers face a high entry barrier. They need expertise on many topics: communication protocols (e.g., web services, REST, SOAP, etc.), data storage (e.g., Amazon S3, Microsoft SkyDrive, etc.), databases, cloud infrastructure (e.g., Amazon EC2, Windows Azure, etc.),  programming or scripting languages. Similarly, converting a single into a multiuser app has a high entry barrier: they need to determine the candidate data structures and methods that operate on data structures as well as move them to the cloud. Currently, this process is manual, time consuming, and error prone~\cite{khan2013survey}.
