@@ -354,8 +354,10 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 
 \section{Automated Refactoring}
 \label{sec:Refactoring}
-This section presents our automated refactoring which converts from \NC{} to \code{Cloud Data Table}. We implemented the 
-refactoring in a tool, \tool, which itself is a \TD app.
+This section presents our automated refactoring which converts from \NC{} to \code{Cloud Data Table}. 
+\FB{We define the refactoring as converting from the local data type to cloud data types.  The transformations are the individual changes that we need to make to the program in order to accomplish this refactoring. }
+We implemented the refactoring in a tool, \tool, which itself is a \TD app.
+
 Section~\ref{sec:workflow} presents the workflow of using the tool. Section~\ref{sec:preconditions} presents the preconditions that must be true
 before applying the refactoring. Section~\ref{sec:transformations} presents the three kinds of transformations needed to perform the refactoring.
 
