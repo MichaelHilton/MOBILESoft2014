@@ -1,0 +1,11 @@
+private sync action MilageRecordTable max ()      
+returns (      
+  max : Number)      
+do       
+  max := MilageRecordTable table -> row at(0) -> MileageRecordColumn      
+  for each ct in MilageRecordTable table      
+    where true      
+  do       
+    if ct -> MileageRecordColumn > max then       
+      max := ct -> MileageRecordColumn       
+    else do nothing      

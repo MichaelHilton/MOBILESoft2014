@@ -175,8 +175,8 @@ Because a weak consistency model is used, refactoring for cloud types can introd
 
 %describe the applications
 We selected \numFormative apps from the \TD script bazaar for our formative study. 
-\FB{We chose simple apps that contained local data collections from various domains to better understand \TD. }
-We converted them from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
+We chose representative apps from various domains that cover different features and use cases of \TD.  We also looked for apps where we could envision multi-user functionality.
+We then converted these apps from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
 
 The first app we selected was \MT, which is publicly available with the script id of~\cite{MileageTracker}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. We converted Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
 
@@ -334,8 +334,8 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 
 \section{Automated Refactoring}
 \label{sec:Refactoring}
-This section presents our automated refactoring which converts from \NC{} to \code{Cloud Data Table}. 
-\FB{We define the refactoring as converting from the local data type to cloud data types.  The transformations are the individual changes that we need to make to the program in order to accomplish this refactoring. }
+This section presents our automated refactoring which converts from a local \NC{} to a \code{Cloud Data Table}. 
+\FB{This refactoring is composed of several transformations.  The transformations are the individual changes that \tool must apply to the program in order to accomplish this refactoring. }
 We implemented the refactoring in a tool, \tool, which itself is a \TD app.
 
 Section~\ref{sec:workflow} presents the workflow of using the tool. Section~\ref{sec:preconditions} presents the preconditions that must be true
@@ -403,11 +403,11 @@ In order to correctly perform the transformation, \code{Mileage} now needs to be
 This becomes a two step process. Step 1 is to add a new row to the \CDT, and step two is to assign the value of \code{Mileage} to that row. This is shown in column (b) lines 26-27. \\
 
 
-\MyParagraph{Custom Function Transformations: } 
+\MyParagraph{Injected Function Transformations: } 
 We used Custom Function Transformations when some API functionality in \NC{} cannot be replicated using APIs from \CDT{}.
-In order to transform such missing APIs, \tool injects custom functions that provide the same functionality.  
+In order to transform such missing APIs, \tool inserts Injected Functions that provide the same functionality.  
 Since \TD does not allow \CDT{}s to be passed to functions, but instead must be used as a global variable, \tool cannot create generic functions to replicate the API functionality.  
-Instead, it must create a custom function for each \CDT that has been created as a result of a refactoring.
+Instead, it must create a custom function for each \CDT that has been created as a result of a refactoring. \FB{We developed a template for each Injected Function Transformation. These templates have ``holes'' and \tool then fills up these ``holes'' with the relevant table name and column name.  Thus \tool generates these Injected Functions fully automatically.}
 
 One example of a Custom Function Transformation is shown in Fig~\ref{fig:codeTransformations}~(a) on lines 32-33.
 The function \code{DisplayAvgMileage} calculates the average value of all contents of \code{MileageRecord}, and then displays it. 
@@ -415,13 +415,38 @@ Once \tool refactors the program to use a \CDT to store the data, there is no lo
 of all contents of a \CDT. Instead, \tool must introduce the custom function \code{MileageRecordTable avg} (see Fig.~\ref{fig:codeTransformations}~(b) lines 36-45) that will compute the average of all the values in the \code{MileageRecordTable}.  
 Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{avg} custom function instead, as seen in Fig.~\ref{fig:codeTransformations}~(b), line 32.
 
+\FB{Another example of an Injected Function Transformation is shown in Fig~\ref{fig:MaxCustomTransformationTransformations}.  Column (a) shows the template for the function that calculates the maximum value of a \CDT.  Column (b) shows the same function once it has been customized for the Mileage Tracker app. } \\
+\MyParagraph{Concurrency: } 
+\FB{Since multiple users can access the cloud data at the same time and perform updates concurrently, one needs to worry about the atomicity of compound operations in our Injected Functions.  However, \TD guarantees atomicity at the function level, thus our Injected Functions will execute atomically.}
+
+//Talk about how we have the function templates and then we customize them with correct values
+//talk about how we don't need to worry about concurrency issues due to TD handling it at the method level.
+
+
+\begin{figure*}
+   \centering
+    \mbox{
+      \lstset{
+	  language=Java, numbers=left, keywordstyle=\color{blue}, commentstyle=\color{red}, stringstyle=\color{black}, basicstyle=\scriptsize, tabsize = 2, moredelim=[is][\underbar]{_}{_}
+      }
+      \subfigure[Template Function]{
+      \lstinputlisting[]{src/in/MaxBeforeRefactoring.txt}
+      }
+      \hspace{0.2in}
+      \subfigure[Customized Function]{
+      \lstinputlisting[]{src/out/MaxAfterRefactoring.txt}
+      }
+    }
+    \caption{Example Custom Function Transformation}
+    \label{fig:MaxCustomTransformationTransformations}
+\end{figure*}
 
 
 \subsubsection{Tool Limitations}
 The current version of \tool does not support the custom function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve \code{add many}.
 
 \subsubsection{Implementation}
-\FB{\tool refactors \TD scripts in place.  First, \tool retrieves the source of the target app as an  Abstract Syntax Tree (AST) stored in JSON format from the \TD script bazaar.  It then transforms the AST as needed.  Once all the transformations are performed, \tool completes the refactoring by saving the new AST for the target app.}
+\FB{\tool refactors \TD scripts \emph{in place}.  First, \tool retrieves the source of the target app as an  Abstract Syntax Tree (AST) stored in JSON format from the \TD script bazaar.  It then transforms the AST as needed.  Once all the transformations are performed, \tool completes the refactoring by saving the new AST for the target app.}
 
 
 \section{Evaluation}
@@ -447,8 +472,7 @@ In order to validate the accuracy of \tool, we randomly chose \numManual scripts
 
 In addition to running these \numManual scripts we also carefully inspected the refactored code. We counted transformations that \tool
 (i) applied correctly, (ii) applied incorrectly, and (iii) missed. 
-\FB{We created a catalog of all the API calls for \NC, as well as how to properly transform each call into a cloud data call. We determined the correct transformations by analyzing the calls and manually performing the needed transformations.  
-We defined this catalog as the \emph{golden standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the golden standard to determine if that transformation had been applied correctly. 
+\FB{The first two authors manually refactored \numManual scripts, and created a set of transformations for these refactorings.  We define this set of transformations that an expert would apply as our \emph{golden standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the golden standard to determine if that transformation had been applied correctly. 
 We define a {\it TruePositive} as a transformation that \tool identified and applied correctly.   
 We define {\it FalsePositive} as a transformation that \tool applies to the code, but it is not part of the golden standard. In other words, \tool transformed code that should not have been transformed.
 We define a {\it FalseNegative} as a transformation that \tool did not apply, but it is in the golden standard. In other words, \tool missed applying a needed transformation.
@@ -542,7 +566,7 @@ Second, are we sure that the performed refactorings are accurate? Ideally, we sh
 Also, the corpus that we used in the evaluation predates the introduction of Cloud Data Types, and thus the developers were unaware of our later study and could not bias their code to help \tool. 
 
 \textbf{External Validity:}  Do our results generalize? For our corpus, we used \numScripts of the most commonly run scripts, but we put no restrictions on the type of the scripts.  Our corpus includes scripts from various domains: entertainment, sports, games, education, productivity, etc. Moreover, the apps in our corpus are developed by 83 authors from a diverse end-user community. We do not foresee any reasons why our results would not generalize to other \TD apps.  
-\FB{HOW DOES THIS GENERALIZE?}
+\FB{Currently there is no widely accepted standard for cloud data types.  In order for our results to generalize, cloud storage providers will first need to agree on Cloud Data Storage standards.}
 
 \textbf{Reliability:} Is our evaluation reliable? The apps that we used to evaluate our tool are all available on the \TD bazaar, and \tool is published on the \TD website with the script ID: \TODO{FINAL VERSION OF SCRIPT ID.}
 
