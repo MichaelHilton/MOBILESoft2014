@@ -174,7 +174,9 @@ Because a weak consistency model is used, refactoring for cloud types can introd
 \label{sec:Formative}
 
 %describe the applications
-We selected \numFormative apps from the \TD script bazaar for our formative study. We converted them from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
+We selected \numFormative apps from the \TD script bazaar for our formative study. 
+\FB{We chose simple apps that contained local data collections from various domains to better understand \TD. }
+We converted them from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
 
 The first app we selected was \MT, which is publicly available with the script id of~\cite{MileageTracker}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. We converted Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
 
@@ -413,13 +415,13 @@ Once \tool refactors the program to use a \CDT to store the data, there is no lo
 of all contents of a \CDT. Instead, \tool must introduce the custom function \code{MileageRecordTable avg} (see Fig.~\ref{fig:codeTransformations}~(b) lines 36-45) that will compute the average of all the values in the \code{MileageRecordTable}.  
 Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{avg} custom function instead, as seen in Fig.~\ref{fig:codeTransformations}~(b), line 32.
 
+
+
 \subsubsection{Tool Limitations}
 The current version of \tool does not support the custom function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve \code{add many}.
 
 \subsubsection{Implementation}
-\tool performs these transformations on an Abstract Syntax Tree (AST) representation of the target app.   
-In order to perform the refactoring, \tool downloads the source code of the target app as an AST stored in JSON format from the \TD script bazaar.  Once \tool has the AST for the target app, 
-it changes the local copy of the AST.  Once all the transformations are complete, \tool uploads the AST to the bazaar, thereby applying the changes to the app.  
+\FB{\tool refactors \TD scripts in place.  First, \tool retrieves the source of the target app as an  Abstract Syntax Tree (AST) stored in JSON format from the \TD script bazaar.  It then transforms the AST as needed.  Once all the transformations are performed, \tool completes the refactoring by saving the new AST for the target app.}
 
 
 \section{Evaluation}
@@ -444,9 +446,13 @@ In order to determine the effort saved by using this refactoring tool we record 
 In order to validate the accuracy of \tool, we randomly chose \numManual scripts from the corpus of \numScripts refactored scripts. We ran the scripts and exercised the features for three minutes before and after each refactoring to ensure that the refactorings did not change the scripts' runtime behavior. Indeed, we did not observe any runtime differences before and after the refactoring. 
 
 In addition to running these \numManual scripts we also carefully inspected the refactored code. We counted transformations that \tool
-(i) applied correctly, (ii) applied incorrectly, and (iii) missed. We first manually created a set of transformations required for each refactoring, which we define as the \emph{golden standard}. We define a {\it TruePositive} as a transformation that \tool identified and applied correctly, and it was a part of the golden standard. 
+(i) applied correctly, (ii) applied incorrectly, and (iii) missed. 
+\FB{We created a catalog of all the API calls for \NC, as well as how to properly transform each call into a cloud data call. We determined the correct transformations by analyzing the calls and manually performing the needed transformations.  
+We defined this catalog as the \emph{golden standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the golden standard to determine if that transformation had been applied correctly. 
+We define a {\it TruePositive} as a transformation that \tool identified and applied correctly.   
 We define {\it FalsePositive} as a transformation that \tool applies to the code, but it is not part of the golden standard. In other words, \tool transformed code that should not have been transformed.
 We define a {\it FalseNegative} as a transformation that \tool did not apply, but it is in the golden standard. In other words, \tool missed applying a needed transformation.
+}
  
  Using these metrics we calculate precision and recall for \tool, using the standard definitions:
 \[precision = \frac{|True Positive|}{|True Positive|+|False Positive|}\]
@@ -536,6 +542,7 @@ Second, are we sure that the performed refactorings are accurate? Ideally, we sh
 Also, the corpus that we used in the evaluation predates the introduction of Cloud Data Types, and thus the developers were unaware of our later study and could not bias their code to help \tool. 
 
 \textbf{External Validity:}  Do our results generalize? For our corpus, we used \numScripts of the most commonly run scripts, but we put no restrictions on the type of the scripts.  Our corpus includes scripts from various domains: entertainment, sports, games, education, productivity, etc. Moreover, the apps in our corpus are developed by 83 authors from a diverse end-user community. We do not foresee any reasons why our results would not generalize to other \TD apps.  
+\FB{HOW DOES THIS GENERALIZE?}
 
 \textbf{Reliability:} Is our evaluation reliable? The apps that we used to evaluate our tool are all available on the \TD bazaar, and \tool is published on the \TD website with the script ID: \TODO{FINAL VERSION OF SCRIPT ID.}
 
