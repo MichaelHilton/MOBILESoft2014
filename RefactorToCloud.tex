@@ -132,16 +132,24 @@ computing through the use of refactoring techniques.
 \end{itemize}
 
 
-\section{Background on TouchDevelop Cloud Data Types}
+\section{Background on TouchDevelop and Cloud Data Types}
 
 %what is touchdevelop
-\TD is a programming language and integrated development environment (IDE) that allows the development of mobile applications (called \emph{scripts}) on any device, for any device. It provides a development experience that is both ubiquitous and social: ubiquitous because the IDE is optimized for operation on touchscreen devices like phones or tablets, and social because scripts and libraries can be easily shared, cloned, forked, and published in the cloud. Both \TD and the \TD scripts are compiled to HTML5/JavaScript, thus they can execute on all major smartphone, tablet, and personal computer brands.  
+\TD is a programming language and integrated development environment (IDE) that
+allows the development of mobile applications (called \emph{scripts}) on any
+device, for any device. 
+It provides a development experience that is both ubiquitous and social:
+ubiquitous because the IDE is optimized for operation on touchscreen devices
+like phones or tablets, and social because scripts and libraries can be easily
+shared, forked, commented on, reviewed, and published in the cloud.
+Both \TD and the \TD scripts are compiled to HTML5/JavaScript, thus they can
+execute on all major smartphone, tablet, and personal computer brands.  
 
 %what is it for
 The main purpose of \TD is twofold: to provide an instrument for enticing and educating the next generation of programmers, and to develop novel programming language features that can simplify and accelerate the development of cloud-connected mobile applications (of which \TD itself is a prime example). An example of the latter are cloud data types \cite{burckhardt2012cloud}, which were recently added to \TD. 
 
 %what are cloud types for
-Cloud types make it easy to share data between instance of the app running on multiple devices, by simply declaring such data to be of a particular \emph{cloud type}. Once declared, the runtime then automatically synchronizes the data across multiple devices that are part of the same \emph{cloud session}. A cloud session may include devices by a single user or by multiple users.  For example, a single user may want to synchronize settings, calendars, contact lists, or any other script data between various devices she owns. Examples of multiple-user scenarios include a simple grocery list (to help family members keep track of items to be purchased on the next trip to the store), multi-player games that share game state, or applications that include typical social features like comments, reviews, achievements, high scores, and so on.
+Cloud types make it easy to share data between instances of the app running on multiple devices, by simply declaring such data to be of a particular \emph{cloud type}. Once declared, the runtime then automatically synchronizes the data across multiple devices that are part of the same \emph{cloud session}. A cloud session may include devices by a single user or by multiple users.  For example, a single user may want to synchronize settings, calendars, contact lists, or any other script data between various devices she owns. Examples of multiple-user scenarios include a simple grocery list (to help family members keep track of items to be purchased on the next trip to the store), multi-player games that share game state, or applications that include typical social features like comments, reviews, achievements, high scores, and so on.
 
 %cloud type categories
 There are three categories of cloud data.
@@ -152,7 +160,35 @@ There are three categories of cloud data.
 \end{description}
 
 %cloud type design rationale
-Cloud types are integrated into the programming language and thus as easy to use as data types used by traditional programming languages (simple types, objects, and collections) but their interface is more similar to types typically used for persistent storage (such as tables and indexes).\footnote{The reason is that cloud types are designed specifically to support synchronization of replicas in a distributed system with a reliable server and clients that may crash silently. In such a system, garbage collection is impossible, thus memory must be managed explicitly, which is facilitated by using globally named variables, tables and indexes. Also, since client devices can read and update local data at all times (whether connected or not), the server must resolve conflicts. To this end, all operations on the cloud types are designed to support automatic conflict resolution, i.e. eventual consistency can be obtained by determining a total order of conflicting updates on the server \cite{burckhardt2012cloud,terry-et-al-SIGOPS95}.} Therefore, programs that use classical heap-based object and collection data types require refactoring to take advantage of the automatic persistence and synchronization provided by cloud types. Roughly, this amounts to making classes correspond to tables, objects to rows, and fields to columns. 
+Cloud types are integrated into the programming language and thus as easy to
+use as data types used by traditional programming languages (simple types,
+objects, and collections) but their interface is more similar to types
+typically used for persistent storage (such as tables and
+indexes).
+The reason for this design choice is that cloud types are designed specifically to
+support synchronization of replicas in a distributed system with a reliable
+server and clients that may crash silently. 
+In such a system, garbage collection is impossible as the server never knows if
+there is some client alive with a reference to a particular piece of data).
+The memory must thus be managed explicitly, which is
+facilitated by using globally named variables, tables and indexes. 
+Also, since client devices can read and update local data at all times (whether
+connected or not), the server must resolve conflicts.
+To this end, all operations on the
+cloud types are designed to support automatic conflict resolution, i.e.
+eventual consistency can be obtained by determining a total order of
+conflicting updates on the server
+\cite{burckhardt2012cloud,terry-et-al-SIGOPS95}. 
+Such conflict resolution is easier when the semantics is implicit in the type
+instead of being encoded in arbitrary heap operations---for example, consider
+resolving conflicts in a table (two devices add a row) versus a linked list
+(two devices swing a pointer somewhere).
+
+As a consequence, programs that use
+classical heap-based object and collection data types require refactoring to
+take advantage of the automatic persistence and synchronization provided by
+cloud types. Roughly, this amounts to making classes correspond to tables,
+objects to rows, and fields to columns. 
 
 \subsection{Consistency Model}
 
@@ -169,6 +205,52 @@ semantics.
 \end{enumerate}
 
 Because a weak consistency model is used, refactoring for cloud types can introduce consistency errors that were not present in the original program. The responsibility for identifying such problems and correcting them remains with the user.
+
+\paragraph{Example}
+Let's consider a client A performing two updates \texttt{x := x + 2} followed by \texttt{x := x + 4} in an event handler E, and client
+B executing \texttt{x := x + 3}, where \texttt{x} is initially \texttt{0}.
+These are the only possible executions:
+\begin{itemize}
+\item B's update is streamed to server and then to A before E starts executing,
+in which case \texttt{x} will be eventually \texttt{9}
+\item A performs its updates, setting \texttt{x} to \texttt{6}, and B sets
+\texttt{x} to \texttt{3}. Depending in which order the updates reach the server
+the eventual value of \texttt{x} will be either \texttt{3} or \texttt{6}.
+Regardless, while E is executing, A will keep seeing \texttt{x} as \texttt{6}
+from the point of the second update on
+(due to local buffers above), and only in the next event it may discover that
+it is now in fact \texttt{3}.
+\end{itemize}
+Note that an update from the server cannot arrive between the two updates in E (due to automatic transactions above).
+Also note that if the updates were \texttt{x->add(2); x->add(4)} for A, and \texttt{x->add(3)} for B, then
+the eventual value of \texttt{x} would be always \texttt{9}, but A could still see \texttt{x} as
+\texttt{6} or \texttt{9} after its updates.
+
+\subsection{TouchDevelop plug-ins}
+
+The \TD IDE can be extended with user-provided plug-ins, which are just regular \TD scripts
+conforming to a specific interface.
+In general, \TD scripts can query and update abstract syntax trees (ASTs) of scripts installed
+on the device (after asking the user for permission).
+A plug-in is invoked by the user when editing a script.
+The identifier of that script is passed to a specific action in the plug-in,
+that can then read and write the AST.
+The AST is represented as a JSON object, which can be manipulated using standard \TD libraries
+(for purely client-side plug-ins),
+or shipped over to a cloud service of plug-in author's choice for processing.
+
+Currently, \TD supports plug-in invocation on an entire script, where the plug-in can ask the user
+to point to a particular AST node to operate on if necessary.
+In near future, we plan to have plug-ins invoked contextually for a given definition
+or expression.
+
+When the user taps the plug-in invocation button, \TD shows a list of currently
+installed scripts marked with \texttt{\#scriptPlugin} in their description.
+The user has also an option of searching \TD cloud for more such scripts.
+We thus reuse the script distribution and rating mechanisms for plug-ins.
+
+After plug-in execution, the user may be shown the diff with the changes performed
+by the plugin and asked to confirm them.
 
 \section{Formative Study}
 \label{sec:Formative}
