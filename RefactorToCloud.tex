@@ -58,10 +58,10 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\titlebanner{banner above paper title}        % These are ignored unless
-\preprintfooter{short description of paper}   % 'preprint' option specified.
+%\titlebanner{banner above paper title}        % These are ignored unless
+\preprintfooter{Refactoring to Cloud Data Types}   % 'preprint' option specified.
 
-\title{Refactoring towards Cloud-enabled Multiuser Mobile Apps}
+\title{Refactoring \emph{Local} to \emph{Cloud} Data Types for Mobile Apps}
 
 \authorinfo{Michael Hilton}
            {Oregon State University}
@@ -85,19 +85,28 @@
 
 
 \begin{abstract}
-Mobile cloud computing can greatly enrich the capabilities of today's pervasive mobile devices. One killer feature is the ability to add multi-user support to existing apps. However, 
- the process of converting a single to multi-user, cloud-enable app requires high expertise, is difficult, and time-consuming. Refactoring techniques can greatly simplify this process.
+Mobile cloud computing can greatly enrich the capabilities of today's pervasive mobile devices. 
+Storing data types on the cloud can enable features such as automatic backup, seamless transition between multiple devices, 
+and multiuser support for existing apps. 
+However,  the process of converting local into cloud data types requires high expertise, is difficult, and time-consuming. 
+Refactoring techniques can greatly simplify this process.
  
-In this paper we present a formative study where we studied and successfully converted \numFormative real-world \TD apps into multi-user apps. Based on these lessons, we designed and implemented, \tool, a tool that automatically refactors \emph{local} data structures into \emph{cloud} data structures on the \TD platform.  Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \numTransformations transformations shows (i) that the refactoring is widely \emph{applicable}, (ii) \tool saves human effort, and (iii) \tool is \emph{accurate}. 
+In this paper we present a formative study where we studied and successfully converted \numFormative real-world \TD apps into cloud-enabled apps. Based on these lessons, we designed and implemented, \tool, a tool that automatically refactors \emph{local} data types into \emph{cloud} data types on the \TD platform.
+Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \numTransformations transformations shows (i) that the refactoring is widely \emph{applicable}, (ii) \tool saves human effort, and (iii) \tool is \emph{accurate}. 
 
-
+\TODO{global conversion of data structures to data types.}
 \end{abstract}
 
 
 \section{Introduction}
 
-% mobile is everywhere. mobile cloud computing can make it better. Examples of multiuser apps
-Mobile apps have gained significant popularity in recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved: battery life~\cite{Chen:2012:CCO:2310096.2310228}, security~\cite{Oberheide:2008:VIS:1622103.1629656}, bandwidth utilization~\cite{Vemulapalli:2013:PSD:2492348.2492353}, and location awareness~\cite{kansal2013latency}. In this paper we are focusing on another killer feature enabled by the cloud: the ability to develop rich, multi-user apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, and collaborative data collection (e.g., Citizen Science~\cite{cohn2008citizen}). 
+% mobile is everywhere. mobile cloud computing can make it better. 
+%Mobile apps have gained significant popularity in recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved: battery life~\cite{Chen:2012:CCO:2310096.2310228}, security~\cite{Oberheide:2008:VIS:1622103.1629656}, bandwidth utilization~\cite{Vemulapalli:2013:PSD:2492348.2492353}, and location awareness~\cite{kansal2013latency}. 
+
+% These are the benefits of cloud data types
+The marriage of cloud and mobile computing has transformed our access to data. 
+If users lose their phone, upon activating a new phone, all the data (e.g., contacts, pictures) is there due to automatic backup of data.
+A user can start editing a document on their mobile device and resume editing it on their tablet at home, thus seamlessly transitioning between multiple devices operating on the same data. Additionally, the cloud enables rich, multi-user apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, and collaborative data collection (e.g., Citizen Science~\cite{cohn2008citizen}). 
 
 % What's broken: advanced expertise, infrastructure, multiple languages
 To take advantage of the benefits of the cloud, app developers face a high entry barrier. They need expertise on many topics: communication protocols (e.g., web services, REST, SOAP, etc.), data storage (e.g., Amazon S3, Microsoft SkyDrive, etc.), databases, cloud infrastructure (e.g., Amazon EC2, Windows Azure, etc.),  programming or scripting languages. Similarly, converting a single into a multiuser app has a high entry barrier: they need to determine the candidate data structures and methods that operate on data structures as well as move them to the cloud. Currently, this process is manual, time consuming, and error prone~\cite{khan2013survey}.
@@ -109,13 +118,14 @@ In this paper we are lowering the entry barrier to allow even hobbyists and begi
 \TD introduced specialized cloud data types~\cite{burckhardt2012cloud} that provide an abstraction layer over web service implementation, communication protocols, and storage.  In order to make the app responsive, even when the connection to the server is unavailable, cloud data types provide both local copies of the data as well as eventually consistent sharable cloud storage. This paradigm allows programmers to use cloud types in a similar manner to local data structures, but to also enjoy the benefits of the cloud.
 
 % Our formative study to learn about refactorings from single to multi-user apps. refactorings for data structures
-In this paper we present the results of our formative study to convert single to multi-user apps. We used \numFormative publicly available, single-user \TD apps (three productivity tools and one game) and manually converted them into multi-user apps. In doing so, we discovered four conversion steps: (i) identify local data structures that need to be shared between multiple users, (ii) for each identified local data structure add a new cloud data structure, (iii) replace local data structure API calls with cloud API calls, (iv) initialize the cloud data structures. Not all these steps can be automated; some (e.g., identifying data structures that need to be shared) require domain knowledge which is best provided by the app developer. 
+In this paper we present the results of our formative study to convert local to cloud-enabled apps. We used \numFormative publicly available \TD apps (three productivity tools and one game) and manually converted them into multi-user apps that share data via the cloud. In doing so, we discovered four conversion steps: (i) identify local data structures that need to be moved to the cloud, (ii) for each identified local data structure add a new cloud data structure, (iii) replace local data structure API calls with cloud API calls, (iv) initialize the cloud data structures. Not all these steps can be automated; some (e.g., identifying data structures that need to be moved) require domain knowledge which is best provided by the app developer. 
 
 % Automated refactoring based on these lessons, why do we need refactoring support.
 Using the lessons that we learned from the formative study, we designed and implemented a refactoring tool, \tool, to automate the conversion of local \NC{} into \code{Cloud Data Table}, and to transform the API calls. We selected this refactoring because its manual application is 
 challenging for several reasons.
 In addition to differences in the names of the APIs, there are also differences in the cardinality of the mapping.
-Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same in both data structure), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). Sometimes there is no mapping at all, in which case we create custom functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a custom function that iterates atomically over the elements of the \code{Table}. Such transformations can not be performed by a find-and-replace tool.
+Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same in both data structure), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). Sometimes there is no mapping at all, in which case \tool injects functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a function that iterates atomically over the elements of the \code{Table}. 
+% Such transformations can not be performed by a find-and-replace tool.
 
 % Contributions
 This paper makes the following contributions:
@@ -273,7 +283,7 @@ After converting these apps, we ran them with multiple users on three devices to
 %describe the process with the four steps
 Based on the lessons we learned from converting these \numFormative apps, we designed a process to convert  a single to a multi-user app.  Our process consists of four steps:   
 \begin{enumerate}
-\item Identify data that needs to be shared between users
+\item Identify data that needs to be moved to the cloud
 
 \item Create new cloud data structures to hold the shared data
 
@@ -692,9 +702,10 @@ However, our current paper is the first paper to engage the mobile end-user in a
 
 \section{Conclusion}
 \label{sec:conclusions}
-Mobile cloud computing can be harnessed to enable rich multi-user experiences. 
-In this paper we presented a formative study to convert single to multi-user apps using the \TD cloud data types. 
-Based on these lessons, we designed, implemented, and evaluated a tool,  \tool,  to refactor local data structures into cloud data structures.  Our empirical evaluation on \numScripts real apps, shows that the tool is applicable, relevant, and saves human effort.
+Mobile cloud computing can be harnessed to enable rich access to data. 
+In this paper we presented a formative study to convert \numFormative apps to use the \TD cloud data types. 
+Based on these lessons, we designed, implemented, and evaluated a tool,  \tool,  to refactor local data types into cloud data types.  
+Our empirical evaluation on \numScripts real apps, shows that the tool is applicable, relevant, and saves human effort.
 Using our refactoring tool in combination with a well designed, powerful end-user programming platform (\TD) can enable even novice programmers to take advantage of the power of the cloud.
 
 
