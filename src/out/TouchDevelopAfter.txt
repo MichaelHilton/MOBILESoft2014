@@ -29,7 +29,7 @@ do
 ...
 
 private action DisplayAvgMileage ()      
-var avgMileage := MilageRecordTable avg      
+var avgMileage := _MilageRecordTable avg_      
 avgMileage->post to wall      
 
 
