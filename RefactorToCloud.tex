@@ -91,7 +91,7 @@ and multiuser support for existing apps.
 However,  the process of converting local into cloud data types requires high expertise, is difficult, and time-consuming. 
 Refactoring techniques can greatly simplify this process.
  
-In this paper we present a formative study where we studied and successfully converted \numFormative real-world \TD apps into cloud-enabled apps. Based on these lessons, we designed and implemented, \tool, a tool that automatically refactors \emph{local} data types into \emph{cloud} data types on the \TD platform.
+In this paper we present a formative study where we analyzed and successfully converted \numFormative real-world \TD apps into cloud-enabled apps. Based on these lessons, we designed and implemented, \tool, a tool that automatically refactors \emph{local} data types into \emph{cloud} data types on the \TD platform.
 Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \numTransformations transformations shows (i) that the refactoring is widely \emph{applicable}, (ii) \tool saves human effort, and (iii) \tool is \emph{accurate}. 
 
 \end{abstract}
@@ -137,7 +137,8 @@ computing through the use of refactoring techniques.
 \item{\textbf{Tool:}} We have designed and implemented the analysis and transformation algorithms to refactor \emph{local} data types into \emph{cloud} data types on the \TD platform. 
 
 \item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely \emph{applicable}: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took \numAVGSecs seconds for each performed refactoring. Third, \tool is  
-\emph{accurate}: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  
+\emph{accurate}: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  All the data and the tool are publicly available at: \\
+\url{http://web.engr.oregonstate.edu/~hiltonm/Cloudifier}
 \end{itemize}
 
 
@@ -306,7 +307,7 @@ In step 3 we replaced all the uses of the local \code{MilageRecord} with uses of
 In step 4 we initialized  \code{MileageRecordTable}. 
 Since the data is now persistent on the cloud, we need to change the initialization code from 
 eager to lazy in order to avoid erasing all the data every time the app is launched.  
-In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session''). \FB{These changes were performed in 5 Lines of Code.}
+In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session''). \FB{These changes required adding 3 LOC and updating 2 LOC.}
 
 %STEP ONE AND 4 REQUIRE DOMAIN KNOWLEDGE
 Notice that steps 1 and 4 require domain knowledge in order to choose and refine the proper end-user experience.  
@@ -354,12 +355,12 @@ CliffHangers & 8 & 0 & 2\\
 My Assignments & 0 & 1 & 0\\
 \hline
 \hline
-Total & 10 & 1  & 8 \\
+\textbf{Total} & 10 & 1  & 8 \\
 \hline
 \end{tabular}
 \end{center}
 \nocaptionrule
-\caption{Total number of refactorings}
+\caption{ Refactorings used in the formative study}
 \label{tab:refactoringsFormative}
 \end{table}%
 
@@ -419,7 +420,7 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 
 \end{tabular}
 \nocaptionrule
-\caption{Table with the Number Collection API's and corresponding Cloud Table Operations. }
+\caption{\texttt{Number Collection} API's and corresponding \texttt{Cloud Data Table} Operations. }
 \label{tab:mappingTable}
 \end{center}
 \end{table*}%
@@ -474,7 +475,7 @@ Line 1 shows the declaration of the \code{MileageRecord} \NC{}, which is the tar
       \label{fig:lambdaOverload}
       }
     }
-    \caption{Selected code from Mileage Tracker app.}
+    \caption{Relevant code from Mileage Tracker app. The left-hand side shows the original app, whereas the right-hand side shows the refactored code. The modified code is underlined, and the \texttt{avg} is a newly injected function.}
     \label{fig:codeTransformations}
 \end{figure*}
 
@@ -528,7 +529,7 @@ Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{a
       \lstinputlisting[]{src/out/MaxAfterRefactoring.txt}
       }
     }
-    \caption{Example Injected Function Transformation}
+    \caption{Template showing the injected function \texttt{max}. The left hand-side shows the template with ``holes'', whereas the right-hand side shows the function instantiated to use the \texttt{MileageRecordTable}.}
     \label{fig:MaxCustomTransformationTransformations}
 \end{figure*}
 
@@ -553,7 +554,7 @@ To create a corpus, we wrote queries against a database of all publicly availabl
 Thus, our query returned top scripts (based on the number of times that each script was executed) 
 that contained a \NC{}. We retained the top \numScripts scripts.
 
-Table~\ref{table:CorpusData} provides details about our corpus.  We report the size in LOC and complexity in number of functions.  We also report the number of times the apps were run, as well as the number of installations.
+Table~\ref{table:CorpusData} provides details about our corpus.  We report the size in non-blank source lines of code (SLOC) and complexity in number of functions.  We also report the number of times the apps were run by the \TD community, as well as the number of installations. Notice that a user can run an app without installing it in the user profile; this feature allows a \TD user to try out an app before installing it.
 
 \begin{table}[htdp]
 \begin{center}
@@ -562,7 +563,7 @@ Table~\ref{table:CorpusData} provides details about our corpus.  We report the s
 \hline
  & Average & Max & Std Dev & Total\\
 \hline
-LOC & 403 & 2,526 & 483 & 47,185 \\
+SLOC & 403 & 2,526 & 483 & 47,185 \\
 Functions & 21 & 121 & 26 & 2,502 \\
 App Runs & 46 & 750 & 127 & 5,350 \\
 App Installations & 5 & 125 & 18 & 635 \\
@@ -717,7 +718,8 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 \textbf{External Validity:}  Do our results generalize? For our corpus, we used \numScripts of the most commonly run scripts, but we put no restrictions on the type of the scripts.  Our corpus includes scripts from various domains: entertainment, sports, games, education, productivity, etc. Moreover, the apps in our corpus are developed by 83 authors from a diverse end-user community. We do not foresee any reasons why our results would not generalize to other \TD apps.  
 \FB{Currently there is no widely accepted standard for cloud data types.  In order for our results to generalize, cloud storage providers will first need to agree on Cloud Data Storage standards.}
 
-\textbf{Reliability:} Is our evaluation reliable? The apps that we used to evaluate our tool are all available on the \TD bazaar, and \tool is published on the \TD website with the script ID: \TODO{FINAL VERSION OF SCRIPT ID.}
+\textbf{Reliability:} Is our evaluation reliable? The apps that we used to evaluate our tool are all available on the \TD bazaar, and \tool is published on the \TD website. All these URLs are available on our webpage: \\
+\url{http://web.engr.oregonstate.edu/~hiltonm/Cloudifier}
 
 
 
