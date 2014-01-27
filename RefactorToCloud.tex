@@ -306,7 +306,7 @@ In step 3 we replaced all the uses of the local \code{MilageRecord} with uses of
 In step 4 we initialized  \code{MileageRecordTable}. 
 Since the data is now persistent on the cloud, we need to change the initialization code from 
 eager to lazy in order to avoid erasing all the data every time the app is launched.  
-In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session'').  \TODO{HOW MANY LOC IS THIS CHANGE}
+In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session''). \FB{These changes were performed in 5 Lines of Code.}
 
 %STEP ONE AND 4 REQUIRE DOMAIN KNOWLEDGE
 Notice that steps 1 and 4 require domain knowledge in order to choose and refine the proper end-user experience.  
@@ -474,7 +474,7 @@ Line 1 shows the declaration of the \code{MileageRecord} \NC{}, which is the tar
     \caption{Selected code from Mileage Tracker app.}
     \label{fig:codeTransformations}
 \end{figure*}
-\TODO{Add Underscores}
+
 
 \myParagraph{Create \texttt{Cloud Data Table} data structure: }
 Lines 1-3 of the right-hand side of Figure~\ref{fig:codeTransformations} show the newly created data structure, \code{MileageRecordTable}. We append the \code{Table} to the end of the name for clarity. This \code{Table} contains one column, \code{MileageRecordColumn}. We will use this column to store the values that were originally stored in the \code{MileageRecord} collection.
@@ -550,47 +550,54 @@ To create a corpus, we wrote queries against a database of all publicly availabl
 Thus, our query returned top scripts (based on the number of times that each script was executed) 
 that contained a \NC{}. We retained the top \numScripts scripts.
 
-Table\TODO{TABLE} provides details about our corpus.  We report the size in LOC and complexity in number of functions. 
+Table~\ref{table:CorpusData} provides details about our corpus.  We report the size in LOC and complexity in number of functions.
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{lclclc|c|c|}
+\\
+\hline
+ & Average & Max & Std Dev & Total\\
+\hline
+LOC & 403 & 2,526 & 483 & 47,185 \\
+Functions & 21 & 121 & 26 & 2,502 \\
+Script Runs & 46 & 750 & 127 & 5,350 \\
+Script Installations & 5 & 125 & 18 & 635 \\
+
+\end{tabular}
+\nocaptionrule
+\caption{Corpus Characteristics}
+\label{table:CorpusData}
+\end{center}
+\end{table}%
+ 
 
 Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus.  For each API we report the total number of call sites in our corpus, as well as the percentage call sites for the total API calls for \NC.
 
 
 \begin{table}[htdp]
 \begin{center}
-\begin{tabular}{lclcl}
+\begin{tabular}{lclclc|}
+\\
 \hline
-Add & 19.92 \\
+API Name & \# Call Sites & \% of total API Call Sites \\
 \hline
- At & 37.83 \\
- \hline
- Avg & 0.37\\
- \hline
- Clear & 3.15\\
- \hline 
- Contains & 4.01\\
- \hline 
- Count & 4.08\\
- \hline 
- Max & 0.11\\
- \hline 
- Min & 0.15\\
- \hline 
- Post To Wall & 0.15\\
- \hline 
- Random & 0.037\\
- \hline 
- Remove & 3.63\\
- \hline 
- Remove At & 1.98\\
- \hline 
- Reverse & 0.15\\
- \hline 
- Set At & 23.67\\
- \hline 
- Sort & 0.30\\
- \hline 
- Sum & 0.45\\
-\hline
+At & 1010 & 39.25 \\
+Set At & 632 & 24.56 \\
+Add & 532 & 20.68 \\
+Count & 109 & 4.24 \\
+Contains & 107 & 4.16 \\
+Clear & 84 & 3.26 \\
+Remove At & 53 & 2.06 \\
+Sum & 12 & 0.47 \\
+Avg & 10 & 0.39 \\
+Sort & 8 & 0.31 \\
+Min & 4 & 0.16 \\
+Post To Wall & 4 & 0.16 \\
+Reverse & 4 & 0.16 \\
+Max & 3 & 0.12 \\
+Random & 1 & 0.04 \\
+
 
 \end{tabular}
 \nocaptionrule
@@ -598,10 +605,6 @@ Add & 19.92 \\
 \label{table:UsageOfAPIS}
 \end{center}
 \end{table}%
-\TODO{ADD TO TOTAL, call it \# Call Sites, sort by total calls}
-
-
-
 
 We ran the refactoring in batch mode. From each script in our corpus, our tool randomly selects one \NC{} as the target for refactoring. 
 
@@ -635,12 +638,12 @@ Out of the \numScripts scripts that \tool attempted to refactor, 102 (94\%) met 
 
 Only 7 scripts were unable to be refactored. Out of these, 4 scripts did not meet precondition \POne (the \NC{} was passed as an argument to a function), and 1 did not meet precondition \PTwo (\NC{} was assigned to a local variable). The remaining 2 scripts exposed a limitation of the current implementation of \tool (they were using a currently unsupported function, \code{add many}). 
 Thus, we think that our refactoring is widely applicable to \TD scripts that contain the \NC{} data type.  
-\TODO{FIX ThESE NuMBERS}
 \begin{table}[htdp]
 \begin{center}
-\begin{tabular}{ll}
+\begin{tabular}{ll} \\
+\hline
 Total Scripts & \numScripts \\
-Number Successfully Refactored & 102 \\
+Number Successfully Refactored & 116 \\
 Failed Precondition \POne & 4 \\
 Failed Precondition \PTwo & 1\\
 Tool Limitations & 2\\
@@ -659,25 +662,25 @@ Table~\ref{table:avgTrans} shows the number of transformations performed per eac
 The first column tabulates the total number of transformations per refactoring. On average each refactoring took a total of 9 seconds to complete.  On average, the number of transformations per refactoring was 11.6. Given that the \TD editing experience is optimized for small screens on touch devices, our refactoring tool saves significant effort.
 
 Moreover, most of these transformations are non-trivial. Figure~\ref{fig:transformations_pieChart} shows the percentage of each kind of transformation applied. By far the most common transformation kind is Indirect Transformation, which involve mapping one API method call to a sequence of one or more API method calls that do not share a common name with the original method. Thus, we believe that automation saves significant effort.
-\TODO{Add total}
+
 \begin{table}[htdp]
 \begin{center}
-\begin{tabular}{lclclclclc|}
+\begin{tabular}{lclclclclc||c|}
 
- & AVG & MAX & STDDEV \\
+ & AVG & MAX & STDDEV & TOTAL\\
 \hline
 \hline
-Refactorings & 1.84 & 8 & 1.38 \\
+Refactorings & 1.84 & 8 & 1.38 & 211 \\
 \hline
-Direct Trans & 2.22 & 30 & 4.45 \\
+Direct Trans & 2.22 & 30 & 4.45 & 249\\
 \hline
-Indirect Trans & 19.88  & 466 & 56.62\\
+Indirect Trans & 19.88  & 466 & 56.62 & 2227\\
 \hline
-Injected Function & 2.20 & 30 & 5.01 \\
+Injected Function & 2.20 & 30 & 5.01 & 246 \\
 \hline
-Total Trans & 24.30 & 466 & 56.56 \\
+Total Trans & 24.30 & 466 & 56.56 & 2722 \\
 \hline 
-Time [sec] & 4.47 & 128 & 15.17\\
+Time [sec] & 4.47 & 128 & 15.17 & 501\\
 
 
 \end{tabular}

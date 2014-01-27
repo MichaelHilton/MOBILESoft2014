@@ -1,11 +1,11 @@
-cloud table MileageRecordTable      
-columns       
-  MileageRecordColumn : Number 
+_cloud table MileageRecordTable      
+columns_       
+  _MileageRecordColumn : Number_ 
 
 private action ShowMileageGraph ()      
 //Shows a graph of the mileage record on the execution wall.
 wall->clear      
-MileageRecordTable table->post to wall      
+_MileageRecordTable table_->post to wall      
 wall->prompt("Click \"Ok\" to continue...")      
      
 ...
@@ -15,7 +15,7 @@ private action ClearMileageRecord ()
 wall->clear      
 if wall->ask boolean("Warning", "Are you sure…")
     ->equals(true) then                        
-  MileageRecordTable table->clear      
+  _MileageRecordTable table->clear_      
 else
 
 ...
@@ -23,8 +23,8 @@ else
 private action AddMileageToRecord (      
 Mileage : Number)      
 do       
-  MileageRecordTable table->add row
-    ->MileageRecordColumn := Mileage      
+  _MileageRecordTable table->add row_
+    _->MileageRecordColumn := Mileage_      
      
 ...
 
