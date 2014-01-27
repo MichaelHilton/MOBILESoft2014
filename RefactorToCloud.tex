@@ -68,7 +68,7 @@
            {hiltonm@eecs.oregonstate.edu}
 \authorinfo{Arpit Christi }
            {Oregon State University}
-           {chrsitia@eecs.oregonstate.edu}
+           {christia@eecs.oregonstate.edu}
 \authorinfo{Danny Dig}
            {Oregon State University}
            {digd@eecs.oregonstate.edu}
@@ -385,33 +385,33 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 \hline
 \code{insert at} & \code{row at$\rightarrow$value} & Indirect \\
 \hline
-\code{add many} & NONE & Function \\
+\code{add many} & NONE & Injected Function \\
 \hline
-\code{avg} & NONE & Function \\
+\code{avg} & NONE & Injected Function \\
 
 \hline
-\code{contains} & NONE & Function \\
+\code{contains} & NONE & Injected Function \\
 \hline
 
-\code{index of} &NONE  & Function \\
+\code{index of} &NONE  & Injected Function \\
 
 \hline
-\code{max} &NONE  & Function \\
+\code{max} &NONE  & Injected Function \\
 \hline
-\code{min} & NONE & Function \\
+\code{min} & NONE & Injected Function \\
 
 \hline
-\code{random} &NONE  & Function \\
+\code{random} &NONE  & Injected Function \\
 \hline
-\code{remove}  & NONE & Function \\
+\code{remove}  & NONE & Injected Function \\
 
 \hline
-\code{reverse} &NONE  & Function \\
+\code{reverse} &NONE  & Injected Function \\
 
 \hline
-\code{sort} & NONE & Function \\
+\code{sort} & NONE &  Injected Function \\
 \hline
-\code{sum} & NONE & Function \\
+\code{sum} & NONE &  Injected Function \\
 \hline
 
 \end{tabular}
@@ -436,7 +436,6 @@ before applying the refactoring. Section~\ref{sec:transformations} presents the 
 \subsection{Workflow}
 \label{sec:workflow}
 \tool is implemented as a \TD app.  It can be run using the \TD platform like any other \TD app.  Once it is run, the app first prompts the user to select a script on which to perform the refactoring.  Once the user has selected a script, \tool will display all the possible refactoring targets for the chosen script, and allow the user to choose which \NC they wish to convert to a \CDT. \tool will then perform all the needed transformations on the selected \NC in an automated fashion.  
-
 
 \subsection{Preconditions}
 \label{sec:preconditions}
@@ -531,7 +530,7 @@ Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{a
 
 
 \subsubsection{Tool Limitations}
-The current version of \tool does not support the injected function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve \code{add many}.
+The current version of \tool does not support the injected function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work. 
 
 \subsubsection{Implementation}
 \FB{\tool refactors \TD scripts \emph{in place}.  First, \tool retrieves the source of the target app as an  Abstract Syntax Tree (AST) stored in JSON format from the \TD script bazaar.  It then transforms the AST as needed.  Once all the transformations are performed, \tool completes the refactoring by saving the new AST for the target app.}
