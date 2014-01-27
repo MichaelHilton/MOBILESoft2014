@@ -94,7 +94,7 @@ Refactoring techniques can greatly simplify this process.
 In this paper we present a formative study where we studied and successfully converted \numFormative real-world \TD apps into cloud-enabled apps. Based on these lessons, we designed and implemented, \tool, a tool that automatically refactors \emph{local} data types into \emph{cloud} data types on the \TD platform.
 Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \numTransformations transformations shows (i) that the refactoring is widely \emph{applicable}, (ii) \tool saves human effort, and (iii) \tool is \emph{accurate}. 
 
-\TODO{global conversion of data structures to data types.}
+\TODO{global conversion of data types to data types.}
 \end{abstract}
 
 
@@ -112,19 +112,19 @@ A user can start editing a document on their mobile device and resume editing it
 To take advantage of the benefits of the cloud, app developers face a high entry barrier. They need expertise on many topics: communication protocols (e.g., web services, REST, SOAP, etc.), data storage (e.g., Amazon S3, Microsoft SkyDrive, etc.), databases, cloud infrastructure (e.g., Amazon EC2, Windows Azure, etc.),  programming or scripting languages. Similarly, converting a single into a multiuser app has a high entry barrier: they need to determine the candidate data structures and methods that operate on data structures as well as move them to the cloud. Currently, this process is manual, time consuming, and error prone~\cite{khan2013survey}.
 
 % In this paper we want to lower the entry barrier for developers, so that even hobbyists and beginner mobile app devs. Thus, TouchDevelop + Refactoring
-In this paper we are lowering the entry barrier to allow even hobbyists and beginner app developers to use the cloud. Thus, we are targeting \TD~\cite{Tillmann2011TPC20482372048245}, a programming environment and language developed by Microsoft Research to write apps \emph{on} mobile devices \emph{for} mobile devices. We are employing automated refactoring techniques to convert local data structures into cloud data structures.
+In this paper we are lowering the entry barrier to allow even hobbyists and beginner app developers to use the cloud. Thus, we are targeting \TD~\cite{Tillmann2011TPC20482372048245}, a programming environment and language developed by Microsoft Research to write apps \emph{on} mobile devices \emph{for} mobile devices. We are employing automated refactoring techniques to convert local data types into cloud data types.
 
 % Intro to TouchDevelop and its cloud datatype
 \TD introduced specialized cloud data types~\cite{burckhardt2012cloud} that provide an abstraction layer over web service implementation, communication protocols, and storage.  In order to make the app responsive, even when the connection to the server is unavailable, cloud data types provide both local copies of the data as well as eventually consistent sharable cloud storage. This paradigm allows programmers to use cloud types in a similar manner to local data structures, but to also enjoy the benefits of the cloud.
 
 % Our formative study to learn about refactorings from single to multi-user apps. refactorings for data structures
-In this paper we present the results of our formative study to convert local to cloud-enabled apps. We used \numFormative publicly available \TD apps (three productivity tools and one game) and manually converted them into multi-user apps that share data via the cloud. In doing so, we discovered four conversion steps: (i) identify local data structures that need to be moved to the cloud, (ii) for each identified local data structure add a new cloud data structure, (iii) replace local data structure API calls with cloud API calls, (iv) initialize the cloud data structures. Not all these steps can be automated; some (e.g., identifying data structures that need to be moved) require domain knowledge which is best provided by the app developer. 
+In this paper we present the results of our formative study to convert local to cloud-enabled apps. We used \numFormative publicly available \TD apps (three productivity tools and one game) and manually converted them into multi-user apps that share data via the cloud. In doing so, we discovered four conversion steps: (i) identify local data structures that need to be moved to the cloud, (ii) for each identified local data structure add a new cloud data structure, (iii) replace local data type API calls with cloud API calls, (iv) initialize the cloud data types. Not all these steps can be automated; some (e.g., identifying data types that need to be moved) require domain knowledge which is best provided by the app developer. 
 
 % Automated refactoring based on these lessons, why do we need refactoring support.
 Using the lessons that we learned from the formative study, we designed and implemented a refactoring tool, \tool, to automate the conversion of local \NC{} into \code{Cloud Data Table}, and to transform the API calls. We selected this refactoring because its manual application is 
 challenging for several reasons.
 In addition to differences in the names of the APIs, there are also differences in the cardinality of the mapping.
-Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same in both data structure), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). Sometimes there is no mapping at all, in which case \tool injects functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a function that iterates atomically over the elements of the \code{Table}. 
+Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same for both data types), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). Sometimes there is no mapping at all, in which case \tool injects functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a function that iterates atomically over the elements of the \code{Table}. 
 % Such transformations can not be performed by a find-and-replace tool.
 
 % Contributions
@@ -135,7 +135,7 @@ computing through the use of refactoring techniques.
 
 \item{\textbf{Formative Study:}} We have conducted a formative study on \numFormative real-world apps to learn what transformations are needed to convert single to multi-user mobile apps. 
 
-\item{\textbf{Tool:}} We have designed and implemented the analysis and transformation algorithms to refactor \emph{local} data structures into \emph{cloud} data structures on the \TD platform. 
+\item{\textbf{Tool:}} We have designed and implemented the analysis and transformation algorithms to refactor \emph{local} data types into \emph{cloud} data types on the \TD platform. 
 
 \item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely \emph{applicable}: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took 9 seconds for each performed refactoring. Third, \tool is  
 \emph{accurate}: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  
@@ -285,7 +285,7 @@ Based on the lessons we learned from converting these \numFormative apps, we des
 \begin{enumerate}
 \item Identify data that needs to be moved to the cloud
 
-\item Create new cloud data structures to hold the shared data
+\item Create new cloud data types to hold the shared data
 
 \item Replace the local usage with cloud usage for the shared data
 
@@ -297,7 +297,7 @@ Next we will illustrate these steps using the \MT app.  In step 1 we identified 
 (ii) \code{MaximumRecordEntries} is a number that determines how many records should be stored, 
 (iii) \code{UseUSUnits} is a boolean that stores the preference between metric or imperial units.
    
-To illustrate step 2, let us consider one of the shared data structures, the \code{MilageRecord} collection. 
+To illustrate step 2, let us consider one of the shared data types, the \code{MilageRecord} collection. 
 We created a new \code{Cloud Data Table} named \code{MileageRecordTable} to hold the data. Notice that the
 original data is stored in a one-dimensional data structure, whereas the \code{Cloud Data Table} is a two-dimensional data 
 structure.
@@ -452,7 +452,7 @@ For example, an instance of a \NC{} can be passed as an argument or returned fro
 \label{sec:transformations}
 
 There are four categories of transformations to refactor \NC{} to \code{Cloud Data Tables}: 
-(i) creating \CDT{} data structure, (ii) direct mapping of APIs, (iii) indirect mapping of APIs, and (iv) custom function to augment missing APIs. Table~\ref{tab:mappingTable} displays the mapping between the APIs of the two data structures.
+(i) creating \CDT{} data structure, (ii) direct mapping of APIs, (iii) indirect mapping of APIs, and (iv) custom function to augment missing APIs. Table~\ref{tab:mappingTable} displays the mapping between the APIs of the two data types.
 
 We will illustrate the transformations using simplified code snippets from the MileageTracker app that we introduced in the Formative Study (see Section~\ref{sec:Formative}), an app that enables users to track their fuel usage. Figure~\ref{fig:codeTransformations} shows the code before and after the refactoring. The left column shows the original code. 
 Line 1 shows the declaration of the \code{MileageRecord} \NC{}, which is the target of the refactoring. We show four functions to display all mileage record, clear existing mileage record, add a new entry to the mileage collection, and compute and display the average mileage. \\
@@ -482,12 +482,12 @@ Lines 1-3 of the right-hand side of Figure~\ref{fig:codeTransformations} show th
 \\
 
 
-\myParagraph{Direct Transformations: } The simplest transformations are those when the mapping from the \NC{} to \CDT APIs is one-to-one and both data structures use the same name (e.g., \code{post to wall}). In this case, the transformation consists of simply replacing the receiver object. 
+\myParagraph{Direct Transformations: } The simplest transformations are those when the mapping from the \NC{} to \CDT APIs is one-to-one and both data types use the same name (e.g., \code{post to wall}). In this case, the transformation consists of simply replacing the receiver object. 
 Figure~\ref{fig:codeTransformations}~(a) line 8 shows the API call before the transformation, while Fig.~\ref{fig:codeTransformations}~(b) line 
 8 shows the code after the transformation.\\
 
 \myParagraph{Indirect Transformations: }
-Indirect Transformations are more complex than Direct Transformations, and cannot be performed with a simple find-and-replace technique. We use Indirect Transformations when the same functionality can be accomplished in both data structures, but the APIs are different: the cardinality and/or the name is different. Sometimes, the transformation maps one API call from the \NC{} into a sequence of API calls from the \CDT{}. In addition, sometimes it turns a function call into an assignment, further increasing complexity.
+Indirect Transformations are more complex than Direct Transformations, and cannot be performed with a simple find-and-replace technique. We use Indirect Transformations when the same functionality can be accomplished in both data types, but the APIs are different: the cardinality and/or the name is different. Sometimes, the transformation maps one API call from the \NC{} into a sequence of API calls from the \CDT{}. In addition, sometimes it turns a function call into an assignment, further increasing complexity.
 
 One example of an Indirect Transformation is shown in Figure~\ref{fig:codeTransformations}. 
 The function \code{AddMileageToRecord} adds a number to the \code{MileageRecord} \NC{}. Line 26 in column (a) shows \code{Mileage} being added via the API call \code{add}.
@@ -585,7 +585,7 @@ Table~\ref{table:totalScripts} shows the results for running \tool on \numScript
 Out of the \numScripts scripts that \tool attempted to refactor, 102 (94\%) met the preconditions for the refactoring.
 
 Only 7 scripts were unable to be refactored. Out of these, 4 scripts did not meet precondition \POne (the \NC{} was passed as an argument to a function), and 1 did not meet precondition \PTwo (\NC{} was assigned to a local variable). The remaining 2 scripts exposed a limitation of the current implementation of \tool (they were using a currently unsupported function, \code{add many}). 
-Thus, we think that our refactoring is widely applicable to \TD scripts that contain the \NC{} data structure.  
+Thus, we think that our refactoring is widely applicable to \TD scripts that contain the \NC{} data type.  
 
 \begin{table}[htdp]
 \begin{center}

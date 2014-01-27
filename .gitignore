@@ -14,3 +14,5 @@ RefactorToCloud.synctex.gz(busy)
 RefactorToCloud.bbl
 
 RefactorToCloud.pdf
+
+*.out
