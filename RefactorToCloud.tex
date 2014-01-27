@@ -104,7 +104,7 @@ Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \nu
 
 % These are the benefits of cloud data types
 The marriage of cloud and mobile computing has transformed our access to data. 
-If users lose their phone, upon activating a new phone, all the data (e.g., contacts, pictures) is there due to automatic backup of data.
+If users lose their phone, upon activating a new phone, all the data (e.g., contacts, pictures) is there due to the automatic backup of data.
 A user can start editing a document on their mobile device and resume editing it on their tablet at home, thus seamlessly transitioning between multiple devices operating on the same data. Additionally, the cloud enables rich, multi-user apps. Examples abound from domains such as social networking (e.g., Facebook, Twitter), multiplayer games, and collaborative data collection (e.g., Citizen Science~\cite{cohn2008citizen}). 
 
 % What's broken: advanced expertise, infrastructure, multiple languages
@@ -123,7 +123,7 @@ In this paper we present the results of our formative study to convert local to 
 Using the lessons that we learned from the formative study, we designed and implemented a refactoring tool, \tool, to automate the conversion of local \NC{} into \code{Cloud Data Table}, and to transform the API calls. We selected this refactoring because its manual application is 
 challenging for several reasons.
 In addition to differences in the names of the APIs, there are also differences in the cardinality of the mapping.
-Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same for both data types), other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). Sometimes there is no mapping at all, in which case \tool injects functions to achieve the same computation. For example, \code{Collection->max} needs to be converted into a function that iterates atomically over the elements of the \code{Table}. 
+Sometimes the mapping is 1-to-1 (e.g., \code{count} is the same for both data types), while other times the mapping is 1-to-many (e.g., \code{insert at} from \code{Collection} is transformed into a sequence of 3 operators from \code{Table}). Sometimes there is no mapping at all, in which case \tool injects functions to achieve the same computation. For example, \code{collection->max} needs to be converted into a function that iterates atomically over the elements of the \code{Table}. 
 % Such transformations can not be performed by a find-and-replace tool.
 
 % Contributions
@@ -136,7 +136,7 @@ computing through the use of refactoring techniques.
 
 \item{\textbf{Tool:}} We have designed and implemented the analysis and transformation algorithms to refactor \emph{local} data types into \emph{cloud} data types on the \TD platform. 
 
-\item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely \emph{applicable}: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took 9 seconds for each performed refactoring. Third, \tool is  
+\item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely \emph{applicable}: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took \numAVGSecs seconds for each performed refactoring. Third, \tool is  
 \emph{accurate}: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  
 \end{itemize}
 
@@ -155,7 +155,7 @@ Both \TD and the \TD scripts are compiled to HTML5/JavaScript, thus they can
 execute on all major smartphone, tablet, and personal computer brands.  
 
 %what is it for
-The main purpose of \TD is twofold: to provide an instrument for enticing and educating the next generation of programmers, and to develop novel programming language features that can simplify and accelerate the development of cloud-connected mobile applications (of which \TD itself is a prime example). An example of the latter are cloud data types \cite{burckhardt2012cloud}, which were recently added to \TD. 
+The main purpose of \TD is: (i) to provide an instrument for enticing and educating the next generation of programmers, and (ii) to develop novel programming language features that can simplify and accelerate the development of cloud-connected mobile applications (of which \TD itself is a prime example). An example of the latter are cloud data types \cite{burckhardt2012cloud}, which were recently added to \TD. 
 
 %what are cloud types for
 Cloud types make it easy to share data between instances of the app running on multiple devices, by simply declaring such data to be of a particular \emph{cloud type}. Once declared, the runtime then automatically synchronizes the data across multiple devices that are part of the same \emph{cloud session}. A cloud session may include devices by a single user or by multiple users.  For example, a single user may want to synchronize settings, calendars, contact lists, or any other script data between various devices she owns. Examples of multiple-user scenarios include a simple grocery list (to help family members keep track of items to be purchased on the next trip to the store), multi-player games that share game state, or applications that include typical social features like comments, reviews, achievements, high scores, and so on.
@@ -169,8 +169,8 @@ There are three categories of cloud data.
 \end{description}
 
 %cloud type design rationale
-Cloud types are integrated into the programming language and thus as easy to
-use as data types used by traditional programming languages (simple types,
+Cloud types are integrated into the programming language and are thus as easy to
+use as data types used by traditional programming languages, (simple types,
 objects, and collections) but their interface is more similar to types
 typically used for persistent storage (such as tables and
 indexes).
@@ -190,8 +190,8 @@ conflicting updates on the server
 \cite{burckhardt2012cloud,terry-et-al-SIGOPS95}. 
 Such conflict resolution is easier when the semantics is implicit in the type
 instead of being encoded in arbitrary heap operations---for example, consider
-resolving conflicts in a table (two devices add a row) versus a linked list
-(two devices swing a pointer somewhere).
+resolving conflicts in a table where two devices add a row, versus a linked list
+where two devices change a pointer's value somewhere.
 
 As a consequence, programs that use
 classical heap-based object and collection data types require refactoring to
@@ -203,7 +203,7 @@ objects to rows, and fields to columns.
 
 As multiple clients can concurrently update the same data, even during offline operation, conflicts may need to be resolved after-the-fact, in a manner that guarantees eventual consistency. To give the reader a general idea, we now briefly describe the mechanism used in \TD, which is a simple, specialized form of eventually consistent transactions \cite{burckhardt2012ect} and guarantees causal eventual consistency. 
 
-For each cloud session, \TD stores a log of all updates performed in the cloud. The basic idea is to use what is often called primary replication: Client devices (secondary replicas) stream all locally issued updates to the \TD server (primary replica). The server interleaves all updates in the order received, and stores them in log which reflects the final ordering of the updates. The server also streams the final update log back to the clients, where the updates in the log get applied to the locally stored copy of the data. This basic primary replication mechanism is however enhanced in several ways:
+For each cloud session, \TD stores a log of all updates performed in the cloud. The basic idea is to use what is often called primary replication: Client devices (secondary replicas) stream all locally issued updates to the \TD server (primary replica). The server interleaves all updates in the order received, and stores them in log which reflects the final ordering of the updates. The server also streams the final update log back to the clients, where the updates in the log get applied to the locally stored copy of the data. However, this basic primary replication mechanism is enhanced in several ways:
 \begin{enumerate}
 \item \textbf{Local Buffers.}  Local updates are made visible immediately, not only after they are echoed (confirmed) by the server. Conceptually, the client maintains a buffer of unconfirmed updates, similar to store buffers in the TSO memory model, and superimposes the effect of these updates over the current confirmed state. The use of such buffers improves the perceived performance and allows seamless offline operation, but breaks strong consistency (which is a necessary consequence of allowing offline operation, as the CAP theorem \cite{cap-brewer,gilbert-lynch-SIGACT02} shows).
 \item \textbf{Automatic Transactions.} Updates are transmitted not individually, but as a group (called an update transaction). The transaction boundaries are determined automatically based on the event queue: any time there is no event executing (i.e. when the execution is quiesced), the current transaction is ended and a new one is started. The use of automatic transactions helps to avoid typical atomicity errors when updating multiple data items at the same time.
@@ -216,8 +216,8 @@ semantics.
 Because a weak consistency model is used, refactoring for cloud types can introduce consistency errors that were not present in the original program. The responsibility for identifying such problems and correcting them remains with the user.
 
 \paragraph{Example}
-Let's consider a client A performing two updates \texttt{x := x + 2} followed by \texttt{x := x + 4} in an event handler E, and client
-B executing \texttt{x := x + 3}, where \texttt{x} is initially \texttt{0}.
+Let's consider a client A performing two updates, \texttt{x := x + 2} followed by \texttt{x := x + 4}, in an event handler E. Client
+B is executing \texttt{x := x + 3}, where \texttt{x} is initially \texttt{0}.
 These are the only possible executions:
 \begin{itemize}
 \item B's update is streamed to server and then to A before E starts executing,
@@ -312,7 +312,7 @@ In addition, we need to make a choice between using the cloud (i) as a backup fo
 Notice that steps 1 and 4 require domain knowledge in order to choose and refine the proper end-user experience.  
  
 % NEXT WE DESCRIBE THREE REFACTORINGS
-Based on the type of the input, local data that we needed to migrate to cloud, we have identified three kinds of refactorings. Each refactoring can be performed using the general steps that we identified above. First, we refactored primitive data 
+Based on the type of the input as well as the local data that we needed to migrate to cloud, we have identified three kinds of refactorings. Each refactoring can be performed using the general steps that we identified above. First, we refactored primitive data 
 types into the corresponding cloud-enabled primitive type (e.g., from \code{Number} to \code{Cloud Number}).
 Second, we refactored local \code{Data Table} into \code{Cloud Data Table}. Third, we refactored local \code{Collection}
 into \code{Cloud Data Table}.
@@ -320,8 +320,10 @@ into \code{Cloud Data Table}.
 When carrying out the refactorings, we noticed that steps 1 and 4 are hard to automate as they require understanding the original program and the desired end-user experience. Steps 2 and 3 have different degrees of complexity. 
 The first two kinds of refactorings  are trivial because there is a perfect match between the local data and the cloud data type, so the change is as simple as prepending the keyword \code{Cloud} to the variable declaration. 
 
-The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table} .
-\begin{figure}[htbp!]
+The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table}, as shown in Figure~\ref{fig:ncToCDT}.
+ The APIs are different enough that sometimes we needed to map one function call from \code{Collection} into a sequence of calls from \code{Table}, whereas other times we had to augment the API by writing new functions. 
+ 
+ \begin{figure}[htbp!]
 \begin{center}
 \includegraphics[width=250pt]{images/convertCollectionToTable}
 \nocaptionrule
@@ -329,7 +331,8 @@ The third kind of refactoring is non-trivial: it requires changing the program f
 \label{fig:ncToCDT}
 \end{center}
 \end{figure}
- The APIs are different enough, so that sometimes we needed to map one function call from \code{Collection} into a sequence of calls from \code{Table}, whereas other times we had to augment the API by writing new functions. 
+
+
 For these reasons, we automated this refactoring. 
 
 Table~\ref{tab:refactoringsFormative} lists the total number of refactorings that we applied as part of our formative study.
@@ -498,7 +501,7 @@ This becomes a two step process. Step 1 is to add a new row to the \CDT, and ste
 We used Injected Function Transformations when some API functionality in \NC{} cannot be replicated using APIs from \CDT{}.
 In order to transform such missing APIs, \tool inserts Injected Functions that provide the same functionality.  
 Since \TD does not allow \CDT{}s to be passed to functions, but instead must be used as a global variable, \tool cannot create generic functions to replicate the API functionality.  
-Instead, it must injected a function for each \CDT that has been created as a result of a refactoring. \FB{We developed a template for each Injected Function Transformation. These templates have ``holes'' and \tool then fills up these ``holes'' with the relevant table name and column name.  Thus \tool generates these Injected Functions fully automatically.}
+Instead, it must inject a function for each \CDT that has been created as a result of a refactoring. \FB{We developed a template for each Injected Function Transformation. These templates have ``holes'' and \tool then fills up these ``holes'' with the relevant table name and column name.  Thus \tool generates these Injected Functions fully automatically.}
 
 One example of an Injected Function Transformation is shown in Fig~\ref{fig:codeTransformations}~(a) on lines 32-33.
 The function \code{DisplayAvgMileage} calculates the average value of all contents of \code{MileageRecord}, and then displays it. 
@@ -550,7 +553,7 @@ To create a corpus, we wrote queries against a database of all publicly availabl
 Thus, our query returned top scripts (based on the number of times that each script was executed) 
 that contained a \NC{}. We retained the top \numScripts scripts.
 
-Table~\ref{table:CorpusData} provides details about our corpus.  We report the size in LOC and complexity in number of functions.
+Table~\ref{table:CorpusData} provides details about our corpus.  We report the size in LOC and complexity in number of functions.  We also report the number of times the apps were run, as well as the number of installations.
 
 \begin{table}[htdp]
 \begin{center}
@@ -572,7 +575,7 @@ App Installations & 5 & 125 & 18 & 635 \\
 \end{table}%
  
 
-Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus.  For each API we report the total number of call sites in our corpus, as well as the percentage call sites for the total API calls for \NC.
+Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus.  For each API we report the total number of call sites in our corpus, as well as the percentage of call sites for the total API calls for \NC.
 
 
 \begin{table}[htdp]
@@ -634,7 +637,7 @@ Next we present the results for each of the three research questions.
 
 \textbf{Applicability: } 
 Table~\ref{table:totalScripts} shows the results for running \tool on \numScripts scripts. 
-Out of the \numScripts scripts that \tool attempted to refactor, 102 (94\%) met the preconditions for the refactoring.
+Out of the \numScripts scripts that \tool attempted to refactor, 116 (94\%) met the preconditions for the refactoring.
 
 Only 7 scripts were unable to be refactored. Out of these, 4 scripts did not meet precondition \POne (the \NC{} was passed as an argument to a function), and 1 did not meet precondition \PTwo (\NC{} was assigned to a local variable). The remaining 2 scripts exposed a limitation of the current implementation of \tool (they were using a currently unsupported function, \code{add many}). 
 Thus, we think that our refactoring is widely applicable to \TD scripts that contain the \NC{} data type.  
@@ -659,7 +662,7 @@ Table~\ref{table:avgTrans} shows the number of transformations performed per eac
  The first three rows show the type of these transformations (i.e., direct, indirect, and injected function). 
  The fourth row shows the total for all types of transformations, while the last row shows the running time for each refactoring.
 
-The first column tabulates the total number of transformations per refactoring. On average each refactoring took a total of 9 seconds to complete.  On average, the number of transformations per refactoring was 11.6. Given that the \TD editing experience is optimized for small screens on touch devices, our refactoring tool saves significant effort.
+The first column shows the average per script, while the last column shows the total for all the scripts.  Each script had, on average, 24 transformations applied in 3 seconds. Given that the \TD editing experience is optimized for small screens on touch devices, our refactoring tool saves significant effort.
 
 Moreover, most of these transformations are non-trivial. Figure~\ref{fig:transformations_pieChart} shows the percentage of each kind of transformation applied. By far the most common transformation kind is Indirect Transformation, which involve mapping one API method call to a sequence of one or more API method calls that do not share a common name with the original method. Thus, we believe that automation saves significant effort.
 
@@ -680,7 +683,7 @@ Injected Function & 2.20 & 30 & 5.01 & 246 \\
 \hline
 Total Trans & 24.30 & 466 & 56.56 & 2722 \\
 \hline 
-Time [sec] & 4.47 & 128 & 15.17 & 501\\
+Time [sec] & 2.64 & 27 & 5.18 & 296\\
 
 
 \end{tabular}
@@ -701,7 +704,7 @@ Time [sec] & 4.47 & 128 & 15.17 & 501\\
 
 \textbf{Accuracy:}
 
-By manually checking refactorings applied in \numManual scripts, we found \tool's precision to be 100\% and its recall 94\%. This means that all the transformations that \tool applied are correct. However, \tool missed 8 potential transformations out 145 transformations that it should have applied. We identified the root cause in our current implementation, and we expect a future version will fix this. 
+By manually checking refactorings applied in \numManual scripts, we found \tool's \emph{precision} to be 100\% and its \emph{recall} 94\%. This means that all the transformations that \tool applied are correct. However, \tool missed 8 potential transformations out 145 transformations that it should have applied. We identified the root cause in our current implementation, and we expect a future version will fix this. 
 
 \subsection{Threats to validity}
 \textbf{Construct Validity:}  Do our metrics indeed measure the advantages of using \tool? Can we measure development effort by simply counting the time and number of transformations per refactoring? Ideally, we would have performed an experiment with real \TD developers and observe them while refactoring. However, given the cutting edge nature of the Cloud Data Types, we could not find such developers. Thus, we chose to use indirect metrics, as it is commonly done in the literature~\cite{Gyori:Lambdaficator,Wloka:Reentrancer}. 
@@ -731,7 +734,6 @@ As far as we know, we present the first automated tool to introduce mobile cloud
 
 The closest research to our current work is by Kwon and Tilevich~\cite{kwon2013cloud} who proposed \emph{Cloud Refactoring}, a tool to refactor methods of an enterprise application system into services that can be  ported to the cloud. Their tool also determines if a method is a good candidate for refactoring using static and dynamic analysis. However, even though their tool automatically refactors methods into services, the programmer must still move them to the cloud manually.  
 Our tool, \tool, performs the refactoring fully automatically, including moving data to the cloud.  
-
 
 Strauch et al.~\cite{strauchmigrating} describe a methodology for refactoring applications to move local data to cloud data. They propose several cloud data patterns, and describe migration scenarios for these patterns. Although this work provides a methodology at a high level, the application of the refactoring is completely manual and left up to the programmer. 
 Ling et al.~\cite{ling2010refactoring} describe a systematic refactoring approach 
