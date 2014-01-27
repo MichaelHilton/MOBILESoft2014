@@ -94,7 +94,6 @@ Refactoring techniques can greatly simplify this process.
 In this paper we present a formative study where we studied and successfully converted \numFormative real-world \TD apps into cloud-enabled apps. Based on these lessons, we designed and implemented, \tool, a tool that automatically refactors \emph{local} data types into \emph{cloud} data types on the \TD platform.
 Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \numTransformations transformations shows (i) that the refactoring is widely \emph{applicable}, (ii) \tool saves human effort, and (iii) \tool is \emph{accurate}. 
 
-\TODO{global conversion of data types to data types.}
 \end{abstract}
 
 
@@ -442,7 +441,7 @@ before applying the refactoring. Section~\ref{sec:transformations} presents the 
 \subsection{Preconditions}
 \label{sec:preconditions}
 In the current implementation of \TD, there are some differences in how \NC{}s and \CDT{}s are treated.
-For example, an instance of a \NC{} can be passed as an argument or returned from a \TD function.  However, \CDT{}s cannot be passed as function arguments, or returned from functions. \TODO{Microsoft People: Please explain why this is} Also, \NC{}s can be assigned to a variable, where as \CDT{}s cannot.  Based on these differences, we developed two preconditions that must be met before \tool can perform a refactoring.  These preconditions are inherent to how the \TD language works, not limitations of our tool.   
+For example, an instance of a \NC{} can be passed as an argument or returned from a \TD function.  However, \CDT{}s cannot be passed as function arguments, or returned from functions.  Also, \NC{}s can be assigned to a variable, where as \CDT{}s cannot.  Based on these differences, we developed two preconditions that must be met before \tool can perform a refactoring.  These preconditions are inherent to how the \TD language works, not limitations of our tool.   
 
 \POne  A \NC{} instance must not be passed as an argument or returned from a function. 
 
@@ -452,7 +451,7 @@ For example, an instance of a \NC{} can be passed as an argument or returned fro
 \label{sec:transformations}
 
 There are four categories of transformations to refactor \NC{} to \code{Cloud Data Tables}: 
-(i) creating \CDT{} data structure, (ii) direct mapping of APIs, (iii) indirect mapping of APIs, and (iv) custom function to augment missing APIs. Table~\ref{tab:mappingTable} displays the mapping between the APIs of the two data types.
+(i) creating \CDT{} data structure, (ii) direct mapping of APIs, (iii) indirect mapping of APIs, and (iv) injected function to augment missing APIs. Table~\ref{tab:mappingTable} displays the mapping between the APIs of the two data types.
 
 We will illustrate the transformations using simplified code snippets from the MileageTracker app that we introduced in the Formative Study (see Section~\ref{sec:Formative}), an app that enables users to track their fuel usage. Figure~\ref{fig:codeTransformations} shows the code before and after the refactoring. The left column shows the original code. 
 Line 1 shows the declaration of the \code{MileageRecord} \NC{}, which is the target of the refactoring. We show four functions to display all mileage record, clear existing mileage record, add a new entry to the mileage collection, and compute and display the average mileage. \\
@@ -496,23 +495,20 @@ This becomes a two step process. Step 1 is to add a new row to the \CDT, and ste
 
 
 \MyParagraph{Injected Function Transformations: } 
-We used Custom Function Transformations when some API functionality in \NC{} cannot be replicated using APIs from \CDT{}.
+We used Injected Function Transformations when some API functionality in \NC{} cannot be replicated using APIs from \CDT{}.
 In order to transform such missing APIs, \tool inserts Injected Functions that provide the same functionality.  
 Since \TD does not allow \CDT{}s to be passed to functions, but instead must be used as a global variable, \tool cannot create generic functions to replicate the API functionality.  
-Instead, it must create a custom function for each \CDT that has been created as a result of a refactoring. \FB{We developed a template for each Injected Function Transformation. These templates have ``holes'' and \tool then fills up these ``holes'' with the relevant table name and column name.  Thus \tool generates these Injected Functions fully automatically.}
+Instead, it must injected a function for each \CDT that has been created as a result of a refactoring. \FB{We developed a template for each Injected Function Transformation. These templates have ``holes'' and \tool then fills up these ``holes'' with the relevant table name and column name.  Thus \tool generates these Injected Functions fully automatically.}
 
-One example of a Custom Function Transformation is shown in Fig~\ref{fig:codeTransformations}~(a) on lines 32-33.
+One example of an Injected Function Transformation is shown in Fig~\ref{fig:codeTransformations}~(a) on lines 32-33.
 The function \code{DisplayAvgMileage} calculates the average value of all contents of \code{MileageRecord}, and then displays it. 
 Once \tool refactors the program to use a \CDT to store the data, there is no longer an API call that will calculate the average value 
-of all contents of a \CDT. Instead, \tool must introduce the custom function \code{MileageRecordTable avg} (see Fig.~\ref{fig:codeTransformations}~(b) lines 36-45) that will compute the average of all the values in the \code{MileageRecordTable}.  
-Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{avg} custom function instead, as seen in Fig.~\ref{fig:codeTransformations}~(b), line 32.
+of all contents of a \CDT. Instead, \tool must introduce the injected function \code{MileageRecordTable avg} (see Fig.~\ref{fig:codeTransformations}~(b) lines 36-45) that will compute the average of all the values in the \code{MileageRecordTable}.  
+Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{avg} injected function instead, as seen in Fig.~\ref{fig:codeTransformations}~(b), line 32.
 
-\FB{Another example of an Injected Function Transformation is shown in Fig~\ref{fig:MaxCustomTransformationTransformations}.  Column (a) shows the template for the function that calculates the maximum value of a \CDT.  Column (b) shows the same function once it has been customized for the Mileage Tracker app. } \\
+\FB{Another example of an Injected Function Transformation is shown in Fig~\ref{fig:MaxCustomTransformationTransformations}.  Column (a) shows the template for the function that calculates the maximum value of a \CDT.  Column (b) shows the same function once it has been injected in the Mileage Tracker app. } \\
 \MyParagraph{Concurrency: } 
 \FB{Since multiple users can access the cloud data at the same time and perform updates concurrently, one needs to worry about the atomicity of compound operations in our Injected Functions.  However, \TD guarantees atomicity at the function level, thus our Injected Functions will execute atomically.}
-
-//Talk about how we have the function templates and then we customize them with correct values
-//talk about how we don't need to worry about concurrency issues due to TD handling it at the method level.
 
 
 \begin{figure*}
@@ -525,17 +521,17 @@ Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{a
       \lstinputlisting[]{src/in/MaxBeforeRefactoring.txt}
       }
       \hspace{0.2in}
-      \subfigure[Customized Function]{
+      \subfigure[Injected Function]{
       \lstinputlisting[]{src/out/MaxAfterRefactoring.txt}
       }
     }
-    \caption{Example Custom Function Transformation}
+    \caption{Example Injected Function Transformation}
     \label{fig:MaxCustomTransformationTransformations}
 \end{figure*}
 
 
 \subsubsection{Tool Limitations}
-The current version of \tool does not support the custom function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve \code{add many}.
+The current version of \tool does not support the injected function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work.  For this reason,  \tool is unable to support transformations that involve \code{add many}.
 
 \subsubsection{Implementation}
 \FB{\tool refactors \TD scripts \emph{in place}.  First, \tool retrieves the source of the target app as an  Abstract Syntax Tree (AST) stored in JSON format from the \TD script bazaar.  It then transforms the AST as needed.  Once all the transformations are performed, \tool completes the refactoring by saving the new AST for the target app.}
@@ -551,7 +547,7 @@ Q3:  \textbf{ACCURACY}: How accurate is \tool when performing a refactoring?\\
 \subsection{Methodology}
 
 To create a corpus, we wrote queries against a database of all publicly available scripts in the \TD script bazaar. We wanted to collect popular and mature scripts. 
-Thus, our query returned top scripts (based on the number of times that each script was executed\TODO{verify that this is what ``number of runs'' means}) 
+Thus, our query returned top scripts (based on the number of times that each script was executed) 
 that contained a \NC{}. We retained the top \numScripts scripts.
 
 We ran the refactoring in batch mode. From each script in our corpus, our tool randomly selects one \NC{} as the target for refactoring. 
@@ -604,7 +600,7 @@ Tool Limitations & 2\\
 
 \textbf{Effort:}  
 Table~\ref{table:avgTrans} shows the number of transformations performed per each refactoring. 
- The first three rows show the type of these transformations (i.e., direct, indirect, and custom function). 
+ The first three rows show the type of these transformations (i.e., direct, indirect, and injected function). 
  The fourth row shows the total for all types of transformations, while the last row shows the running time for each refactoring.
 
 The first column tabulates the total number of transformations per refactoring. On average each refactoring took a total of 9 seconds to complete.  On average, the number of transformations per refactoring was 11.6. Given that the \TD editing experience is optimized for small screens on touch devices, our refactoring tool saves significant effort.
@@ -613,25 +609,27 @@ Moreover, most of these transformations are non-trivial. Figure~\ref{fig:transfo
 
 \begin{table}[htdp]
 \begin{center}
-\begin{tabular}{lclclclcl}
+\begin{tabular}{lclclclclc|}
 
-& AVG & MAX & STDDEV \\
+ & AVG & MAX & STDDEV \\
 \hline
 \hline
-Direct Trans & 1.20 & 13 & 1.8 \\
+Refactorings & 1.84 & 8 & 1.38 \\
 \hline
-Indirect Trans & 9.1  & 112 & 15.6\\
+Direct Trans & 2.22 & 30 & 4.45 \\
 \hline
-Custom Function & 1.34 & 19 & 2.9 \\
+Indirect Trans & 19.88  & 466 & 56.62\\
 \hline
-Total Trans & 11.6 & 112 & 15.5 \\
+Injected Function & 2.20 & 30 & 5.01 \\
+\hline
+Total Trans & 24.30 & 466 & 56.56 \\
 \hline 
-Time [sec] & 9.3 & 18 & 3.3\\
+Time [sec] & 4.47 & 128 & 15.17\\
 
 
 \end{tabular}
 \nocaptionrule
-\caption{Average Number of Transformations}
+\caption{Refactorings Applied Per Script}
 \label{table:avgTrans}
 \end{center}
 \end{table}%
@@ -661,6 +659,54 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 \FB{Currently there is no widely accepted standard for cloud data types.  In order for our results to generalize, cloud storage providers will first need to agree on Cloud Data Storage standards.}
 
 \textbf{Reliability:} Is our evaluation reliable? The apps that we used to evaluate our tool are all available on the \TD bazaar, and \tool is published on the \TD website with the script ID: \TODO{FINAL VERSION OF SCRIPT ID.}
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{lclcl}
+\hline
+Add & 19.92 \\
+\hline
+ At & 37.83 \\
+ \hline
+ Avg & 0.37\\
+ \hline
+ Clear & 3.15\\
+ \hline 
+ Contains & 4.01\\
+ \hline 
+ Count & 4.08\\
+ \hline 
+ Max & 0.11\\
+ \hline 
+ Min & 0.15\\
+ \hline 
+ Post To Wall & 0.15\\
+ \hline 
+ Random & 0.037\\
+ \hline 
+ Remove & 3.63\\
+ \hline 
+ Remove At & 1.98\\
+ \hline 
+ Reverse & 0.15\\
+ \hline 
+ Set At & 23.67\\
+ \hline 
+ Sort & 0.30\\
+ \hline 
+ Sum & 0.45\\
+\hline
+
+\end{tabular}
+\nocaptionrule
+\caption{Frequency of a Transformation}
+\label{table:FreqOfTrans}
+\end{center}
+\end{table}%
+
+
+
+
 
 
 
@@ -699,6 +745,8 @@ Lewis et al.~\cite{lewis2009report} describe the need of End User Programming to
 \TD is a programming platform developed by Microsoft Research that allows hobbyist, novice programmers and end users  to program \emph{on} their phone for their phone.  There are other programming environments that are targeted to a similar audience, including:  App Inventor~\cite{Wolber}, Scratch~\cite{maloney2010scratch}, Alice~\cite{cooper2010design}, and Greenfoot~\cite{kolling2010greenfoot}. 
 Our recent work~\cite{badame2012refactoring} provides refactoring tools for users of Excel. 
 However, our current paper is the first paper to engage the mobile end-user in a refactoring workflow.
+
+\TODO{DANNY: ADD RELATED WORK ABOUT REFACTOR TO TABLE}
 
 \section{Conclusion}
 \label{sec:conclusions}
