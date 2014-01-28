@@ -728,8 +728,8 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 
 We group the related work in the following categories: (i) cloud-related refactorings, (ii) multi-user apps, and (iii) tools for the end-user development community. \\
 
-\MyParagraph{Cloud-related refactoring:}
-There is a lot of research on generic topic of refactoring. While the original research was using refactoring to improve the design of existing programs, the more recent work used refactoring techniques to retrofit 
+\MyParagraph{Refactoring and the Cloud:}
+There is a lot of research on the generic topic of refactoring. While the original research was using refactoring to improve the design of existing programs, the more recent work used refactoring techniques to retrofit 
 concurrency~\cite{wloka2009refactoring,dig2009refactoring}, functional features~\cite{Gyori:Lambdaficator}, etc.
 As far as we know, we present the first automated tool to introduce mobile cloud computing via an automated refactoring tool.
 
@@ -746,7 +746,12 @@ Researchers have used many approaches to harness the power of the cloud.
 One of the more common uses of the mobile cloud is to offload computing in order to make apps more energy efficient and thereby preserve battery life, such as Spectra~\cite{flinn2002balancing}, Slingshot~\cite{su2005slingshot}, and MAUI~\cite{cuervo2010maui}.  
 Kwon and Tilevich~\cite{kwon2012energy} proposed an approach to offload computation to the cloud to save battery life that is tolerant to network outages or unavailability.
 
-CloudCone~\cite{chun2011clonecloud} also attempts to harness the power of mobile cloud computing, but their approach is significantly different then ours in that they create clones on the cloud, and then move the execution of the application as well as it's state between the cloud and the device.  \\
+CloudCone~\cite{chun2011clonecloud} also attempts to harness the power of mobile cloud computing, but their approach is significantly different then ours in that they create clones on the cloud, and then move the execution of the application as well as it's state between the cloud and the device.  
+
+Researchers have also used refactoring techniques to migrate from a version of the library to another version. Balaban et al.~\cite{BalabanTF05} propose
+refactorings that automatically replace obsolete library classes with their newer counterparts. Component developers have to provide mappings between legacy classes and their replacements, and an analysis based on type constraints determines where the replacement can be done. Nguyen et al.~\cite{Nguyen2010} designed a technique to identify API changes automatically. Their analysis compares two library versions and extracts knowledge about how the updated code has migrated to the newer version of the API. Since this line of work is investigating API migration between two versions of the same class, the changes are less dramatic than in the case of migrating between a 
+one-dimensional data type (\NC) and a two-dimensional data type (\CDT). Such a dramatic API change requires custom program transformations, and cannot be specified with a generic rule system. \\
+
 
 \MyParagraph{Multi-user apps:}
 Many have studied multi-user apps in the following domains: collaboration~\cite{Yuill:multiuserColab, Lopez-Gulliver:imageprocessing}, gaming~\cite{Leichtenstern:multiuserGames}, Geospatial Applications~\cite{Forlines:geospatial} (e.g., Google earth), information sharing~\cite{Nacenta:2012:LMM:2307798.2307816}, and music~\cite{Sorensen:2012:ISM:2399016.2399094}. This research focuses on how multi-user technologies impact human interactions. In contrast, we are focused on the technical challenges of refactoring from single to multi-user apps. \\
@@ -758,7 +763,6 @@ Lewis et al.~\cite{lewis2009report} describe the need of End User Programming to
 Our recent work~\cite{badame2012refactoring} provides refactoring tools for users of Excel. 
 However, our current paper is the first paper to engage the mobile end-user in a refactoring workflow.
 
-\TODO{DANNY: ADD RELATED WORK ABOUT REFACTOR TO TABLE }
 
 \section{Conclusion}
 \label{sec:conclusions}
