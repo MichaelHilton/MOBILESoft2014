@@ -748,8 +748,9 @@ Kwon and Tilevich~\cite{kwon2012energy} proposed an approach to offload computat
 
 CloudCone~\cite{chun2011clonecloud} also attempts to harness the power of mobile cloud computing, but their approach is significantly different then ours in that they create clones on the cloud, and then move the execution of the application as well as it's state between the cloud and the device.  
 
-Researchers have also used refactoring techniques to migrate from a version of the library to another version. Balaban et al.~\cite{BalabanTF05} propose
-refactorings that automatically replace obsolete library classes with their newer counterparts. Component developers have to provide mappings between legacy classes and their replacements, and an analysis based on type constraints determines where the replacement can be done. Nguyen et al.~\cite{Nguyen2010} designed a technique to identify API changes automatically. Their analysis compares two library versions and extracts knowledge about how the updated code has migrated to the newer version of the API. Since this line of work is investigating API migration between two versions of the same class, the changes are less dramatic than in the case of migrating between a 
+Researchers~\cite{BalabanTF05,Nguyen2010} have also used refactoring techniques to migrate from a version of the library to another version. Balaban et al.~\cite{BalabanTF05} propose
+refactorings that automatically replace obsolete library classes with their newer counterparts. Component developers have to provide mappings between legacy classes and their replacements, and an analysis based on type constraints determines where the replacement can be done. Nguyen et al.~\cite{Nguyen2010} designed a technique to identify API changes automatically. Their analysis compares two library versions and extracts knowledge about how the updated client code has migrated to the newer version of the API. 
+Since this line of work is investigating API migration between two versions of the same class, the changes are less dramatic than in the case of migrating between a 
 one-dimensional data type (\NC) and a two-dimensional data type (\CDT). Such a dramatic API change requires custom program transformations, and cannot be specified with a generic rule system. \\
 
 
