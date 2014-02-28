@@ -136,8 +136,8 @@ computing through the use of refactoring techniques.
 
 \item{\textbf{Tool:}} We have designed and implemented the analysis and transformation algorithms to refactor \emph{local} data types into \emph{cloud} data types on the \TD platform. 
 
-\item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely \emph{applicable}: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took \numAVGSecs seconds for each performed refactoring. Third, \tool is  
-\emph{accurate}: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  All the data and the tool are publicly available at: \\
+\item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely applicable: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took \numAVGSecs seconds for each performed refactoring. Third, \tool is  
+accurate: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  All the data and the tool are publicly available at: \\
 \url{http://web.engr.oregonstate.edu/~hiltonm/Cloudifier}
 \end{itemize}
 
@@ -274,9 +274,9 @@ The first app we selected was \MT, which is publicly available with the script i
 
 Business Manager+~\cite{BusinessManager} is an app to track business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with each other.
 
-CliffHangers~\cite{CliffHangers} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they loose the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
+CliffHangers~\cite{CliffHangers} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they \CR{lose} the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
 
-MyAssignment~\cite{MyAssignments} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  We converted into a multi-user app so that multiple students can collaborate on class assignments.
+MyAssignment~\cite{MyAssignments} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  \CR{We converted it into} a multi-user app so that multiple students can collaborate on class assignments.
 
 After converting these apps, we ran them with multiple users on three devices to verify that in fact the apps work correctly. They are all publicly available~\cite{MileageTrackerFinal,BusinessManagerFinal,CliffHangersFinal,MyAssignmentsFinal} .
 
@@ -620,10 +620,10 @@ In order to validate the accuracy of \tool, we randomly chose \numManual scripts
 
 In addition to running these \numManual scripts we also carefully inspected the refactored code. We counted transformations that \tool
 (i) applied correctly, (ii) applied incorrectly, and (iii) missed. 
-\FB{The first two authors manually refactored \numManual scripts, and created a set of transformations for these refactorings.  We define this set of transformations that an expert would apply as our \emph{golden standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the golden standard to determine if that transformation had been applied correctly. 
+\FB{The first two authors manually refactored \numManual scripts, and created a set of transformations for these refactorings.  We define this set of transformations that an expert would apply as our \emph{gold standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the gold standard to determine if that transformation had been applied correctly. 
 We define a {\it TruePositive} as a transformation that \tool identified and applied correctly.   
-We define {\it FalsePositive} as a transformation that \tool applies to the code, but it is not part of the golden standard. In other words, \tool transformed code that should not have been transformed.
-We define a {\it FalseNegative} as a transformation that \tool did not apply, but it is in the golden standard. In other words, \tool missed applying a needed transformation.
+We define {\it FalsePositive} as a transformation that \tool applies to the code, but it is not part of the gold standard. In other words, \tool transformed code that should not have been transformed.
+We define a {\it FalseNegative} as a transformation that \tool did not apply, but it is in the gold standard. In other words, \tool missed applying a needed transformation.
 }
  
  Using these metrics we calculate precision and recall for \tool, using the standard definitions:
@@ -710,7 +710,7 @@ By manually checking refactorings applied in \numManual scripts, we found \tool'
 \textbf{Construct Validity:}  Do our metrics indeed measure the advantages of using \tool? Can we measure development effort by simply counting the time and number of transformations per refactoring? Ideally, we would have performed an experiment with real \TD developers and observe them while refactoring. However, given the cutting edge nature of the Cloud Data Types, we could not find such developers. Thus, we chose to use indirect metrics, as it is commonly done in the literature~\cite{Gyori:Lambdaficator,Wloka:Reentrancer}. 
 Second, are we sure that the performed refactorings are accurate? Ideally, we should have run tests before and after each refactoring. However, very few scripts in \TD have any tests at all. In order to mitigate this we manually inspected a random set of \numManual apps and exercised their functionality to determine that the runtime behavior did not change.
 
-\textbf{Internal Validity:}  How did we mitigate bias during manual inspection? We randomly sampled from the set of our corpus, until we had sampled from a variety of app domains. Also, we carefully constructed the set of transformations in the golden standard \emph{before} we applied \tool. The authors are all experts on the \TD platform.
+\textbf{Internal Validity:}  How did we mitigate bias during manual inspection? We randomly sampled from the set of our corpus, until we had sampled from a variety of app domains. Also, we carefully constructed the set of transformations in the gold standard \emph{before} we applied \tool. The authors are all experts on the \TD platform.
 
 Also, the corpus that we used in the evaluation predates the introduction of Cloud Data Types, and thus the developers were unaware of our later study and could not bias their code to help \tool. 
 
