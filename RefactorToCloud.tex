@@ -271,7 +271,7 @@ We chose representative apps from various domains that cover different features 
 We then converted these apps from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
 
 The first app we selected was \MT, which is publicly available with the script id of
-\CR{~\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:zenx:overview}}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. We converted Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
+\CR{~\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:zenx:overview}}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. \CR{We began by adding some functionality to the original app. We then converted} Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
 
 Business Manager+\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:chgv:overview}} is an app to track business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with each other.
 
@@ -542,6 +542,8 @@ Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{a
 \subsubsection{Tool Limitations}
 The current version of \tool does not support the injected function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work. 
 
+\CR{\tool was only implemented for \NC{}s.  In order to add other types of collections, new injected functions would need to be written in order to provide additional functionality.  For example, in order to implement the \code{String Collection}, the join api call which concatenates the entire collection into one string would need to be implemented.}
+
 \subsubsection{Implementation}
 \FB{\tool refactors \TD scripts \emph{in place}.  First, \tool retrieves the source of the target app as an  Abstract Syntax Tree (AST) stored in JSON format from the \TD script bazaar.  It then transforms the AST as needed.  Once all the transformations are performed, \tool completes the refactoring by saving the new AST for the target app.}
 
@@ -581,7 +583,7 @@ App Installations & 5 & 125 & 18 & 635 \\
 \end{table}%
  
 
-Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus.  For each API we report the total number of call sites in our corpus, as well as the percentage of call sites for the total API calls for \NC.
+Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus. \CR{ For each API call we report the total number of call sites in our corpus, as well as the percentage of the total number of \NC API calls each individual call represents.}
 
 
 \begin{table}[htdp]
@@ -589,7 +591,8 @@ Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpu
 \begin{tabular}{lclclc|}
 \\
 \hline
-API Name & \# Call Sites & \% of total API Call Sites \\
+API Name & \# Call Sites & \% of total \NC  \\
+ & & API Call Sites \\
 \hline
 At & 1010 & 39.25 \\
 Set At & 632 & 24.56 \\
