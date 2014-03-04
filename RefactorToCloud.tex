@@ -730,6 +730,19 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 \url{http://web.engr.oregonstate.edu/~hiltonm/Cloudifier}
 
 
+\section{Discussion}
+\label{sec:discussion}
+
+%This review was written by Eli Tilevich (tilevich@cs.vt.edu). I've deliberately unblinded my review, as this work is closely related to my recent research on cloud refactoring. Having studied a general version of this problem for many years, I believe that this paper represents an important evolutionary step in enabling centralized programs with distributed execution capabilities. This work is well motivated, executed, and evaluated. I recommend that it be accepted for presentation.
+%
+%What is missing from the paper is a discussion section that would put this work into perspective. What I find most interesting about Cloudifyer is that this is the first successful example of an automated distribution approach that works by replacing types. Several similar prior approaches in managed languages, such as Java and C#, have failed to achieve this objective. Specifically, converting regular interfaces to Remote interfaces in Java RMI; and marking regular methods as [Remote] in C# Remoting. There are two reasons why Cloudifyer succeeds where the prior approaches failed. First, the cloud types in touchdevelop have a well-defined but constrained semantics that includes a sophisticated built-in eventual consistency mechanism. Second, the touchdevelop language lacks the features that make automated distribution such a hard problem. While the first reason is well-explained in Section 2.1, the second one needs to be explained further. 
+%
+%What makes automated distribution fiendishly hard is the possibility of aliasing. Say you have a local reference that you want to convert into a remote reference by changing its type. If there are other aliases to the local reference, which can be used to access the object directly after the distribution took place, the application will crash. Another very hard problem is the possibility of local objects accessing native libraries directly (e.g., using Java JNI). If these objects are moved to the cloud, the distributed application will also crash. There is a whole other set of other difficulties, including the differences in parameter passing semantics in local and distributed methods and different threading/synchronization semantics between local and distributed executions. To address these difficulties in J-Orchestra, I ended up having to implement a distributed shared memory via a combination of code transformation/generation. It seems that because the semantics of the tou
+%chdevelop language is constrained, you are able to make safe assumptions that enable automated distribution based on replacing types. It would be informative to discuss how the design of touchdevelop makes it possible to make these assumptions.
+%
+%Finally, Cloudifyer is an important first step in cloud-enabling touchdevelop applications. I believe that touchdevelop can enable even a greater degree of automation of this task, without for example the user having to identify the specific types to refactor at the source code level. For example, the user could select a desired specific synchronization semantics visually, with a tool automatically generating the needed transformations. In other words, for general-purpose, managed languages such as Java, automated approaches with the programmer involved (e.g., as in my own J-Orchestra system) is the only viable choice. For special-purpose languages such as touchdevelop, it should be possible to infer and perform many refactoring transformations without exposing the end-user to any implementation details.
+
+
 
 
 \section{Related Work}
