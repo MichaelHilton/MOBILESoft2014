@@ -618,7 +618,8 @@ Random & 1 & 0.04 \\
 \end{center}
 \end{table}%
 
-We ran the refactoring in batch mode. From each script in our corpus, our tool randomly selects one \NC{} as the target for refactoring. 
+We ran the refactoring in batch mode. \CR{Steps 1 and 4 of our process require domain knowledge.  For Step 1, we refactored all the \NC{}s in our corpus instead of trying to identify which data should be moved to the cloud.  For Step 4, we maintained the current data initialization, as changing that would involve making design decisions for each app.  As far as the data session, we used the default session provided by \TD, the ``just me session.'' 
+   }
 
 In order to determine the applicability of \tool, we report the number of scripts that our tool was able to refactor successfully, as well as the number of each kind of transformations performed inside a refactoring.
 
@@ -628,7 +629,7 @@ In order to validate the accuracy of \tool, we randomly chose \numManual scripts
 
 In addition to running these \numManual scripts we also carefully inspected the refactored code. We counted transformations that \tool
 (i) applied correctly, (ii) applied incorrectly, and (iii) missed. 
-\FB{The first two authors manually refactored \numManual scripts, and created a set of transformations for these refactorings.  We define this set of transformations that an expert would apply as our \emph{gold standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the gold standard to determine if that transformation had been applied correctly. 
+\FB{The first two authors manually refactored \CR{these same \numManual scripts}, and created a set of transformations for these refactorings.  We define this set of transformations that an expert would apply as our \emph{gold standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the gold standard to determine if that transformation had been applied correctly. 
 We define a {\it TruePositive} as a transformation that \tool identified and applied correctly.   
 We define {\it FalsePositive} as a transformation that \tool applies to the code, but it is not part of the gold standard. In other words, \tool transformed code that should not have been transformed.
 We define a {\it FalseNegative} as a transformation that \tool did not apply, but it is in the gold standard. In other words, \tool missed applying a needed transformation.
