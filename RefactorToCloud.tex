@@ -202,6 +202,7 @@ cloud types. Roughly, this amounts to making classes correspond to tables,
 objects to rows, and fields to columns. 
 
 \subsection{Consistency Model}
+\label{sec:ConsistencyModel}
 
 As multiple clients can concurrently update the same data, even during offline operation, conflicts may need to be resolved after-the-fact, in a manner that guarantees eventual consistency. To give the reader a general idea, we now briefly describe the mechanism used in \TD, which is a simple, specialized form of eventually consistent transactions \cite{burckhardt2012ect} and guarantees causal eventual consistency. 
 
