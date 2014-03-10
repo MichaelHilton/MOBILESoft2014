@@ -767,7 +767,6 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 %
 %Finally, Cloudifyer is an important first step in cloud-enabling touchdevelop applications. I believe that touchdevelop can enable even a greater degree of automation of this task, without for example the user having to identify the specific types to refactor at the source code level. For example, the user could select a desired specific synchronization semantics visually, with a tool automatically generating the needed transformations. In other words, for general-purpose, managed languages such as Java, automated approaches with the programmer involved (e.g., as in my own J-Orchestra system) is the only viable choice. For special-purpose languages such as touchdevelop, it should be possible to infer and perform many refactoring transformations without exposing the end-user to any implementation details.
 
-%Finally, Cloudifyer is an important first step in cloud-enabling touchdevelop applications. I believe that touchdevelop can enable even a greater degree of automation of this task, without for example the user having to identify the specific types to refactor at the source code level. For example, the user could select a desired specific synchronization semantics visually, with a tool automatically generating the needed transformations. In other words, for general-purpose, managed languages such as Java, automated approaches with the programmer involved (e.g., as in my own J-Orchestra system) is the only viable choice. For special-purpose languages such as touchdevelop, it should be possible to infer and perform many refactoring transformations without exposing the end-user to any implementation details.
 
 \CR{There are two reasons why \TD is well suited for refactoring to the cloud.  The first is that cloud types in \TD have well-defined but constrained semantics which includes the eventual consistency model as described in section~\ref{sec:ConsistencyModel}.  The second is that \TD does not allow \NC data objects to be aliased. }
 
@@ -775,11 +774,7 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 Consider a local object that you wish to convert into a cloud data type.  If there are aliases to the local reference, any subsequent call to that alias will cause the application to crash.  The reason this is not a concern for our tool is that \TD only allows cloud data types to be global objects, therefore ensuring there are no aliases to the object that was moved to the cloud.}
 \CR{Also, concerns must be taken to deal with local objects accessing native libraries directly.  This can also be a problem one objects are moved to the cloud.}
 
-There is a whole other set of other difficulties, including the differences in parameter passing semantics in local and distributed methods and different threading/synchronization semantics between local and distributed executions. To address these difficulties in J-Orchestra, I ended up having to implement a distributed shared memory via a combination of code transformation/generation. It seems that because the semantics of the touchdevelop language is constrained, you are able to make safe assumptions that enable automated distribution based on replacing types. It would be informative to discuss how the design of touchdevelop makes it possible to make these assumptions.
-
-
-
-
+\CR{In order to deal with these issues in a Java, researchers have been forced to implement distributed shared memory via a combination of code transformation/generation. ~\cite{Tilevich:2009}}
 
 
 
@@ -835,7 +830,7 @@ Using our refactoring tool in combination with a well designed, powerful end-use
 
 
 \section{ACKNOWLEDGEMENTS}
-\CR{We would like to thank Caius Brindescu, Mihai Codoban, Sergii Shmarkatiuk, Alexandru Gyori, Semih Okur, Yu Lin, Cosmin Radoi, Eli Tilevich, and the anonymous reviewers for feedback on earlier drafts of this paper. This research is partly funded through NSF CCF-1213091 and CCF-1219027 grants, a SEIF award from Microsoft, and a gift grant from Intel. }
+\CR{We would like to thank Caius Brindescu, Mihai Codoban, Sergii Shmarkatiuk, Alexandru Gyori, Semih Okur, Yu Lin, Cosmin Radoi, Eli Tilevich, and the anonymous reviewers for feedback on earlier drafts of this paper. This research is partly funded through NSF CCF-1213091 and CCF-1219027 grants, a SEIF award from Microsoft, and a gift grant from Intel.}
 
 
 %suprising. 
@@ -844,223 +839,251 @@ Using our refactoring tool in combination with a well designed, powerful end-use
 
 \bibliographystyle{abbrvnat}
 
-% The bibliography should be embedded for final submission.
-
 \begin{thebibliography}{10}
 
-\bibitem{badame2012refactoring}
+% The bibliography should be embedded for final submission.
+\bibitem[Badame and Dig(2012)]{badame2012refactoring}
 S.~Badame and D.~Dig.
-\newblock Refactoring meets spreadsheet formulas. 
-\newblock In {\em 28th IEEE International Conference on Software Maintenance
-  (ICSM)}, pages 399--409, 2012. 
+\newblock Refactoring meets spreadsheet formulas.
+\newblock In \emph{28th IEEE International Conference on Software Maintenance
+  (ICSM)}, pages 399--409, 2012.
 
-\bibitem{BalabanTF05}
+\bibitem[Balaban et~al.(2005)Balaban, Tip, and Fuhrer]{BalabanTF05}
 I.~Balaban, F.~Tip, and R.~M. Fuhrer.
 \newblock Refactoring support for class library migration.
-\newblock In {\em ACM International Conference on Object Oriented Programming
+\newblock In \emph{ACM International Conference on Object Oriented Programming
   Systems Languages and Applications (OOPSLA)}, pages 265--279, 2005.
 
-\bibitem{cap-brewer}
+\bibitem[Brewer(2000)]{cap-brewer}
 E.~A. Brewer.
 \newblock Towards robust distributed systems (abstract).
-\newblock In {\em 19th ACM SIGACT-SIGOPS Symposium on Principles of Distributed
-  Computing (PODC)}, pages 7--, 2000.
+\newblock In \emph{19th ACM SIGACT-SIGOPS Symposium on Principles of
+  Distributed Computing (PODC)}, pages 7--, 2000.
 
-\bibitem{burckhardt2012ect}
+\bibitem[Burckhardt et~al.(2012{\natexlab{a}})Burckhardt, F\"ahndrich, Leijen,
+  and Sagiv]{burckhardt2012ect}
 S.~Burckhardt, M.~F\"ahndrich, D.~Leijen, and M.~Sagiv.
 \newblock {E}ventually {C}onsistent {T}ransactions.
-\newblock In {\em European Symposium on Programming (ESOP), (extended version
+\newblock In \emph{European Symposium on Programming (ESOP), (extended version
   available as Microsoft Tech Report MSR-TR-2011-117), \textrm{LNCS}}, volume
-  7211, pages 64--83, 2012.
+  7211, pages 64--83, 2012{\natexlab{a}}.
 
-\bibitem{burckhardt2012cloud}
+\bibitem[Burckhardt et~al.(2012{\natexlab{b}})Burckhardt, F{\"a}hndrich,
+  Leijen, and Wood]{burckhardt2012cloud}
 S.~Burckhardt, M.~F{\"a}hndrich, D.~Leijen, and B.~P. Wood.
 \newblock Cloud types for eventual consistency.
-\newblock In {\em European Conference on Object-Oriented Programming (ECOOP)},
-  pages 283--307. 2012.
+\newblock In \emph{European Conference on Object-Oriented Programming (ECOOP)},
+  pages 283--307. 2012{\natexlab{b}}.
 
-\bibitem{chun2011clonecloud}
+\bibitem[Chun et~al.(2011)Chun, Ihm, Maniatis, Naik, and
+  Patti]{chun2011clonecloud}
 B.-G. Chun, S.~Ihm, P.~Maniatis, M.~Naik, and A.~Patti.
 \newblock Clonecloud: elastic execution between mobile device and cloud.
-\newblock In {\em 6th conference on Computer systems (EuroSys)}, pages
+\newblock In \emph{6th conference on Computer systems (EuroSys)}, pages
   301--314. ACM, 2011.
 
-\bibitem{cohn2008citizen}
+\bibitem[Cohn(2008)]{cohn2008citizen}
 J.~P. Cohn.
 \newblock Citizen science: Can volunteers do real research?
-\newblock {\em BioScience}, 58(3):192--197, 2008.
+\newblock \emph{BioScience}, 58\penalty0 (3):\penalty0 192--197, 2008.
 
-\bibitem{cooper2010design}
+\bibitem[Cooper(2010)]{cooper2010design}
 S.~Cooper.
 \newblock The design of alice.
-\newblock {\em ACM Transactions on Computing Education (TOCE)}, 10(4):15, 2010.
+\newblock \emph{ACM Transactions on Computing Education (TOCE)}, 10\penalty0
+  (4):\penalty0 15, 2010.
 
-\bibitem{cuervo2010maui}
+\bibitem[Cuervo et~al.(2010)Cuervo, Balasubramanian, Cho, Wolman, Saroiu,
+  Chandra, and Bahl]{cuervo2010maui}
 E.~Cuervo, A.~Balasubramanian, D.-k. Cho, A.~Wolman, S.~Saroiu, R.~Chandra, and
   P.~Bahl.
 \newblock Maui: making smartphones last longer with code offload.
-\newblock In {\em 8th international conference on Mobile systems, applications,
-  and services (MobiSys)}, pages 49--62. ACM, 2010.
+\newblock In \emph{8th international conference on Mobile systems,
+  applications, and services (MobiSys)}, pages 49--62. ACM, 2010.
 
-\bibitem{dig2009refactoring}
+\bibitem[Dig et~al.(2009)Dig, Marrero, and Ernst]{dig2009refactoring}
 D.~Dig, J.~Marrero, and M.~D. Ernst.
 \newblock Refactoring sequential java code for concurrency via concurrent
   libraries.
-\newblock In {\em 31st International Conference on Software Engineering
+\newblock In \emph{31st International Conference on Software Engineering
   (ICSE)}, pages 397--407. IEEE Computer Society, 2009.
 
-\bibitem{flinn2002balancing}
+\bibitem[Flinn et~al.(2002)Flinn, Park, and Satyanarayanan]{flinn2002balancing}
 J.~Flinn, S.~Park, and M.~Satyanarayanan.
 \newblock Balancing performance, energy, and quality in pervasive computing.
-\newblock In {\em 22nd International Conference on Distributed Computing
+\newblock In \emph{22nd International Conference on Distributed Computing
   Systems (ICDCS)}, pages 217--226. IEEE, 2002.
 
-\bibitem{Forlines:geospatial}
+\bibitem[Forlines et~al.(2006)Forlines, Esenther, Shen, Wigdor, and
+  Ryall]{Forlines:geospatial}
 C.~Forlines, A.~Esenther, C.~Shen, D.~Wigdor, and K.~Ryall.
 \newblock Multi-user, multi-display interaction with a single-user,
   single-display geospatial application.
-\newblock In {\em 19th Annual ACM Symposium on User Interface Software and
+\newblock In \emph{19th Annual ACM Symposium on User Interface Software and
   Technology (UIST)}, pages 273--276. ACM, 2006.
 
-\bibitem{gilbert-lynch-SIGACT02}
+\bibitem[Gilbert and Lynch(2002)]{gilbert-lynch-SIGACT02}
 S.~Gilbert and N.~Lynch.
 \newblock Brewer's conjecture and the feasibility of consistent, available,
   partition-tolerant web services.
-\newblock {\em SIGACT News}, 33:51--59, June 2002.
+\newblock \emph{SIGACT News}, 33:\penalty0 51--59, June 2002.
 
-\bibitem{Gyori:Lambdaficator}
+\bibitem[Gyori et~al.(2013)Gyori, Franklin, Dig, and
+  Lahoda]{Gyori:Lambdaficator}
 A.~Gyori, L.~Franklin, D.~Dig, and J.~Lahoda.
 \newblock Crossing the gap from imperative to functional programming through
   refactoring.
-\newblock In {\em 9th joint meeting of the European software engineering
+\newblock In \emph{9th joint meeting of the European software engineering
   conference and the ACM SIGSOFT symposium on The foundations of software
   engineering (ESEC/FSE)}, pages 543--553, 2013.
 
-\bibitem{khan2013survey}
+\bibitem[Khan et~al.()Khan, Othman, Madani, and Khan]{khan2013survey}
 A.~Khan, M.~Othman, S.~Madani, and S.~Khan.
 \newblock A survey of mobile cloud computing application models.
 
-\bibitem{kolling2010greenfoot}
+\bibitem[K{\"o}lling(2010)]{kolling2010greenfoot}
 M.~K{\"o}lling.
 \newblock The greenfoot programming environment.
-\newblock {\em ACM Transactions on Computing Education (TOCE)}, 10(4):14, 2010.
+\newblock \emph{ACM Transactions on Computing Education (TOCE)}, 10\penalty0
+  (4):\penalty0 14, 2010.
 
-\bibitem{kwon2012energy}
+\bibitem[Kwon and Tilevich(2012)]{kwon2012energy}
 Y.-W. Kwon and E.~Tilevich.
 \newblock Energy-efficient and fault-tolerant distributed mobile execution.
-\newblock In {\em IEEE 32nd International Conference on Distributed Computing
+\newblock In \emph{IEEE 32nd International Conference on Distributed Computing
   Systems (ICDCS)}, pages 586--595. IEEE, 2012.
 
-\bibitem{kwon2013cloud}
+\bibitem[Kwon and Tilevich(2013)]{kwon2013cloud}
 Y.-W. Kwon and E.~Tilevich.
 \newblock Cloud refactoring: automated transitioning to cloud-based services.
-\newblock {\em Automated Software Engineering}, pages 1--28, 2013.
+\newblock \emph{Automated Software Engineering}, pages 1--28, 2013.
 
-\bibitem{Leichtenstern:multiuserGames}
+\bibitem[Leichtenstern and Andr{\'e}(2009)]{Leichtenstern:multiuserGames}
 K.~Leichtenstern and E.~Andr{\'e}.
 \newblock Studying multi-user settings for pervasive games.
-\newblock In {\em 11th International Conference on Human-Computer Interaction
+\newblock In \emph{11th International Conference on Human-Computer Interaction
   with Mobile Devices and Services (MobileHCI)}, pages 25:1--25:10. ACM, 2009.
 
-\bibitem{lewis2009report}
+\bibitem[Lewis et~al.(2009)Lewis, Smith, Bass, and Myers]{lewis2009report}
 G.~Lewis, D.~Smith, L.~Bass, and B.~Myers.
 \newblock Report of the workshop on software engineering foundations for
   end-user programming.
-\newblock {\em ACM SIGSOFT Software Engineering Notes}, 34(5):51--54, 2009.
+\newblock \emph{ACM SIGSOFT Software Engineering Notes}, 34\penalty0
+  (5):\penalty0 51--54, 2009.
 
-\bibitem{ling2010refactoring}
+\bibitem[Ling et~al.(2010)Ling, Zhou, and Zheng]{ling2010refactoring}
 H.~Ling, X.~Zhou, and Y.~Zheng.
 \newblock Refactoring from object-oriented systems to service-oriented systems:
   A categorical approach.
-\newblock In {\em International Conference on Service Sciences (ICSS)}, pages
+\newblock In \emph{International Conference on Service Sciences (ICSS)}, pages
   214--218. IEEE, 2010.
 
-\bibitem{Lopez-Gulliver:imageprocessing}
+\bibitem[Lopez-Gulliver et~al.(2004)Lopez-Gulliver, Tochigi, Sato, Suzuki, and
+  Hagita]{Lopez-Gulliver:imageprocessing}
 R.~Lopez-Gulliver, H.~Tochigi, T.~Sato, M.~Suzuki, and N.~Hagita.
 \newblock Senseweb: Collaborative image classification in a multi-user
   interaction environment.
-\newblock In {\em 12th Annual ACM International Conference on Multimedia (MM)},
-  pages 456--459. ACM, 2004.
+\newblock In \emph{12th Annual ACM International Conference on Multimedia
+  (MM)}, pages 456--459. ACM, 2004.
 
-\bibitem{maloney2010scratch}
+\bibitem[Maloney et~al.(2010)Maloney, Resnick, Rusk, Silverman, and
+  Eastmond]{maloney2010scratch}
 J.~Maloney, M.~Resnick, N.~Rusk, B.~Silverman, and E.~Eastmond.
 \newblock The scratch programming language and environment.
-\newblock {\em ACM Transactions on Computing Education (TOCE)}, 10(4):16, 2010.
+\newblock \emph{ACM Transactions on Computing Education (TOCE)}, 10\penalty0
+  (4):\penalty0 16, 2010.
 
-\bibitem{Nacenta:2012:LMM:2307798.2307816}
+\bibitem[Nacenta et~al.(2012)Nacenta, Jakobsen, Dautriche, Hinrichs, D\"{o}rk,
+  Haber, and Carpendale]{Nacenta:2012:LMM:2307798.2307816}
 M.~A. Nacenta, M.~R. Jakobsen, R.~Dautriche, U.~Hinrichs, M.~D\"{o}rk,
   J.~Haber, and S.~Carpendale.
 \newblock The lunchtable: A multi-user, multi-display system for information
   sharing in casual group interactions.
-\newblock In {\em 2012 International Symposium on Pervasive Displays (PerDis)},
-  pages 18:1--18:6. ACM, 2012.
+\newblock In \emph{2012 International Symposium on Pervasive Displays
+  (PerDis)}, pages 18:1--18:6. ACM, 2012.
 
-\bibitem{Nguyen2010}
+\bibitem[Nguyen et~al.(2010)Nguyen, Nguyen, Wilson, Nguyen, Kim, and
+  Nguyen]{Nguyen2010}
 H.~A. Nguyen, T.~T. Nguyen, G.~Wilson, Jr., A.~T. Nguyen, M.~Kim, and T.~N.
   Nguyen.
 \newblock A graph-based approach to api usage adaptation.
-\newblock In {\em ACM International Conference on Object Oriented Programming
+\newblock In \emph{ACM International Conference on Object Oriented Programming
   Systems Languages and Applications (OOPSLA)}, pages 302--321. ACM, 2010.
 
-\bibitem{Sorensen:2012:ISM:2399016.2399094}
+\bibitem[S{\o}rensen and Kjeldskov(2012)]{Sorensen:2012:ISM:2399016.2399094}
 H.~S{\o}rensen and J.~Kjeldskov.
 \newblock The interaction space of a multi-device, multi-user music experience.
-\newblock In {\em 7th Nordic Conference on Human-Computer Interaction: Making
+\newblock In \emph{7th Nordic Conference on Human-Computer Interaction: Making
   Sense Through Design (NordiCHI)}, pages 504--513. ACM, 2012.
 
-\bibitem{strauchmigrating}
+\bibitem[Strauch et~al.(2013)Strauch, Andrikopoulos, and
+  Bachmann]{strauchmigrating}
 S.~Strauch, V.~Andrikopoulos, and T.~Bachmann.
 \newblock Migrating application data to the cloud using cloud data.
-\newblock In {\em e 3rd International Conference on Cloud Computing and Service
-  Science, (CLOSER)}, pages 36--46. SciTePress, 2013.
+\newblock In \emph{e 3rd International Conference on Cloud Computing and
+  Service Science, (CLOSER)}, pages 36--46. SciTePress, 2013.
 
-\bibitem{su2005slingshot}
+\bibitem[Su and Flinn(2005)]{su2005slingshot}
 Y.-Y. Su and J.~Flinn.
 \newblock Slingshot: deploying stateful services in wireless hotspots.
-\newblock In {\em 3rd international conference on Mobile systems, applications,
-  and services (MobiSys)}, pages 79--92. ACM, 2005.
+\newblock In \emph{3rd international conference on Mobile systems,
+  applications, and services (MobiSys)}, pages 79--92. ACM, 2005.
 
-\bibitem{terry-et-al-SIGOPS95}
+\bibitem[Terry et~al.(1995)Terry, Theimer, Petersen, Demers, Spreitzer, and
+  Hauser]{terry-et-al-SIGOPS95}
 D.~Terry, M.~Theimer, K.~Petersen, A.~Demers, M.~Spreitzer, and C.~Hauser.
 \newblock Managing update conflicts in bayou, a weakly connected replicated
   storage system.
-\newblock {\em SIGOPS Oper. Syst. Rev.}, 29:172--182, December 1995.
+\newblock \emph{SIGOPS Oper. Syst. Rev.}, 29:\penalty0 172--182, December 1995.
+\newblock ISSN 0163-5980.
 
-\bibitem{Tillmann2011TPC20482372048245}
+\bibitem[Tilevich and Smaragdakis(2009)]{Tilevich:2009}
+E.~Tilevich and Y.~Smaragdakis.
+\newblock J-orchestra: Enhancing java programs with distribution capabilities.
+\newblock \emph{ACM Trans. Softw. Eng. Methodol.}, 19\penalty0 (1):\penalty0
+  1:1--1:40, Aug. 2009.
+\newblock ISSN 1049-331X.
+
+\bibitem[Tillmann et~al.(2011)Tillmann, Moskal, de~Halleux, and
+  Fahndrich]{Tillmann2011TPC20482372048245}
 N.~Tillmann, M.~Moskal, J.~de~Halleux, and M.~Fahndrich.
 \newblock Touchdevelop: Programming cloud-connected mobile devices via
   touchscreen.
-\newblock In {\em 10th SIGPLAN Symposium on New Ideas, New Paradigms, and
+\newblock In \emph{10th SIGPLAN Symposium on New Ideas, New Paradigms, and
   Reflections on Programming and Software (ONWARD)}, pages 49--60. ACM, 2011.
+\newblock ISBN 978-1-4503-0941-7.
 
-\bibitem{Wloka:Reentrancer}
+\bibitem[Wloka et~al.(2009{\natexlab{a}})Wloka, Sridharan, and
+  Tip]{Wloka:Reentrancer}
 J.~Wloka, M.~Sridharan, and F.~Tip.
 \newblock Refactoring for reentrancy.
-\newblock In {\em 9th joint meeting of the European Software Engineering
+\newblock In \emph{9th joint meeting of the European Software Engineering
   Conference and the ACM SIGSOFT Symposium on the Foundations of Software
-  Engineering (ESEC/SIGSOFT FSE)}, pages 173--182, 2009.
+  Engineering (ESEC/SIGSOFT FSE)}, pages 173--182, 2009{\natexlab{a}}.
 
-\bibitem{wloka2009refactoring}
+\bibitem[Wloka et~al.(2009{\natexlab{b}})Wloka, Sridharan, and
+  Tip]{wloka2009refactoring}
 J.~Wloka, M.~Sridharan, and F.~Tip.
 \newblock Refactoring for reentrancy.
-\newblock In {\em 7th joint meeting of the European software engineering
+\newblock In \emph{7th joint meeting of the European software engineering
   conference and the ACM SIGSOFT symposium on The foundations of software
-  engineering (ESEC/FSE)}, pages 173--182. ACM, 2009.
+  engineering (ESEC/FSE)}, pages 173--182. ACM, 2009{\natexlab{b}}.
 
-\bibitem{Wolber}
+\bibitem[Wolber(2011)]{Wolber}
 D.~Wolber.
 \newblock App inventor and real-world motivation.
-\newblock In {\em 42Nd ACM Technical Symposium on Computer Science Education
+\newblock In \emph{42Nd ACM Technical Symposium on Computer Science Education
   (SIGCSE)}, pages 601--606. ACM, 2011.
 
-\bibitem{Yuill:multiuserColab}
+\bibitem[Yuill and Rogers(2012)]{Yuill:multiuserColab}
 N.~Yuill and Y.~Rogers.
 \newblock Mechanisms for collaboration: A design and evaluation framework for
   multi-user interfaces.
-\newblock {\em ACM Trans. Comput.-Hum. Interact.}, 19(1):1:1--1:25, May 2012.
+\newblock \emph{ACM Trans. Comput.-Hum. Interact.}, 19\penalty0 (1):\penalty0
+  1:1--1:25, May 2012.
+\newblock ISSN 1073-0516.
 
 \end{thebibliography}
-
 
 
 \end{document}
