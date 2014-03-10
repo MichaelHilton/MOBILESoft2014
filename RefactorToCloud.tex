@@ -337,7 +337,9 @@ types into the corresponding cloud-enabled primitive type (e.g., from \code{Numb
 Second, we refactored local \code{Data Table} into \code{Cloud Data Table}. Third, we refactored local \code{Collection}
 into \code{Cloud Data Table}.
 
-When carrying out the refactorings, we noticed that steps 1 and 4 are hard to automate as they require understanding the original program and the desired end-user experience. Steps 2 and 3 have different degrees of complexity. 
+When carrying out the refactorings, we noticed that steps 1 and 4 are hard to automate as they require understanding the original program and the desired end-user experience. 
+\CR{It took the second author an average of 6 minutes to perform steps 1 and 4 for each app in the formative study.}
+Steps 2 and 3 have different degrees of complexity. 
 The first two kinds of refactorings  are trivial because there is a perfect match between the local data and the cloud data type, so the change is as simple as prepending the keyword \code{Cloud} to the variable declaration. 
 
 The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table}, as shown in Figure~\ref{fig:ncToCDT}.
