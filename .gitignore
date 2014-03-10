@@ -16,3 +16,5 @@ RefactorToCloud.bbl
 RefactorToCloud.pdf
 
 *.out
+
+*.log
