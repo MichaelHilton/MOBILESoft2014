@@ -498,9 +498,10 @@
 %                       Bibliography
 %                       ------------
 
+\renewcommand{\refname}{10.~~~~REFERENCES}%
 
 \renewenvironment{thebibliography}[1]
-     {\section*{\refname
+     {\section{\refname
         \@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}}%
       \list{\@biblabel{\@arabic\c@enumiv}}%
            {\settowidth\labelwidth{\@biblabel{#1}}%
