@@ -326,7 +326,7 @@ In step 3 we replaced all the uses of the local \code{MilageRecord} with uses of
 In step 4 we initialized  \code{MileageRecordTable}. 
 Since the data is now persistent on the cloud, we need to change the initialization code from 
 eager to lazy in order to avoid erasing all the data every time the app is launched.  
-In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session''). \FB{These changes required adding 3 LOC and updating 2 LOC.}
+In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session''). \FB{These changes required adding 3 LOC and updating 2 LOC.} 
 
 %STEP ONE AND 4 REQUIRE DOMAIN KNOWLEDGE
 Notice that steps 1 and 4 require domain knowledge in order to choose and refine the proper end-user experience.  
