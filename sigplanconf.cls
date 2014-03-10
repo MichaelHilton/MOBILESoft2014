@@ -491,7 +491,7 @@
 
 
 \renewenvironment{abstract}{%
-  \section*{Abstract}%
+  \section*{ABSTRACT}%
   \normalsize}{%
   }
 
@@ -607,20 +607,12 @@
   \noindent \textsl{\@conferencename}, \quad \@conferenceinfo. \par
   \noindent Copyright \copyright\ \@copyrightyear\ ACM \@copyrightdata
     \dots \@reprintprice.\par
-  \noindent http://dx.doi.org/10.1145/\@doi }
+  \noindent  }
 
 \newcommand{\permission}[1]{%
   \gdef \@permission {#1}}
 
-\permission{%
-  Permission to make digital or hard copies of all or part of this work for
-  personal or classroom use is granted without fee provided that copies are
-  not made or distributed for profit or commercial advantage and that copies
-  bear this notice and the full citation on the first page. Copyrights for
-  components of this work owned by others than ACM must be honored.
-  Abstracting with credit is permitted. To copy otherwise, or republish, to
-  post on servers or to redistribute to lists, requires prior specific
-  permission and/or a fee. Request permissions from permissions@acm.org.}
+\permission{Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page.  To copy otherwise, to republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee.}
 
 % These are two new rights management and bibstrip text blocks.
 
