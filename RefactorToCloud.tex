@@ -293,8 +293,8 @@ We selected \numFormative apps from the \TD script bazaar for our formative stud
 We chose representative apps from various domains that cover different features and use cases of \TD.  We also looked for apps where we could envision multi-user functionality.
 We then converted these apps from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
 
-The first app we selected was \MT, which is publicly available with the script id of
-\CR{~\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:zenx:overview}}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. \CR{We began by adding some functionality to the original app. We then converted} Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
+The first app we selected was \MT, which is publicly available 
+\CR{(the script id can be found on~\cite{ourwebpage})}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. \CR{We began by adding some functionality to the original app. We then converted} Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
 
 Business Manager+\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:chgv:overview}} is an app to track business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with each other.
 
@@ -567,7 +567,10 @@ Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{a
 \subsubsection{Tool Limitations}
 The current version of \tool does not support the injected function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work. 
 
-\CR{\tool was only implemented for \NC{}s.  In order to add other types of collections, new injected functions would need to be written in order to provide additional functionality.  For example, in order to implement the \code{String Collection}, the join api call which concatenates the entire collection into one string would need to be implemented.}
+\CR{So far, we implemented \tool only for \NC{}s.  In order to add other types of collections, we would need to write new injected functions in order to provide additional functionality.  
+For example, in order to support the \code{String Collection}, we would need to write an equivalent
+injected function 
+for the \code{join} API method which concatenates the entire collection into one string.}
 
 \subsubsection{Implementation}
 \FB{\tool refactors \TD scripts \emph{in place}.  First, \tool retrieves the source of the target app as an  Abstract Syntax Tree (AST) stored in JSON format from the \TD script bazaar.  It then transforms the AST as needed.  Once all the transformations are performed, \tool completes the refactoring by saving the new AST for the target app.}
@@ -608,7 +611,8 @@ App Installations & 5 & 125 & 18 & 635 \\
 \end{table}%
  
 
-Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus. \CR{ For each API call we report the total number of call sites in our corpus, as well as the percentage of the total number of \NC API calls each individual call represents.}
+Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus. \CR{ For each API method we report (i) the total number of call sites in our corpus, 
+and (ii) the percentage of call sites among the number of \NC API calls.}
 
 
 \begin{table}[htdp]
@@ -643,7 +647,9 @@ Random & 1 & 0.04 \\
 \end{center}
 \end{table}%
 
-We ran the refactoring in batch mode. \CR{Steps 1 and 4 of our process require domain knowledge.  For Step 1, we refactored all the \NC{}s in our corpus instead of trying to identify which data should be moved to the cloud.  For Step 4, we maintained the current data initialization, as changing that would involve making design decisions for each app.  As far as the data session, we used the default session provided by \TD, the ``just me session.'' 
+We ran the refactoring in batch mode. \CR{Steps 1 and 4 of our process require domain knowledge.  For Step 1, we refactored all the \NC{}s in our corpus instead of trying to identify which data makes
+sense to be moved to the cloud.  
+For Step 4, we used the same policy that the app currently uses for data initialization, as changing that would involve making design decisions for each app.  As far as the data session, we used the default session provided by \TD, the ``just me session.'' 
    }
 
 In order to determine the applicability of \tool, we report the number of scripts that our tool was able to refactor successfully, as well as the number of each kind of transformations performed inside a refactoring.
@@ -770,11 +776,14 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 
 \CR{There are two reasons why \TD is well suited for refactoring to the cloud.  The first is that cloud types in \TD have well-defined but constrained semantics which includes the eventual consistency model as described in section~\ref{sec:ConsistencyModel}.  The second is that \TD does not allow \NC data objects to be aliased. }
 
-\CR{In order to generalize our results beyond \TD, one must deal with the problem of aliasing.  This is a problem when the object that is being moved 
-Consider a local object that you wish to convert into a cloud data type.  If there are aliases to the local reference, any subsequent call to that alias will cause the application to crash.  The reason this is not a concern for our tool is that \TD only allows cloud data types to be global objects, therefore ensuring there are no aliases to the object that was moved to the cloud.}
-\CR{Also, concerns must be taken to deal with local objects accessing native libraries directly.  This can also be a problem one objects are moved to the cloud.}
+\CR{In order to generalize our results beyond \TD, one must deal with the problem of aliasing.  This is a problem when the object that is being moved is referenced by another alias in the code.
+Consider a local object that one wishes to convert into a cloud data type.  
+If there are aliases to the local reference, any subsequent method calls via that alias will cause the application to crash, unless one finds all aliases and changes their data type as well. 
+The reason this is not a concern for our tool is that \TD only allows cloud data types to be global objects, therefore ensuring there are no aliases to the object that was moved to the cloud.}
+%\CR{Also, concerns must be taken to deal with local objects accessing native libraries directly.  This can also be a problem once objects are moved to the cloud.}
 
-\CR{In order to deal with these issues in a Java, researchers have been forced to implement distributed shared memory via a combination of code transformation/generation. ~\cite{Tilevich:2009}}
+\CR{In order to deal with these issues in environments that allow aliases (e.g., in Java), 
+researchers~\cite{Tilevich:2009} have been forced to implement distributed shared memory via a combination of code transformation/generation. }
 
 
 
