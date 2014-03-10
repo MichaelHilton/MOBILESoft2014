@@ -20,7 +20,7 @@
 %-----------------------------------------------------------------------------
 
 
-\documentclass[preprint]{sigplanconf}
+\documentclass[article]{sigplanconf}
 
 % The following \documentclass options may be useful:
 
@@ -33,6 +33,13 @@
 %\usepackage{hyperref}
 %\pagenumbering{arabic}
 
+\usepackage{flushend}
+
+
+ \clubpenalty = 10000
+          \widowpenalty = 10000
+          \displaywidowpenalty = 10000
+
 \begin{document}
 
 \thispagestyle{empty}
@@ -43,10 +50,15 @@
 \setlength{\pdfpageheight}{\paperheight}
 \setlength{\pdfpagewidth}{\paperwidth}
 
-\conferenceinfo{CONF 'yy}{Month d--d, 20yy, City, ST, Country} 
-\copyrightyear{20yy} 
-\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} 
-\doi{nnnnnnn.nnnnnnn}
+%\conferenceinfo{MOBILESoft}{'14, June 2–3, 2014, Hyderabad, India}
+%\CopyrightYear{14}
+%\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} 
+%\doi{nnnnnnn.nnnnnnn}
+
+\conferenceinfo{MOBILESoft'14}{June 2-3, 2014, Hyderabad, India}
+\CopyrightYear{14}
+\crdata{/14/06}
+\doi{}
 
 % Uncomment one of the following two, if you are not going for the 
 % traditional copyright transfer agreement.
@@ -64,29 +76,28 @@
 \title{Refactoring \emph{Local} to \emph{Cloud} Data Types for Mobile Apps}
 
 \authorinfo{Michael Hilton}
-           {Oregon State University}
+           {Oregon State University, USA}
            {hiltonm@eecs.oregonstate.edu}
 \authorinfo{Arpit Christi }
-           {Oregon State University}
+           {Oregon State University, USA}
            {christia@eecs.oregonstate.edu}
 \authorinfo{Danny Dig}
-           {Oregon State University}
+           {Oregon State University, USA}
            {digd@eecs.oregonstate.edu}
 \authorinfo{Micha{\l} Moskal}
-           {Microsoft Research}
+           {Microsoft Research, USA}
            {Michal.Moskal@microsoft.com}
 \authorinfo{Sebastian Burckhardt}
-           {Microsoft Research}
+           {Microsoft Research, USA}
            {sburckha@microsoft.com}
 \authorinfo{Nikolai Tillmann}
-           {Microsoft Research}
+           {Microsoft Research, USA}
            {nikolait@microsoft.com}
 \maketitle
 
-
 \begin{abstract}
 Mobile cloud computing can greatly enrich the capabilities of today's pervasive mobile devices. 
-Storing data types on the cloud can enable features such as automatic backup, seamless transition between multiple devices, 
+Storing data on the cloud can enable features such as automatic backup, seamless transition between multiple devices, 
 and multiuser support for existing apps. 
 However,  the process of converting local into cloud data types requires high expertise, is difficult, and time-consuming. 
 Refactoring techniques can greatly simplify this process.
@@ -97,7 +108,17 @@ Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \nu
 \end{abstract}
 
 
-\section{Introduction}
+% A category with the (minimum) three required fields
+\category{D.2.7}{\CR{Software Engineering}}{\CR{Distribution, Maintenance, and Enhancement}}
+
+\terms{\CR{Refactoring}}
+
+\keywords{\CR{Refactoring, Cloud Computing, Empirical Study}}
+
+
+
+
+\section{INTRODUCTION}
 
 % mobile is everywhere. mobile cloud computing can make it better. 
 %Mobile apps have gained significant popularity in recent years. According to Gartner~\cite{Gartner}, by 2016 more than 300 billion apps will be downloaded annually. The cloud has amplified the utility of mobile devices by providing additional computing power and storage, which translate into improved: battery life~\cite{Chen:2012:CCO:2310096.2310228}, security~\cite{Oberheide:2008:VIS:1622103.1629656}, bandwidth utilization~\cite{Vemulapalli:2013:PSD:2492348.2492353}, and location awareness~\cite{kansal2013latency}. 
@@ -136,14 +157,15 @@ computing through the use of refactoring techniques.
 
 \item{\textbf{Tool:}} We have designed and implemented the analysis and transformation algorithms to refactor \emph{local} data types into \emph{cloud} data types on the \TD platform. 
 
-\item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely \emph{applicable}: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took \numAVGSecs seconds for each performed refactoring. Third, \tool is  
-\emph{accurate}: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  All the data and the tool are publicly available at: \\
-\url{http://web.engr.oregonstate.edu/~hiltonm/Cloudifier}
+\item{\textbf{Evaluation:}} We have evaluated our tool, \tool, on a corpus of \numScripts mobile apps, resulting in \numTransformations transformations. The results show (i) that the refactoring is widely applicable: \percentRefactored of the candidate local \code{Collection}s were successfully refactored into \code{Cloud Data Table}. Second, \tool saves human effort: on average it took \numAVGSecs seconds for each performed refactoring. Third, \tool is  
+accurate: 100\% of the applied transformations are correct, and the tool correctly identified 95\% of all necessary transformations.  The tool and all the data are publicly available at: \\
+\CR{\url{http://cope.eecs.oregonstate.edu/cloudifier}}
+
 \end{itemize}
 
 
-\section{Background on TouchDevelop and Cloud Data Types}
-
+%\section{Background on TouchDevelop and Cloud Data Types}
+\section{BACKGROUND ON TOUCHDEVELOP AND CLOUD DATA TYPES}
 %what is touchdevelop
 \TD is a programming language and integrated development environment (IDE) that
 allows the development of mobile applications (called \emph{scripts}) on any
@@ -201,6 +223,7 @@ cloud types. Roughly, this amounts to making classes correspond to tables,
 objects to rows, and fields to columns. 
 
 \subsection{Consistency Model}
+\label{sec:ConsistencyModel}
 
 As multiple clients can concurrently update the same data, even during offline operation, conflicts may need to be resolved after-the-fact, in a manner that guarantees eventual consistency. To give the reader a general idea, we now briefly describe the mechanism used in \TD, which is a simple, specialized form of eventually consistent transactions \cite{burckhardt2012ect} and guarantees causal eventual consistency. 
 
@@ -262,7 +285,7 @@ We thus reuse the script distribution and rating mechanisms for plug-ins.
 After plug-in execution, the user may be shown the diff with the changes performed
 by the plugin and asked to confirm them.
 
-\section{Formative Study}
+\section{FORMATIVE STUDY}
 \label{sec:Formative}
 
 %describe the applications
@@ -270,15 +293,20 @@ We selected \numFormative apps from the \TD script bazaar for our formative stud
 We chose representative apps from various domains that cover different features and use cases of \TD.  We also looked for apps where we could envision multi-user functionality.
 We then converted these apps from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
 
-The first app we selected was \MT, which is publicly available with the script id of~\cite{MileageTracker}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. We converted Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
+The first app we selected was \MT, which is publicly available with the script id of
+\CR{~\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:zenx:overview}}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. \CR{We began by adding some functionality to the original app. We then converted} Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
 
-Business Manager+~\cite{BusinessManager} is an app to track business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with each other.
+Business Manager+\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:chgv:overview}} is an app to track business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with each other.
 
-CliffHangers~\cite{CliffHangers} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they loose the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
+CliffHangers\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:ylon:overview}} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they \CR{lose} the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
 
-MyAssignment~\cite{MyAssignments} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  We converted into a multi-user app so that multiple students can collaborate on class assignments.
+MyAssignment\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:xkhza:overview}} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  \CR{We converted it into} a multi-user app so that multiple students can collaborate on class assignments.
 
-After converting these apps, we ran them with multiple users on three devices to verify that in fact the apps work correctly. They are all publicly available~\cite{MileageTrackerFinal,BusinessManagerFinal,CliffHangersFinal,MyAssignmentsFinal} .
+After converting these apps, we ran them with multiple users on three devices to verify that in fact the apps work correctly. They are all publicly available
+\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:eyhca:overview}}
+\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:gvkea:overview}}
+\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:xgrva:overview}}
+\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:xfrm:overview}}.
 
 %describe the process with the four steps
 Based on the lessons we learned from converting these \numFormative apps, we designed a process to convert  a single to a multi-user app.  Our process consists of four steps:   
@@ -307,7 +335,7 @@ In step 3 we replaced all the uses of the local \code{MilageRecord} with uses of
 In step 4 we initialized  \code{MileageRecordTable}. 
 Since the data is now persistent on the cloud, we need to change the initialization code from 
 eager to lazy in order to avoid erasing all the data every time the app is launched.  
-In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session''). \FB{These changes required adding 3 LOC and updating 2 LOC.}
+In addition, we need to make a choice between using the cloud (i) as a backup for the data for one user across multiple devices(``just me session'') or (ii) to enable collaboration between multiple users across multiple devices (``everyone session''). \FB{These changes required adding 3 LOC and updating 2 LOC.} 
 
 %STEP ONE AND 4 REQUIRE DOMAIN KNOWLEDGE
 Notice that steps 1 and 4 require domain knowledge in order to choose and refine the proper end-user experience.  
@@ -318,7 +346,9 @@ types into the corresponding cloud-enabled primitive type (e.g., from \code{Numb
 Second, we refactored local \code{Data Table} into \code{Cloud Data Table}. Third, we refactored local \code{Collection}
 into \code{Cloud Data Table}.
 
-When carrying out the refactorings, we noticed that steps 1 and 4 are hard to automate as they require understanding the original program and the desired end-user experience. Steps 2 and 3 have different degrees of complexity. 
+When carrying out the refactorings, we noticed that steps 1 and 4 are hard to automate as they require understanding the original program and the desired end-user experience. 
+\CR{It took the second author an average of 6 minutes to perform steps 1 and 4 for each app in the formative study.}
+Steps 2 and 3 have different degrees of complexity. 
 The first two kinds of refactorings  are trivial because there is a perfect match between the local data and the cloud data type, so the change is as simple as prepending the keyword \code{Cloud} to the variable declaration. 
 
 The third kind of refactoring is non-trivial: it requires changing the program from using a flat, one-dimensional \code{Collection} to a two-dimensional \code{Cloud Data Table}, as shown in Figure~\ref{fig:ncToCDT}.
@@ -427,7 +457,7 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 
 
 
-\section{Automated Refactoring}
+\section{AUTOMATED REFACTORING}
 \label{sec:Refactoring}
 This section presents our automated refactoring which converts from a local \NC{} to a \code{Cloud Data Table}. 
 \FB{This refactoring is composed of several transformations.  The transformations are the individual changes that \tool must apply to the program in order to accomplish this refactoring. }
@@ -537,11 +567,13 @@ Now the API call in \code{DisplayAvgMileage} is transformed to call this \code{a
 \subsubsection{Tool Limitations}
 The current version of \tool does not support the injected function transformation needed to transform the API call \code{add many}.  We believe that this function could be implemented but it remains as future work. 
 
+\CR{\tool was only implemented for \NC{}s.  In order to add other types of collections, new injected functions would need to be written in order to provide additional functionality.  For example, in order to implement the \code{String Collection}, the join api call which concatenates the entire collection into one string would need to be implemented.}
+
 \subsubsection{Implementation}
 \FB{\tool refactors \TD scripts \emph{in place}.  First, \tool retrieves the source of the target app as an  Abstract Syntax Tree (AST) stored in JSON format from the \TD script bazaar.  It then transforms the AST as needed.  Once all the transformations are performed, \tool completes the refactoring by saving the new AST for the target app.}
 
 
-\section{Evaluation}
+\section{EVALUATION}
 \label{sec:evaluation}
 To determine if \tool is useful we ask the following research questions.\\
 Q1:  \textbf{APPLICABILITY}:  How applicable is the refactoring?\\
@@ -576,7 +608,7 @@ App Installations & 5 & 125 & 18 & 635 \\
 \end{table}%
  
 
-Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus.  For each API we report the total number of call sites in our corpus, as well as the percentage of call sites for the total API calls for \NC.
+Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpus. \CR{ For each API call we report the total number of call sites in our corpus, as well as the percentage of the total number of \NC API calls each individual call represents.}
 
 
 \begin{table}[htdp]
@@ -584,7 +616,8 @@ Table~\ref{table:UsageOfAPIS} shows the total usage of the \NC APIs in our corpu
 \begin{tabular}{lclclc|}
 \\
 \hline
-API Name & \# Call Sites & \% of total API Call Sites \\
+API Name & \# Call Sites & \% of total \NC  \\
+ & & API Call Sites \\
 \hline
 At & 1010 & 39.25 \\
 Set At & 632 & 24.56 \\
@@ -610,7 +643,8 @@ Random & 1 & 0.04 \\
 \end{center}
 \end{table}%
 
-We ran the refactoring in batch mode. From each script in our corpus, our tool randomly selects one \NC{} as the target for refactoring. 
+We ran the refactoring in batch mode. \CR{Steps 1 and 4 of our process require domain knowledge.  For Step 1, we refactored all the \NC{}s in our corpus instead of trying to identify which data should be moved to the cloud.  For Step 4, we maintained the current data initialization, as changing that would involve making design decisions for each app.  As far as the data session, we used the default session provided by \TD, the ``just me session.'' 
+   }
 
 In order to determine the applicability of \tool, we report the number of scripts that our tool was able to refactor successfully, as well as the number of each kind of transformations performed inside a refactoring.
 
@@ -620,10 +654,10 @@ In order to validate the accuracy of \tool, we randomly chose \numManual scripts
 
 In addition to running these \numManual scripts we also carefully inspected the refactored code. We counted transformations that \tool
 (i) applied correctly, (ii) applied incorrectly, and (iii) missed. 
-\FB{The first two authors manually refactored \numManual scripts, and created a set of transformations for these refactorings.  We define this set of transformations that an expert would apply as our \emph{golden standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the golden standard to determine if that transformation had been applied correctly. 
+\FB{The first two authors manually refactored \CR{these same \numManual scripts}, and created a set of transformations for these refactorings.  We define this set of transformations that an expert would apply as our \emph{gold standard}.  For each transformation that \tool applied, we manually compared the result of the automated transformation with the gold standard to determine if that transformation had been applied correctly. 
 We define a {\it TruePositive} as a transformation that \tool identified and applied correctly.   
-We define {\it FalsePositive} as a transformation that \tool applies to the code, but it is not part of the golden standard. In other words, \tool transformed code that should not have been transformed.
-We define a {\it FalseNegative} as a transformation that \tool did not apply, but it is in the golden standard. In other words, \tool missed applying a needed transformation.
+We define {\it FalsePositive} as a transformation that \tool applies to the code, but it is not part of the gold standard. In other words, \tool transformed code that should not have been transformed.
+We define a {\it FalseNegative} as a transformation that \tool did not apply, but it is in the gold standard. In other words, \tool missed applying a needed transformation.
 }
  
  Using these metrics we calculate precision and recall for \tool, using the standard definitions:
@@ -710,7 +744,7 @@ By manually checking refactorings applied in \numManual scripts, we found \tool'
 \textbf{Construct Validity:}  Do our metrics indeed measure the advantages of using \tool? Can we measure development effort by simply counting the time and number of transformations per refactoring? Ideally, we would have performed an experiment with real \TD developers and observe them while refactoring. However, given the cutting edge nature of the Cloud Data Types, we could not find such developers. Thus, we chose to use indirect metrics, as it is commonly done in the literature~\cite{Gyori:Lambdaficator,Wloka:Reentrancer}. 
 Second, are we sure that the performed refactorings are accurate? Ideally, we should have run tests before and after each refactoring. However, very few scripts in \TD have any tests at all. In order to mitigate this we manually inspected a random set of \numManual apps and exercised their functionality to determine that the runtime behavior did not change.
 
-\textbf{Internal Validity:}  How did we mitigate bias during manual inspection? We randomly sampled from the set of our corpus, until we had sampled from a variety of app domains. Also, we carefully constructed the set of transformations in the golden standard \emph{before} we applied \tool. The authors are all experts on the \TD platform.
+\textbf{Internal Validity:}  How did we mitigate bias during manual inspection? We randomly sampled from the set of our corpus, until we had sampled from a variety of app domains. Also, we carefully constructed the set of transformations in the gold standard \emph{before} we applied \tool. The authors are all experts on the \TD platform.
 
 Also, the corpus that we used in the evaluation predates the introduction of Cloud Data Types, and thus the developers were unaware of our later study and could not bias their code to help \tool. 
 
@@ -718,12 +752,33 @@ Also, the corpus that we used in the evaluation predates the introduction of Clo
 \FB{Currently there is no widely accepted standard for cloud data types.  In order for our results to generalize, cloud storage providers will first need to agree on Cloud Data Storage standards.}
 
 \textbf{Reliability:} Is our evaluation reliable? The apps that we used to evaluate our tool are all available on the \TD bazaar, and \tool is published on the \TD website. All these URLs are available on our webpage: \\
-\url{http://web.engr.oregonstate.edu/~hiltonm/Cloudifier}
+\CR{\url{http://cope.eecs.oregonstate.edu/cloudifier}}
+
+
+\section{DISCUSSION}
+\label{sec:discussion}
+
+%This review was written by Eli Tilevich (tilevich@cs.vt.edu). I've deliberately unblinded my review, as this work is closely related to my recent research on cloud refactoring. Having studied a general version of this problem for many years, I believe that this paper represents an important evolutionary step in enabling centralized programs with distributed execution capabilities. This work is well motivated, executed, and evaluated. I recommend that it be accepted for presentation.
+%
+%What is missing from the paper is a discussion section that would put this work into perspective. What I find most interesting about Cloudifyer is that this is the first successful example of an automated distribution approach that works by replacing types. Several similar prior approaches in managed languages, such as Java and C#, have failed to achieve this objective. Specifically, converting regular interfaces to Remote interfaces in Java RMI; and marking regular methods as [Remote] in C# Remoting. There are two reasons why Cloudifyer succeeds where the prior approaches failed. First, the cloud types in touchdevelop have a well-defined but constrained semantics that includes a sophisticated built-in eventual consistency mechanism. Second, the touchdevelop language lacks the features that make automated distribution such a hard problem. While the first reason is well-explained in Section 2.1, the second one needs to be explained further. 
+%
+%What makes automated distribution fiendishly hard is the possibility of aliasing. Say you have a local reference that you want to convert into a remote reference by changing its type. If there are other aliases to the local reference, which can be used to access the object directly after the distribution took place, the application will crash. Another very hard problem is the possibility of local objects accessing native libraries directly (e.g., using Java JNI). If these objects are moved to the cloud, the distributed application will also crash. There is a whole other set of other difficulties, including the differences in parameter passing semantics in local and distributed methods and different threading/synchronization semantics between local and distributed executions. To address these difficulties in J-Orchestra, I ended up having to implement a distributed shared memory via a combination of code transformation/generation. It seems that because the semantics of the tou
+%chdevelop language is constrained, you are able to make safe assumptions that enable automated distribution based on replacing types. It would be informative to discuss how the design of touchdevelop makes it possible to make these assumptions.
+%
+%Finally, Cloudifyer is an important first step in cloud-enabling touchdevelop applications. I believe that touchdevelop can enable even a greater degree of automation of this task, without for example the user having to identify the specific types to refactor at the source code level. For example, the user could select a desired specific synchronization semantics visually, with a tool automatically generating the needed transformations. In other words, for general-purpose, managed languages such as Java, automated approaches with the programmer involved (e.g., as in my own J-Orchestra system) is the only viable choice. For special-purpose languages such as touchdevelop, it should be possible to infer and perform many refactoring transformations without exposing the end-user to any implementation details.
+
+
+\CR{There are two reasons why \TD is well suited for refactoring to the cloud.  The first is that cloud types in \TD have well-defined but constrained semantics which includes the eventual consistency model as described in section~\ref{sec:ConsistencyModel}.  The second is that \TD does not allow \NC data objects to be aliased. }
+
+\CR{In order to generalize our results beyond \TD, one must deal with the problem of aliasing.  This is a problem when the object that is being moved 
+Consider a local object that you wish to convert into a cloud data type.  If there are aliases to the local reference, any subsequent call to that alias will cause the application to crash.  The reason this is not a concern for our tool is that \TD only allows cloud data types to be global objects, therefore ensuring there are no aliases to the object that was moved to the cloud.}
+\CR{Also, concerns must be taken to deal with local objects accessing native libraries directly.  This can also be a problem one objects are moved to the cloud.}
+
+\CR{In order to deal with these issues in a Java, researchers have been forced to implement distributed shared memory via a combination of code transformation/generation. ~\cite{Tilevich:2009}}
 
 
 
-
-\section{Related Work}
+\section{RELATED WORK}
 \label{sec:relatedWork}
 
 We group the related work in the following categories: (i) cloud-related refactorings, (ii) multi-user apps, and (iii) tools for the end-user development community. \\
@@ -765,7 +820,7 @@ Our recent work~\cite{badame2012refactoring} provides refactoring tools for user
 However, our current paper is the first paper to engage the mobile end-user in a refactoring workflow.
 
 
-\section{Conclusion}
+\section{CONCLUSION}
 \label{sec:conclusions}
 Mobile cloud computing can be harnessed to enable rich access to data. 
 In this paper we presented a formative study to convert \numFormative apps to use the \TD cloud data types. 
@@ -774,15 +829,261 @@ Our empirical evaluation on \numScripts real apps, shows that the tool is applic
 Using our refactoring tool in combination with a well designed, powerful end-user programming platform (\TD) can enable even novice programmers to take advantage of the power of the cloud.
 
 
+\section{ACKNOWLEDGEMENTS}
+\CR{We would like to thank Caius Brindescu, Mihai Codoban, Sergii Shmarkatiuk, Alexandru Gyori, Semih Okur, Yu Lin, Cosmin Radoi, Eli Tilevich, and the anonymous reviewers for feedback on earlier drafts of this paper. This research is partly funded through NSF CCF-1213091 and CCF-1219027 grants, a SEIF award from Microsoft, and a gift grant from Intel.}
+
+
 %suprising. 
 
 % We recommend abbrvnat bibliography style.
 
 \bibliographystyle{abbrvnat}
 
-% The bibliography should be embedded for final submission.
+\begin{thebibliography}{10}
 
-\bibliography{refs}
+% The bibliography should be embedded for final submission.
+\bibitem[Badame and Dig(2012)]{badame2012refactoring}
+S.~Badame and D.~Dig.
+\newblock Refactoring meets spreadsheet formulas.
+\newblock In \emph{28th IEEE International Conference on Software Maintenance
+  (ICSM)}, pages 399--409, 2012.
+
+\bibitem[Balaban et~al.(2005)Balaban, Tip, and Fuhrer]{BalabanTF05}
+I.~Balaban, F.~Tip, and R.~M. Fuhrer.
+\newblock Refactoring support for class library migration.
+\newblock In \emph{ACM International Conference on Object Oriented Programming
+  Systems Languages and Applications (OOPSLA)}, pages 265--279, 2005.
+
+\bibitem[Brewer(2000)]{cap-brewer}
+E.~A. Brewer.
+\newblock Towards robust distributed systems (abstract).
+\newblock In \emph{19th ACM SIGACT-SIGOPS Symposium on Principles of
+  Distributed Computing (PODC)}, pages 7--, 2000.
+
+\bibitem[Burckhardt et~al.(2012{\natexlab{a}})Burckhardt, F\"ahndrich, Leijen,
+  and Sagiv]{burckhardt2012ect}
+S.~Burckhardt, M.~F\"ahndrich, D.~Leijen, and M.~Sagiv.
+\newblock {E}ventually {C}onsistent {T}ransactions.
+\newblock In \emph{European Symposium on Programming (ESOP), (extended version
+  available as Microsoft Tech Report MSR-TR-2011-117), \textrm{LNCS}}, volume
+  7211, pages 64--83, 2012{\natexlab{a}}.
+
+\bibitem[Burckhardt et~al.(2012{\natexlab{b}})Burckhardt, F{\"a}hndrich,
+  Leijen, and Wood]{burckhardt2012cloud}
+S.~Burckhardt, M.~F{\"a}hndrich, D.~Leijen, and B.~P. Wood.
+\newblock Cloud types for eventual consistency.
+\newblock In \emph{European Conference on Object-Oriented Programming (ECOOP)},
+  pages 283--307. 2012{\natexlab{b}}.
+
+\bibitem[Chun et~al.(2011)Chun, Ihm, Maniatis, Naik, and
+  Patti]{chun2011clonecloud}
+B.-G. Chun, S.~Ihm, P.~Maniatis, M.~Naik, and A.~Patti.
+\newblock Clonecloud: elastic execution between mobile device and cloud.
+\newblock In \emph{6th conference on Computer systems (EuroSys)}, pages
+  301--314. ACM, 2011.
+
+\bibitem[Cohn(2008)]{cohn2008citizen}
+J.~P. Cohn.
+\newblock Citizen science: Can volunteers do real research?
+\newblock \emph{BioScience}, 58\penalty0 (3):\penalty0 192--197, 2008.
+
+\bibitem[Cooper(2010)]{cooper2010design}
+S.~Cooper.
+\newblock The design of alice.
+\newblock \emph{ACM Transactions on Computing Education (TOCE)}, 10\penalty0
+  (4):\penalty0 15, 2010.
+
+\bibitem[Cuervo et~al.(2010)Cuervo, Balasubramanian, Cho, Wolman, Saroiu,
+  Chandra, and Bahl]{cuervo2010maui}
+E.~Cuervo, A.~Balasubramanian, D.-k. Cho, A.~Wolman, S.~Saroiu, R.~Chandra, and
+  P.~Bahl.
+\newblock Maui: making smartphones last longer with code offload.
+\newblock In \emph{8th international conference on Mobile systems,
+  applications, and services (MobiSys)}, pages 49--62. ACM, 2010.
+
+\bibitem[Dig et~al.(2009)Dig, Marrero, and Ernst]{dig2009refactoring}
+D.~Dig, J.~Marrero, and M.~D. Ernst.
+\newblock Refactoring sequential java code for concurrency via concurrent
+  libraries.
+\newblock In \emph{31st International Conference on Software Engineering
+  (ICSE)}, pages 397--407. IEEE Computer Society, 2009.
+
+\bibitem[Flinn et~al.(2002)Flinn, Park, and Satyanarayanan]{flinn2002balancing}
+J.~Flinn, S.~Park, and M.~Satyanarayanan.
+\newblock Balancing performance, energy, and quality in pervasive computing.
+\newblock In \emph{22nd International Conference on Distributed Computing
+  Systems (ICDCS)}, pages 217--226. IEEE, 2002.
+
+\bibitem[Forlines et~al.(2006)Forlines, Esenther, Shen, Wigdor, and
+  Ryall]{Forlines:geospatial}
+C.~Forlines, A.~Esenther, C.~Shen, D.~Wigdor, and K.~Ryall.
+\newblock Multi-user, multi-display interaction with a single-user,
+  single-display geospatial application.
+\newblock In \emph{19th Annual ACM Symposium on User Interface Software and
+  Technology (UIST)}, pages 273--276. ACM, 2006.
+
+\bibitem[Gilbert and Lynch(2002)]{gilbert-lynch-SIGACT02}
+S.~Gilbert and N.~Lynch.
+\newblock Brewer's conjecture and the feasibility of consistent, available,
+  partition-tolerant web services.
+\newblock \emph{SIGACT News}, 33:\penalty0 51--59, June 2002.
+
+\bibitem[Gyori et~al.(2013)Gyori, Franklin, Dig, and
+  Lahoda]{Gyori:Lambdaficator}
+A.~Gyori, L.~Franklin, D.~Dig, and J.~Lahoda.
+\newblock Crossing the gap from imperative to functional programming through
+  refactoring.
+\newblock In \emph{9th joint meeting of the European software engineering
+  conference and the ACM SIGSOFT symposium on The foundations of software
+  engineering (ESEC/FSE)}, pages 543--553, 2013.
+
+\bibitem[Khan et~al.()Khan, Othman, Madani, and Khan]{khan2013survey}
+A.~Khan, M.~Othman, S.~Madani, and S.~Khan.
+\newblock A survey of mobile cloud computing application models.
+
+\bibitem[K{\"o}lling(2010)]{kolling2010greenfoot}
+M.~K{\"o}lling.
+\newblock The greenfoot programming environment.
+\newblock \emph{ACM Transactions on Computing Education (TOCE)}, 10\penalty0
+  (4):\penalty0 14, 2010.
+
+\bibitem[Kwon and Tilevich(2012)]{kwon2012energy}
+Y.-W. Kwon and E.~Tilevich.
+\newblock Energy-efficient and fault-tolerant distributed mobile execution.
+\newblock In \emph{IEEE 32nd International Conference on Distributed Computing
+  Systems (ICDCS)}, pages 586--595. IEEE, 2012.
+
+\bibitem[Kwon and Tilevich(2013)]{kwon2013cloud}
+Y.-W. Kwon and E.~Tilevich.
+\newblock Cloud refactoring: automated transitioning to cloud-based services.
+\newblock \emph{Automated Software Engineering}, pages 1--28, 2013.
+
+\bibitem[Leichtenstern and Andr{\'e}(2009)]{Leichtenstern:multiuserGames}
+K.~Leichtenstern and E.~Andr{\'e}.
+\newblock Studying multi-user settings for pervasive games.
+\newblock In \emph{11th International Conference on Human-Computer Interaction
+  with Mobile Devices and Services (MobileHCI)}, pages 25:1--25:10. ACM, 2009.
+
+\bibitem[Lewis et~al.(2009)Lewis, Smith, Bass, and Myers]{lewis2009report}
+G.~Lewis, D.~Smith, L.~Bass, and B.~Myers.
+\newblock Report of the workshop on software engineering foundations for
+  end-user programming.
+\newblock \emph{ACM SIGSOFT Software Engineering Notes}, 34\penalty0
+  (5):\penalty0 51--54, 2009.
+
+\bibitem[Ling et~al.(2010)Ling, Zhou, and Zheng]{ling2010refactoring}
+H.~Ling, X.~Zhou, and Y.~Zheng.
+\newblock Refactoring from object-oriented systems to service-oriented systems:
+  A categorical approach.
+\newblock In \emph{International Conference on Service Sciences (ICSS)}, pages
+  214--218. IEEE, 2010.
+
+\bibitem[Lopez-Gulliver et~al.(2004)Lopez-Gulliver, Tochigi, Sato, Suzuki, and
+  Hagita]{Lopez-Gulliver:imageprocessing}
+R.~Lopez-Gulliver, H.~Tochigi, T.~Sato, M.~Suzuki, and N.~Hagita.
+\newblock Senseweb: Collaborative image classification in a multi-user
+  interaction environment.
+\newblock In \emph{12th Annual ACM International Conference on Multimedia
+  (MM)}, pages 456--459. ACM, 2004.
+
+\bibitem[Maloney et~al.(2010)Maloney, Resnick, Rusk, Silverman, and
+  Eastmond]{maloney2010scratch}
+J.~Maloney, M.~Resnick, N.~Rusk, B.~Silverman, and E.~Eastmond.
+\newblock The scratch programming language and environment.
+\newblock \emph{ACM Transactions on Computing Education (TOCE)}, 10\penalty0
+  (4):\penalty0 16, 2010.
+
+\bibitem[Nacenta et~al.(2012)Nacenta, Jakobsen, Dautriche, Hinrichs, D\"{o}rk,
+  Haber, and Carpendale]{Nacenta:2012:LMM:2307798.2307816}
+M.~A. Nacenta, M.~R. Jakobsen, R.~Dautriche, U.~Hinrichs, M.~D\"{o}rk,
+  J.~Haber, and S.~Carpendale.
+\newblock The lunchtable: A multi-user, multi-display system for information
+  sharing in casual group interactions.
+\newblock In \emph{2012 International Symposium on Pervasive Displays
+  (PerDis)}, pages 18:1--18:6. ACM, 2012.
+
+\bibitem[Nguyen et~al.(2010)Nguyen, Nguyen, Wilson, Nguyen, Kim, and
+  Nguyen]{Nguyen2010}
+H.~A. Nguyen, T.~T. Nguyen, G.~Wilson, Jr., A.~T. Nguyen, M.~Kim, and T.~N.
+  Nguyen.
+\newblock A graph-based approach to api usage adaptation.
+\newblock In \emph{ACM International Conference on Object Oriented Programming
+  Systems Languages and Applications (OOPSLA)}, pages 302--321. ACM, 2010.
+
+\bibitem[S{\o}rensen and Kjeldskov(2012)]{Sorensen:2012:ISM:2399016.2399094}
+H.~S{\o}rensen and J.~Kjeldskov.
+\newblock The interaction space of a multi-device, multi-user music experience.
+\newblock In \emph{7th Nordic Conference on Human-Computer Interaction: Making
+  Sense Through Design (NordiCHI)}, pages 504--513. ACM, 2012.
+
+\bibitem[Strauch et~al.(2013)Strauch, Andrikopoulos, and
+  Bachmann]{strauchmigrating}
+S.~Strauch, V.~Andrikopoulos, and T.~Bachmann.
+\newblock Migrating application data to the cloud using cloud data.
+\newblock In \emph{e 3rd International Conference on Cloud Computing and
+  Service Science, (CLOSER)}, pages 36--46. SciTePress, 2013.
+
+\bibitem[Su and Flinn(2005)]{su2005slingshot}
+Y.-Y. Su and J.~Flinn.
+\newblock Slingshot: deploying stateful services in wireless hotspots.
+\newblock In \emph{3rd international conference on Mobile systems,
+  applications, and services (MobiSys)}, pages 79--92. ACM, 2005.
+
+\bibitem[Terry et~al.(1995)Terry, Theimer, Petersen, Demers, Spreitzer, and
+  Hauser]{terry-et-al-SIGOPS95}
+D.~Terry, M.~Theimer, K.~Petersen, A.~Demers, M.~Spreitzer, and C.~Hauser.
+\newblock Managing update conflicts in bayou, a weakly connected replicated
+  storage system.
+\newblock \emph{SIGOPS Oper. Syst. Rev.}, 29:\penalty0 172--182, December 1995.
+\newblock ISSN 0163-5980.
+
+\bibitem[Tilevich and Smaragdakis(2009)]{Tilevich:2009}
+E.~Tilevich and Y.~Smaragdakis.
+\newblock J-orchestra: Enhancing java programs with distribution capabilities.
+\newblock \emph{ACM Trans. Softw. Eng. Methodol.}, 19\penalty0 (1):\penalty0
+  1:1--1:40, Aug. 2009.
+\newblock ISSN 1049-331X.
+
+\bibitem[Tillmann et~al.(2011)Tillmann, Moskal, de~Halleux, and
+  Fahndrich]{Tillmann2011TPC20482372048245}
+N.~Tillmann, M.~Moskal, J.~de~Halleux, and M.~Fahndrich.
+\newblock Touchdevelop: Programming cloud-connected mobile devices via
+  touchscreen.
+\newblock In \emph{10th SIGPLAN Symposium on New Ideas, New Paradigms, and
+  Reflections on Programming and Software (ONWARD)}, pages 49--60. ACM, 2011.
+\newblock ISBN 978-1-4503-0941-7.
+
+\bibitem[Wloka et~al.(2009{\natexlab{a}})Wloka, Sridharan, and
+  Tip]{Wloka:Reentrancer}
+J.~Wloka, M.~Sridharan, and F.~Tip.
+\newblock Refactoring for reentrancy.
+\newblock In \emph{9th joint meeting of the European Software Engineering
+  Conference and the ACM SIGSOFT Symposium on the Foundations of Software
+  Engineering (ESEC/SIGSOFT FSE)}, pages 173--182, 2009{\natexlab{a}}.
+
+\bibitem[Wloka et~al.(2009{\natexlab{b}})Wloka, Sridharan, and
+  Tip]{wloka2009refactoring}
+J.~Wloka, M.~Sridharan, and F.~Tip.
+\newblock Refactoring for reentrancy.
+\newblock In \emph{7th joint meeting of the European software engineering
+  conference and the ACM SIGSOFT symposium on The foundations of software
+  engineering (ESEC/FSE)}, pages 173--182. ACM, 2009{\natexlab{b}}.
+
+\bibitem[Wolber(2011)]{Wolber}
+D.~Wolber.
+\newblock App inventor and real-world motivation.
+\newblock In \emph{42Nd ACM Technical Symposium on Computer Science Education
+  (SIGCSE)}, pages 601--606. ACM, 2011.
+
+\bibitem[Yuill and Rogers(2012)]{Yuill:multiuserColab}
+N.~Yuill and Y.~Rogers.
+\newblock Mechanisms for collaboration: A design and evaluation framework for
+  multi-user interfaces.
+\newblock \emph{ACM Trans. Comput.-Hum. Interact.}, 19\penalty0 (1):\penalty0
+  1:1--1:25, May 2012.
+\newblock ISSN 1073-0516.
+
+\end{thebibliography}
 
 
 \end{document}

@@ -7,13 +7,19 @@
 \usepackage[hidelinks]{hyperref}
 
 
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{flushend}
+%\usepackage{leading}
+%\leading{10pt}
+
 %\usepackage[english]{babel}
 %\usepackage{threeparttable}
 %\usepackage{amssymb}
 %\setcounter{tocdepth}{3}
 %
 %\usepackage{multirow}
-%\usepackage{url}
+\usepackage{url}
 %\usepackage{array}
 %
 %\usepackage{moreverb}
@@ -44,6 +50,8 @@
 
 %\newcommand{\FB}[1]{\textcolor{blue}{\textbf{FEEDBACK: }#1}}
 \newcommand{\FB}[1]{{#1}}
+
+\newcommand{\CR}[1]{\textcolor{blue}{#1}}
 %
 %\newcommand{\ADD}[1]{\textbf{\textcolor{blue}{#1}}}
 %\newcommand{\REMOVE}[1]{\textbf{\textcolor{red}{#1}}}
@@ -134,33 +142,17 @@
 \newcommand{\code}[1]{\begin{small}\texttt{#1}\end{small}}
 %\newcommand{\URL}[1]{\begin{footnotesize}\url{#1}\end{footnotesize}}
 
-
 \newcommand{\tool}{\begin{small}\textsc{Cloudifyer}\end{small}\xspace}
-
-
 
 %\newcommand{\RQOne}{\textbf{RQ1:} How do developers use asynchronous programming?\xspace}
 %
 %\newcommand{\MisuseOne}{\subParagraph{(1) Fire \& Forget methods:}\xspace}
-
-
-
-
-
-
-
 
 %Are they \textbf{safer} than manual approach?\xspace}
 %Do they improve \textbf{code quality}?\xspace}
 
 %\newcommand{\subParagraph}[1]{\textbf{\emph{#1}}}
 \newcommand{\myParagraph}[1]{\noindent \textbf{#1}}
-
-
-
-
-
-
 
 
 \usepackage{listings}
@@ -219,12 +211,7 @@
 \newcommand{\MyParagraph}[1]{\noindent \textbf{#1}}
 \newenvironment{CodeOut}{\begin{scriptsize}}{\end{scriptsize}}
 
-
-
 \newcommand{\vertbar}{vertBar\xspace}
-
-
-
 
 \newcommand{\NumProjects}{9\xspace}
 \newcommand{\NumSLOCReduced}{2213\xspace}
