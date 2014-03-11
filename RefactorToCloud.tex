@@ -294,19 +294,16 @@ We chose representative apps from various domains that cover different features 
 We then converted these apps from single-user to multi-user apps. In this section we describe the script's behavior, the process to convert them, as well as the changes we needed to make.
 
 The first app we selected was \MT, which is publicly available 
-\CR{(the script id can be found on~\cite{ourwebpage})}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. \CR{We began by adding some functionality to the original app. We then converted} Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
+\CR{(the script id can be found at~\cite{cloudifierData})}.  Mileage Tracker is an app that records and calculates fuel usage in Miles per Gallon (MPG) and displays how it changes over time. \CR{We began by adding some functionality to the original app. We then converted} Milage Tracker into a multi-user app, such that multiple family members using the same family car can collect the fuel usage even across multiple devices.
 
-Business Manager+\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:chgv:overview}} is an app to track business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with each other.
+Business Manager+\CR{~\cite{cloudifierData}} is an app to track business contacts.  We converted it into a multi-user app so that business colleagues can share their contact list with each other.
 
-CliffHangers\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:ylon:overview}} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they \CR{lose} the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
+CliffHangers\CR{~\cite{cloudifierData}} is a clone of the popular game ``hangman."  The player is presented with a series of blanks, and they must guess the letters that fill in the blanks to make a word.  The player has a limited number of guesses, and if they cannot guess the word before they reach the limit, they \CR{lose} the game.  We converted it into a multi-player game so that two players can collaboratively work together on separate devices to guess the word.
 
-MyAssignment\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:xkhza:overview}} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  \CR{We converted it into} a multi-user app so that multiple students can collaborate on class assignments.
+MyAssignment\CR{~\cite{cloudifierData}} is an app for students to track their class assignments or projects.  A single user can input information about projects, progress, due dates, etc.  \CR{We converted it into} a multi-user app so that multiple students can collaborate on class assignments.
 
 After converting these apps, we ran them with multiple users on three devices to verify that in fact the apps work correctly. They are all publicly available
-\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:eyhca:overview}}
-\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:gvkea:overview}}
-\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:xgrva:overview}}
-\CR{\footnote{https://www.touchdevelop.com/app/beta\#list:installed-scripts:script:xfrm:overview}}.
+\CR{~\cite{cloudifierData}}.
 
 %describe the process with the four steps
 Based on the lessons we learned from converting these \numFormative apps, we designed a process to convert  a single to a multi-user app.  Our process consists of four steps:   
@@ -848,9 +845,19 @@ Using our refactoring tool in combination with a well designed, powerful end-use
 
 \bibliographystyle{abbrvnat}
 
-\begin{thebibliography}{10}
+%\bibliography{refs}
 
-% The bibliography should be embedded for final submission.
+\begin{thebibliography}{36}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[clo()]{cloudifierData}
+Refactoring to cloud data.
+\newblock March '14, \url{http://cope.eecs.oregonstate.edu/cloudifier/}.
+
 \bibitem[Badame and Dig(2012)]{badame2012refactoring}
 S.~Badame and D.~Dig.
 \newblock Refactoring meets spreadsheet formulas.
