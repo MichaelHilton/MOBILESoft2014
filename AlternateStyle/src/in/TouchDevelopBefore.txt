@@ -1,0 +1,64 @@
+data MileageRecord : Number Collection  
+
+
+
+private action ShowMileageGraph ()      
+//Shows a graph of the mileage record on the execution wall.
+wall->clear      
+MileageRecord->post to wall
+wall->prompt("Click \"Ok\" to continue...")      
+
+...
+   
+private action ClearMileageRecord ()      
+//This action clears the mileage record.
+wall->clear      
+if wall->ask boolean("Warning", "Are you sure you want... 
+  to clear...")->equals(true) then       
+  MileageRecord := collections->create number collection      
+else do nothing      
+
+...
+
+private action AddMileageToRecord (      
+  Mileage : Number)      
+do       
+  MileageRecord->add(Mileage)      
+
+
+...
+
+private action DisplayAvgMileage ()      
+var avgMileage := MileageRecord->avg      
+avgMileage->post to wall  
+
+
+
+
+
+
+
+
+
+
+
+
+
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
