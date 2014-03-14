@@ -637,7 +637,7 @@
 
 \lineskip \p@
 \normallineskip \p@
-\def\baselinestretch{1}
+\def\baselinestretch{1.05}
 \def\@ptsize{0} %needed for amssymbols.sty
 
 %% CHANGES ON NEXT LINES
@@ -664,7 +664,7 @@
 % to change {cmr} to {times} above. (Not recommended)
   \renewcommand{\@ptsize}{}
   \renewcommand{\normalsize}{%
-    \@setfontsize\normalsize\@ixpt{10.5\p@}%\ninept%
+    \@setfontsize\normalsize\@ixpt{9\p@}%\ninept%
     \abovedisplayskip 6\p@ \@plus2\p@ \@minus\p@
     \belowdisplayskip \abovedisplayskip
     \abovedisplayshortskip 6\p@ \@minus 3\p@
