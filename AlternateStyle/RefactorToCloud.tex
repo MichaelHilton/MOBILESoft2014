@@ -144,11 +144,17 @@ Our empirical evaluation on a corpus of \numScripts mobile apps resulting in \nu
 
 \end{abstract}
 
-\category{D.2.7}{\CR{Software Engineering}}{\CR{Distribution, Maintenance, and Enhancement}}
+~\\
+\noindent
+\textbf{Categories and Subject Descriptors:} D.2.7 [Software Engineering]: Distribution, Maintenance, and Enhancement\\
 
-\terms{\CR{Refactoring}}
+\vspace{-0.25cm}
+\noindent
+\textbf{General Terms:} Refactoring\\
 
-\keywords{\CR{Refactoring, Cloud Computing, Empirical Study}}
+\vspace{-0.25cm}
+\noindent
+\textbf{Keywords:} Refactoring, Cloud Computing, Empirical Study
 
 
 
@@ -387,14 +393,14 @@ The third kind of refactoring is non-trivial: it requires changing the program f
  The APIs are different enough that sometimes we needed to map one function call from \code{Collection} into a sequence of calls from \code{Table}, whereas other times we had to augment the API by writing new functions. 
  
  \begin{figure}[htbp!]
-   \vspace{-10pt}
+   \vspace{-5pt}
 \begin{center}
-\includegraphics[width=250pt]{images/convertCollectionToTable}
-  \vspace{-20pt}
+\includegraphics[width=200pt]{images/convertCollectionToTable}
+  \vspace{-5pt}
 \caption{Conversion from Number Collection to Cloud Data Table}
 \label{fig:ncToCDT}
 \end{center}
-  \vspace{-18pt}
+  \vspace{-13pt}
 \end{figure}
 
 
@@ -407,8 +413,9 @@ Table~\ref{tab:refactoringsFormative} lists the total number of refactorings tha
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
-App  & Primitive & Local Table to   & Collection\\
- Name &  to Cloud  &  Cloud Table  & to Cloud \\
+App  & Primitive & Local Table   & Collection\\
+ Name &  to Cloud  &  to  & to Cloud \\
+  &    &  Cloud Table  &  \\
 \hline
 MileageTracker & 2 & 0 & 1\\
 \hline
@@ -485,7 +492,9 @@ Number Collection Operations & Cloud Table Operations & Transformation Type\\
 \caption{\texttt{Number Collection} API's and corresponding \texttt{Cloud Data Table} Operations. }
 \label{tab:mappingTable}
 \end{center}
+
 \end{table*}%
+
 
 
 
@@ -748,7 +757,7 @@ The first column shows the average per script, while the last column shows the t
 
 Moreover, most of these transformations are non-trivial. Figure~\ref{fig:transformations_pieChart} shows the percentage of each kind of transformation applied. By far the most common transformation kind is Indirect Transformation, which involve mapping one API method call to a sequence of one or more API method calls that do not share a common name with the original method. Thus, we believe that automation saves significant effort.
 
-\begin{table}[p]
+\begin{table}[h!bt]
 \begin{center}
 \begin{tabular}{lclclclclc||c|}
 
@@ -769,11 +778,12 @@ Time [sec] & 2.64 & 27 & 5.18 & 296\\
 \end{center}
 \end{table}%
 
-
-\begin{figure}[hp]
+\begin{figure}[h!bt]
 \begin{center}
-\includegraphics[width=250pt]{images/TransformationsChart}
+\includegraphics[width=160pt]{images/TransformationsChart}
+\vspace{-5pt}
 \caption{Transformations by Percentage}
+\vspace{-20pt}
 \label{fig:transformations_pieChart}
 \end{center}
 \end{figure}
