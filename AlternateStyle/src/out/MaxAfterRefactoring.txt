@@ -2,7 +2,8 @@ private action _MileageRecordTable_ max ()
 returns (      
   max : Number)      
 do       
-  max := _MileageRecordTable table_ -> row at(0) -> _MileageRecordColumn_      
+  max := _MileageRecordTable table_ -> row at(0) ...
+   -> _MileageRecordColumn_      
   for each ct in _MileageRecordTable_ table      
     where true      
   do       

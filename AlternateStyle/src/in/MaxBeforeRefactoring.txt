@@ -2,7 +2,8 @@ private sync action $TABLENAME max ()
 returns (      
   max : Number)      
 do       
-  max := $TABLENAME -> row at(0) -> $COLUMNAME      
+  max := $TABLENAME -> row at(0) ...
+   -> $COLUMNAME      
   for each ct in $TABLENAME      
     where true      
   do       

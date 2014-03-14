@@ -3,7 +3,8 @@ data MileageRecord : Number Collection
 
 
 private action ShowMileageGraph ()      
-//Shows a graph of the mileage record on the execution wall.
+//Shows a graph of the mileage 
+//record on the execution wall.
 wall->clear      
 MileageRecord->post to wall
 wall->prompt("Click \"Ok\" to continue...")      

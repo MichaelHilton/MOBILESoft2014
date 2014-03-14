@@ -3,7 +3,8 @@ columns_
   _MileageRecordColumn : Number_ 
 
 private action ShowMileageGraph ()      
-//Shows a graph of the mileage record on the execution wall.
+//Shows a graph of the mileage
+//record on the execution wall.
 wall->clear      
 _MileageRecordTable table_->post to wall      
 wall->prompt("Click \"Ok\" to continue...")      
@@ -13,7 +14,7 @@ wall->prompt("Click \"Ok\" to continue...")
 private action ClearMileageRecord ()      
 //This action clears the mileage record.
 wall->clear      
-if wall->ask boolean("Warning", "Are you sure…")
+if wall->ask boolean("Warning", "Are you...")
     ->equals(true) then                        
   _MileageRecordTable table->clear_      
 else
