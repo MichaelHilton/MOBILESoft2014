@@ -1,0 +1,127 @@
+% !TEX root =  RefactorToCloud.tex
+
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage[hidelinks]{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{flushend}
+\usepackage{url}
+
+\newcommand{\TODO}[1]{\textcolor{magenta}{\textbf{TODO: }#1}}
+
+%\newcommand{\FB}[1]{\textcolor{blue}{\textbf{FEEDBACK: }#1}}
+\newcommand{\FB}[1]{{#1}}
+
+\newcommand{\CR}[1]{{#1}}
+
+\newcommand{\codesnippet}[1]{
+\begin{lstlisting}#1\end{lstlisting}}
+
+\newcommand{\numScripts}{123\xspace}
+\newcommand{\numManual}{20\xspace}
+\newcommand{\numFormative}{four\xspace}
+\newcommand{\numAVGSecs}{3\xspace}
+\newcommand{\MT}{\begin{small}\textsc{Mileage Tracker}\end{small}\xspace}
+\newcommand{\numTransformations}{2722\xspace}
+\newcommand{\percentRefactored}{94\%\xspace}
+
+\newcommand{\TD}{\textsf{touch\textbf{develop}}\xspace}
+\newcommand{\NC}{\code{Number Collection}\xspace}
+\newcommand{\CDT}{\code{Cloud Data Table}\xspace}
+
+\newcommand{\POne}{\textbf{(P1)}\xspace}
+\newcommand{\PTwo}{\textbf{(P2)}\xspace}
+
+\newcommand{\code}[1]{\begin{small}\texttt{#1}\end{small}}
+
+
+\newcommand{\tool}{\begin{small}\textsc{Cloudifyer}\end{small}\xspace}
+
+\newcommand{\myParagraph}[1]{\noindent \textbf{#1}}
+
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xspace}
+\usepackage{alltt}
+
+ \usepackage{multirow} 
+ \usepackage{rotating}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% THIS BELOW COPIED FROM vkuncak/doc/vmcai09/defs.tex
+\definecolor{gray}{RGB}{211,211,211}
+\newcommand{\jbasicstyle}{\scriptsize\sffamily}%\footnotesize}
+\newcommand{\textcode}[1]{{#1}} % with current font \sf and \tt look ugly
+\newcommand{\jnumberstyle}{\tiny}
+\newcommand{\Hilight}{\makebox[0pt][l]{\color{gray}\rule[-3pt]{0.80\linewidth}{9pt}}}
+\newcommand{\CodeIn}[1]{{\small\texttt{#1}}}
+
+\newcommand{\codex}[1]{{\smaller\texttt{#1}}\xspace}
+
+\newcommand{\tilted}[1]{\begin{turn}{75}#1\end{turn}}
+
+\lstdefinelanguage{pseudo}
+ {
+%alsoletter={<>:=},
+  morekeywords={int,boolean,new,continue,enum,
+                void,if,else,while,return,for,foreach,in,assert,assume,false,true,class,static,import,
+                ignoreIf,getInt,getAny,getNew,getExisting,getBoolean,force,concrete,Susp,
+                getInt,getAny,getNew,getBoolean,force,concrete,Susp,max,min,ObjectPool,
+                implements,interface,public,double,synchronized,final,
+                proc,@Event,@Schedule,extends,case,sleep,waitForTick,assertTick,instanceof},
+  keywordstyle=\bfseries,
+  lineskip=-0.1em,
+%  numbers=left,
+  numbers=none,
+  numberstyle=\jnumberstyle,
+  numbersep=4pt,
+%  basicstyle=\scriptsize,
+  basicstyle=\jbasicstyle,
+  breaklines=true,
+  breakautoindent=true,
+  tabsize=2,
+%  columns=fixed,
+%  columns=flexible,
+  columns=fullflexible,
+%  morecomment=*[s][\textsl]{/*:}{*/},
+  morecomment=*[l][\textsl]{//},
+%  morecomment=*[s][\jahobform]{"}{"},
+  mathescape=true,
+%  escapeinside=<>,
+%  escapebegin={\begin{isakeyword}},
+%  escapeend={\end{isakeyword}}
+%  caption={},
+%  label={},
+}
+\newcommand{\MyParagraph}[1]{\noindent \textbf{#1}}
+\newenvironment{CodeOut}{\begin{scriptsize}}{\end{scriptsize}}
+
+\newcommand{\vertbar}{vertBar\xspace}
+
+\newcommand{\NumProjects}{9\xspace}
+\newcommand{\NumSLOCReduced}{2213\xspace}
+\newcommand{\NumOperationsInferred}{2681\xspace}
+\newcommand{\NumChainsInferred}{1709\xspace}
+\newcommand{\NumSLOCChangedAnon}{3707\xspace}
+\newcommand{\NumSLOCChangedFor}{12313\xspace}
+\newcommand{\NumSLOCChanged}{16020\xspace}
+
+
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{url}
+\usepackage{footnote}
+%\usepackage{biblatex}
+%\usepackage{natbib}
+\usepackage{balance}
+
+\usepackage{float}
+\restylefloat{table}
+
+
+
