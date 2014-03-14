@@ -14,9 +14,10 @@ wall->prompt("Click \"Ok\" to continue...")
 private action ClearMileageRecord ()      
 //This action clears the mileage record.
 wall->clear      
-if wall->ask boolean("Warning", "Are you sure you want... 
-  to clear...")->equals(true) then       
-  MileageRecord := collections->create number collection      
+if wall->ask boolean("Warning", "Are you sure... 
+  you want to clear...")->equals(true) then       
+  MileageRecord := 
+      collections->create number collection      
 else do nothing      
 
 ...
